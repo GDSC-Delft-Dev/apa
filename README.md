@@ -14,3 +14,6 @@ virtualenv env
 source env/bin/activate
 pip install -r requirements.txt
 ```
+
+# Datasets
+You can play with the datasets in the *notebooks* folder.
