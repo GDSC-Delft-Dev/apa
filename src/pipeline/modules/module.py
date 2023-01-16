@@ -1,6 +1,5 @@
 from __future__ import annotations
 import cv2
-from typing import NewType
 
 """
 Represents an arbitrary image processing pipeline module.
@@ -35,7 +34,7 @@ class Module:
     Prepares the module to be run.
     """
     def prepare(self):
-        print("Running module <" + self.name + ">")
+        print(f"Running module <{self.module}>")
 
     """
     Adds the provided module to the chain.
@@ -47,4 +46,4 @@ class Module:
         if self.next:
             self.next.add(module)
         self.next = module
-        print("Added module <" + module.name + ">")
+        print(f"Added module <{self.module}>")
