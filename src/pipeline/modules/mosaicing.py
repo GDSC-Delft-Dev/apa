@@ -25,7 +25,7 @@ class Mosaicing(Module):
         stitcher.setWaveCorrection(False)
 
         # Run the algorithm
-        status, stitched = stitcher.stitch([img[0], img[1]])
+        status, stitched = stitcher.stitch(img)
         if status != cv2.Stitcher_OK:
             print("Error stitching images: code " + str(status))
             raise Exception("The stiching failed")
