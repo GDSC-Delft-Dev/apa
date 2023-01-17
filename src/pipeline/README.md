@@ -4,9 +4,9 @@ The image processing pipeline is the main construct of our project. When provide
 
 <p align="center">
     <p align="center">
-        <img src="test/data/mosaicing/farm/multiple.png" width="300" />
+        <img src="test\data\mosaicing\farm\multiple.png" width="300" />
         &nbsp &nbsp
-        <img src="test/data/mosaicing/farm/stitched.png" width="300" />
+        <img src="test\data\mosaicing\farm\stitched.png" width="300" />
     </p>
     <i align="center">Example of image mosaicing</i>
 </p>
