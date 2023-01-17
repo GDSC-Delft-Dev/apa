@@ -2,7 +2,14 @@
 
 The image processing pipeline is the main construct of our project. When provided with images from a flyover, the pipeline computes indicies (i.e. vegetation index, mositure content) to estimate relevant information and provides insights (e.g. nutrient deficiencies, infestations) locally. This data is saved in the database, and can be visualized in the user interface, or used for further analysis (e.g. model training, statistical analysis).
 
-
+<p align="center">
+    <p align="center">
+        <img src="test/data/mosaicing/farm/multiple.png" width="300" />
+        &nbsp &nbsp
+        <img src="test/data/mosaicing/farm/stitched.png" width="300" />
+    </p>
+    <i align="center">Example of image mosaicing</i>
+</p>
 
 ### Modules
 
