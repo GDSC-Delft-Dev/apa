@@ -1,11 +1,14 @@
 from __future__ import annotations
+from enum import Enum
 from screeninfo import get_monitors
+from .runnable import Runnable
+from .data import Data
 import cv2
 
 """
 Represents an arbitrary image processing pipeline module.
 """
-class Module:
+class Module(Runnable):
     def __init__(self, name: str):  
         self.name: str = name
         self.next: Module = None
@@ -14,20 +17,17 @@ class Module:
     Processes the image.
 
     Args:
-        img: the input image(s)
-        rest: non-specific module arguments
-        save: whether to save the images to the field database
+        data: the job data
+        persist: whether to save the images to the field database
     """
-    def run(self, img: cv2.Mat | list[cv2.Mat], rest: any, save: bool = True) -> any:
-        # TODO: save the images
-        self.display(img)
-
+    def run(self, data: Data) -> any:
         # If there is a next module, then run it
         if self.next != None:
-            return self.next.run(img, rest)
+            self.next.prepare(data)
+            return self.next.run(data)
 
-        # Otherwise, return the arguments
-        return rest
+        # Otherwise, return the data
+        return data
 
     def display(self, img: cv2.Mat):
         # Adjust the image size
@@ -46,8 +46,11 @@ class Module:
     """
     Prepares the module to be run.
     """
-    def prepare(self):
+    def prepare(self, data: Data):
         print(f"Running module <{self.name}>")
+        data.stages.append({
+            "name": self.name,
+        })
 
     """
     Adds the provided module to the chain.
@@ -60,3 +63,12 @@ class Module:
             self.next.add(module)
         self.next = module
         print(f"Added module <{self.name}>")
+
+"""
+Represents module types.
+"""
+class Modules(Enum):
+    PREPROCESS = 0,
+    MOSAIC = 1,
+    INDEX = 2,
+    INSIGHT = 3
