@@ -13,7 +13,7 @@ class Runnable(ABC):
     Abstract function for running the arbitrary logic.
     """
     @abstractmethod
-    def run(self, data: Data, persist: bool = False) -> cv2.Mat:
+    def run(self, data: Data) -> cv2.Mat:
         pass
 
     """
