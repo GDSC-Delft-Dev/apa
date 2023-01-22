@@ -3,7 +3,7 @@ import cv2
 from .module import Module
 from .data import Data
 from .runnable import Runnable
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, wait
 
 """
 Represents an arbitrary image processing pipeline module that can
@@ -19,8 +19,7 @@ class ParallelModule:
 
     Args:
         img: the input image(s)
-        rest: non-specific module arguments
-        save: whether to save the images to the field database
+        data: the job data
     """
     def run(self, data: Data) -> any:
         # Spawn the executor
@@ -28,9 +27,10 @@ class ParallelModule:
         with ThreadPoolExecutor(max_workers=4) as executor:
             # Run the runnables
             futures = {executor.submit(runnable.run, data): runnable for runnable in self.runnables}
-            for future in as_completed(futures):
-                # TODO: assign results
-                pass
+            
+            # Wait for completion
+            # TODO: add validation
+            wait(futures)
                 
         # Run the module functionality
         return super().run(data)

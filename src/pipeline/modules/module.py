@@ -3,6 +3,7 @@ from enum import Enum
 from screeninfo import get_monitors
 from .runnable import Runnable
 from .data import Data
+from mat import Mat
 import cv2
 
 """
@@ -29,7 +30,7 @@ class Module(Runnable):
         # Otherwise, return the data
         return data
 
-    def display(self, img: cv2.Mat):
+    def display(self, img: Mat):
         # Adjust the image size
         monitor = get_monitors()[0]
         print(img.shape, monitor.width, monitor.height)
