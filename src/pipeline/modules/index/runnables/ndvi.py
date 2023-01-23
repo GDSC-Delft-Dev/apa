@@ -1,10 +1,7 @@
 from ...runnable import Runnable
-from ...data import Data
-from ...module import Modules
+from ...data import Data, Modules
+from ..indicies import Indicies
 from mat import Channels
-from index import Indicies
-import numpy as np
-import cv2
 
 class NDVI(Runnable):
     def __init__(self):
