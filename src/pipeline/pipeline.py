@@ -1,10 +1,12 @@
 from modules.module import Module
 from modules.mosaicing import Mosaicing
+from modules.preprocess import Preprocess, AgricultureVisionPreprocess
 import cv2
 
 class Pipeline:
     def __init__(self):
-        self.chain: Module = Mosaicing()
+        self.chain: Module = AgricultureVisionPreprocess()
+        self.chain.add(Mosaicing())
 
     """
     Runs an instance of the pipeline
