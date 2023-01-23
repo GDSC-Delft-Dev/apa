@@ -7,8 +7,8 @@ def main():
     img = [cv2.imread(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
     masks = [cv2.imread(file) for file in glob.glob("test/data/mosaicing/farm/mask*.JPG")]
     # Run the pipeline
-    pipeline = Pipeline()
-    pipeline.run(img, masks)
+    pipeline = Pipeline({})
+    pipeline.run(img)
 
 if __name__ == "__main__":
     main()

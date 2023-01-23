@@ -1,7 +1,15 @@
 from __future__ import annotations
-import cv2
-from .module import Modules
 from mat import Mat
+from enum import Enum
+
+"""
+Represents module types.
+"""
+class Modules(Enum):
+    PREPROCESS = 0,
+    MOSAIC = 1,
+    INDEX = 2,
+    INSIGHT = 3
 
 """
 Represents the pipeline data object.
@@ -12,10 +20,19 @@ Args:
     current: the current pipeline stage; initially none
 """
 class Data:
-    def __init__(self, input: list[Mat] | Mat):
-        self.input: list[Mat] | Mat = input
-        self.modules: dict([(module_type, {}) for module_type in Modules])
+    def __init__(self):
+        self.input: list[Mat] | Mat = None
+        self.modules: dict([(module_type, {}) for module_type in Modules]) = {}
         self.current: None | Modules = None
+
+    """
+    Sets the input images.
+
+    Args:
+        img: the images to process
+    """
+    def set(self, img: Mat | list[Mat]):
+        self.input = img
 
     """
     Provides the data of the specified module.

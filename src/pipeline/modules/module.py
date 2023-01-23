@@ -1,5 +1,4 @@
 from __future__ import annotations
-from enum import Enum
 from screeninfo import get_monitors
 from .runnable import Runnable
 from .data import Data
@@ -49,9 +48,6 @@ class Module(Runnable):
     """
     def prepare(self, data: Data):
         print(f"Running module <{self.name}>")
-        data.stages.append({
-            "name": self.name,
-        })
 
     """
     Adds the provided module to the chain.
@@ -64,12 +60,3 @@ class Module(Runnable):
             self.next.add(module)
         self.next = module
         print(f"Added module <{self.name}>")
-
-"""
-Represents module types.
-"""
-class Modules(Enum):
-    PREPROCESS = 0,
-    MOSAIC = 1,
-    INDEX = 2,
-    INSIGHT = 3

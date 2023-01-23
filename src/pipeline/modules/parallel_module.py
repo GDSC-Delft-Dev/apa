@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, wait
 Represents an arbitrary image processing pipeline module that can
 run multiple runnables at the same time.
 """
-class ParallelModule:
+class ParallelModule(Module):
     def __init__(self, name: str):  
         super().__init__(name)
         self.runnables: dict[int, Runnable] = {}
@@ -40,10 +40,3 @@ class ParallelModule:
     """
     def prepare(self, data: Data):
         print(f"Running parallel module <{self.name}>")
-        data.stages.append({
-            "name": self.name,
-            "runnables": {}
-        })
-
-        for runnable in self.runnables:
-            runnable.prepare(data)

@@ -21,6 +21,3 @@ class Runnable(ABC):
     """
     def prepare(self, data: Data):
         print(f"Running runnable <{self.name}>")
-        data.stages[-1]["runnables"][self.name] = {
-            "name": self.name
-        }
