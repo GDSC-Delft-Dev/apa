@@ -20,7 +20,9 @@ class Module:
     """
     def run(self, img: cv2.Mat | list[cv2.Mat], rest: any, save: bool = True) -> any:
         # TODO: save the images
-        self.display(img)
+
+        if self.name == "Mosaicing":
+            self.display(img)
 
         # If there is a next module, then run it
         if self.next != None:
