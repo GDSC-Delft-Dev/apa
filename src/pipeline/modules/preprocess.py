@@ -66,9 +66,6 @@ class AgricultureVisionPreprocess(Preprocess):
         masked = [cv2.multiply(x, mask) for (x, mask) in zip(img, rest)]
 
         percentiles = [(np.percentile(x, 5), np.percentile(x, 95)) for x in masked]
-        print(percentiles)
-        for (p5, p95) in percentiles:
-            print(max(0.0, p5 - 0.4 * (p95 - p5)), min(255.0, p95 + 0.4*(p95-p5)))
         bounds = [(max(0.0, p5 - 0.4 * (p95 - p5)), min(255.0, p95 + 0.4*(p95-p5))) 
                     for (p5, p95) in percentiles]
         clipping = [np.clip(x, v_lower, v_upper).astype(np.uint8) for (x, (v_lower, v_upper)) in zip(img, bounds)]

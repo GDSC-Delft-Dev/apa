@@ -1,11 +1,6 @@
 from pipeline import Pipeline
 import glob
 import cv2
-import numpy as np
-
-IMAGE_WIDTH = 5472
-IMAGE_HEIGHT = 3078
-CHANNELS = 3
 
 def main():
     # Get test data
