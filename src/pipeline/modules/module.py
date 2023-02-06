@@ -2,6 +2,7 @@ from __future__ import annotations
 from screeninfo import get_monitors
 from .runnable import Runnable
 from .data import Data
+from .types import Modules
 from mat import Mat
 import cv2
 
@@ -9,9 +10,15 @@ import cv2
 Represents an arbitrary image processing pipeline module.
 """
 class Module(Runnable):
-    def __init__(self, name: str):  
+    """
+    Initializes the module metadata and the data object.
+    """
+    def __init__(self, name: str, type: Modules, data: Data):  
         self.name: str = name
         self.next: Module = None
+
+        self.type: Modules = type
+        data.modules[self.type] = {}
 
     """
     Processes the image.

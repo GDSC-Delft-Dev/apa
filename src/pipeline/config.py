@@ -1,5 +1,5 @@
-from modules.data import Modules
+from modules.module import Module
 
 class Config:
-    def __init__(self, modules: list[Modules]):
-        self.modules: list[Modules] = modules
+    def __init__(self, modules: list[Module]):
+        self.modules: list[Module] = modules
