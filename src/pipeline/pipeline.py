@@ -11,16 +11,20 @@ class Pipeline:
     """
     Build the pipeline according to the configuration.
     """
-    def __init__(self, config: any):
-        # Build the chain
-        self.chain: Module = Mosaicing()
-        self.chain.next = Index()
+    def __init__(self, config: Config):
+        self.chain: Module = None
+
+        # Build the modules chain
+        tail = self.chain
+        for module in config.modules:
+            tail = module.__init__()
+            tail = tail.next
 
         # Build the data object
         self.data_proto: Data = Data()
 
     """
-    Runs an instance of the pipeline
+    Runs the pipeline on the provided input images.
 
     Args:
         img: the input image(s)

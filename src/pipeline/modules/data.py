@@ -1,15 +1,6 @@
 from __future__ import annotations
 from mat import Mat
-from enum import Enum
-
-"""
-Represents module types.
-"""
-class Modules(Enum):
-    PREPROCESS = 0,
-    MOSAIC = 1,
-    INDEX = 2,
-    INSIGHT = 3
+from .types import Modules
 
 """
 Represents the pipeline data object.
