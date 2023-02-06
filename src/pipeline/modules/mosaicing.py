@@ -1,14 +1,15 @@
 from .module import Module
 from .data import Data
 from mat import Mat
+from .types import Modules
 import cv2
 
 """
 Pipeline module for mosaicing (stitching) images
 """
 class Mosaicing(Module):
-    def __init__(self):
-        super().__init__("Mosaicing")
+    def __init__(self, data: Data):
+        super().__init__("Mosaicing", Modules.MOSAIC, data)
 
     """
     Sitches the images to create an orthomosaic image of the farm.
@@ -22,7 +23,7 @@ class Mosaicing(Module):
     Returns:
         The stiched image
     """
-    def run(self, data: Data) -> cv2.Mat:
+    def run(self, data: Data):
         self.prepare(data)
         
         # Check if there are multiple input images
@@ -39,7 +40,7 @@ class Mosaicing(Module):
             if status != cv2.Stitcher_OK:
                 print("Error stitching images: code " + str(status))
                 raise Exception("The stiching failed")
-            data.stitched = stitched
+            data.modules[Modules.MOSAIC]["stitched"] = stitched
             
         # Run the next module
         return super().run(data)

@@ -26,7 +26,7 @@ from .types import Modules
 from pipeline import Pipeline
 
 cfg = Config(modules=[MOSAIC, INDEX, INSIGHT])
-p = Pipeline(cfg)
+pipeline = Pipeline(cfg)
 ```
 Running this code will spawn a pipeline instance that can perform a job. The pipeline creation might fail if the configuration is invalid, e.g. when the user wants to detect an insight that relies on the `NDVI` index, but that index isn't calculated by the pipeline.
 
@@ -36,7 +36,7 @@ To run the pipeline use `.run()`:
 from .Mat import Mat
 
 imgs: list[Mat] = ...
-p.run(imgs)
+pipeline.run(imgs)
 ```
 
 Note that the input images must be wrapped in the `Mat` class (wrapping a `cv2.Mat` class) to support images with various multispectral layouts.
