@@ -29,15 +29,15 @@ class _HomeState extends State<Home> {
   static final CameraPosition _kInitialPosition =
   CameraPosition(target: _kMapDelft, zoom: 15.0, tilt: 0, bearing: 0);
 
-  static final Marker _insightMarker = Marker(
-      markerId: MarkerId('_insightMarker'),
+  static final Marker _exampleMarker = Marker(
+      markerId: MarkerId('_exampleMarker'),
       infoWindow: InfoWindow(title: 'Corn Field 3'),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
       position: _kMapDelft,
   );
 
-  static final Polygon _kPolyField = Polygon(
-      polygonId: PolygonId('k_PolyField'),
+  static final Polygon _exampleField = Polygon(
+      polygonId: PolygonId('exampleField'),
       points: [
         LatLng(51.987308, 4.324069),
         LatLng(51.987179, 4.321984),
@@ -50,6 +50,12 @@ class _HomeState extends State<Home> {
       fillColor: Colors.transparent
   );
 
+  // For creating custom polygons by tapping
+  Set<Marker> _markers = Set<Marker>();
+  Set<Polygon> _polygons = Set<Polygon>();
+  List<LatLng> polygonLatLngs = <LatLng>[];
+  int _polygonIdCounter = 1;
+
   // Reads JSON to locate to location that was searched for
   Future<void> _goToPlace(Map<String, dynamic> place) async {
     final double lat = place['geometry']['location']['lat'];
@@ -60,6 +66,38 @@ class _HomeState extends State<Home> {
        CameraPosition(target: LatLng(lat, lng), zoom: 12),
     ));
   }
+
+  void _setPolygon() {
+    final String polygonIdVal = 'polygon_$_polygonIdCounter';
+    // Give each polygon a different id
+    _polygonIdCounter++;
+
+    _polygons.add(
+      Polygon(
+        polygonId: PolygonId(polygonIdVal),
+        points: polygonLatLngs,
+        strokeWidth: 3,
+        strokeColor: Colors.orange,
+        fillColor: Colors.transparent,
+      )
+    );
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _setMarker(_kMapDelft);
+  // }
+  //
+  // void _setMarker(LatLng point) {
+  //   setState(() {
+  //     _markers.add(
+  //       Marker(
+  //           markerId: MarkerId('marker'),
+  //           position: point),
+  //     );
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -105,10 +143,16 @@ class _HomeState extends State<Home> {
                   mapToolbarEnabled: false,
                   initialCameraPosition: _kInitialPosition,
                   mapType: MapType.hybrid,
-                  markers: {_insightMarker},
-                  polygons: {_kPolyField},
+                  markers: {_exampleMarker},
+                  polygons: _polygons,
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
+                  },
+                  onTap: (point) {
+                    setState(() {
+                      polygonLatLngs.add(point);
+                      _setPolygon();
+                    });
                   },
                 ),
               ),
