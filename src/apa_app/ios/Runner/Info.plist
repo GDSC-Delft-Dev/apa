@@ -30,6 +30,8 @@
 	<string>Main</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
     <string>The app needs location permission</string>
+    <key>googleMapsApiKey</key>
+    <string>$(GOOGLE_MAPS_API_KEY)</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

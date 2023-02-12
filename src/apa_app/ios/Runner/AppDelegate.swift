@@ -8,6 +8,8 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+    // The "googleMapsApiKey" variable is fetched from Debug.xcconfig
+    GMSServices.provideAPIKey(Bundle.main.object(forInfoDictionaryKey:"googleMapsApiKey") as? String ?? "");
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
