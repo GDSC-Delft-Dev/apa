@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   Completer<GoogleMapController> _controller = Completer();
+  TextEditingController _searchController = TextEditingController();
 
   // Workaround lagging screen due to Google Maps initialization
   Future _mapFuture = Future.delayed(Duration(milliseconds: 250), () => true);
@@ -63,19 +64,40 @@ class _HomeState extends State<Home> {
             print("Empty");
             return Container();
           }
-          return GoogleMap(
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            rotateGesturesEnabled: true,
-            scrollGesturesEnabled: true,
-            mapToolbarEnabled: false,
-            initialCameraPosition: _kInitialPosition,
-            mapType: MapType.hybrid,
-            markers: {_insightMarker},
-            polygons: {_kPolyField},
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                      child: TextFormField(
+                        controller: _searchController,
+                        textCapitalization: TextCapitalization.words,
+                        decoration: InputDecoration(hintText: 'Search by city'), textAlign: TextAlign.center,
+                        onChanged: (value) {
+                          print(value);
+                        },
+                      )
+                  ),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.search),),
+                ],
+              ),
+              Expanded(
+                child: GoogleMap(
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  rotateGesturesEnabled: true,
+                  scrollGesturesEnabled: true,
+                  mapToolbarEnabled: false,
+                  initialCameraPosition: _kInitialPosition,
+                  mapType: MapType.hybrid,
+                  markers: {_insightMarker},
+                  polygons: {_kPolyField},
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
