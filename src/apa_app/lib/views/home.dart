@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:apa_app/views/loading.dart';
+import 'package:apa_app/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Home extends StatefulWidget {
@@ -49,6 +50,17 @@ class _HomeState extends State<Home> {
       fillColor: Colors.transparent
   );
 
+  // Reads JSON to locate to location that was searched for
+  Future<void> _goToPlace(Map<String, dynamic> place) async {
+    final double lat = place['geometry']['location']['lat'];
+    final double lng = place['geometry']['location']['lng'];
+
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+       CameraPosition(target: LatLng(lat, lng), zoom: 12),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -78,7 +90,10 @@ class _HomeState extends State<Home> {
                         },
                       )
                   ),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.search),),
+                  IconButton(onPressed: () async {
+                   var place = await LocationService().getPlace(_searchController.text);
+                    _goToPlace(place);
+                    }, icon: Icon(Icons.search),),
                 ],
               ),
               Expanded(
