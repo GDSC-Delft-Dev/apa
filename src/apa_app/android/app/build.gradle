@@ -21,6 +21,11 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def googleMapsApiKey = localProperties.getProperty('GMapsAPIKey')
+if (googleMapsApiKey == null) {
+    googleMapsApiKey = System.getenv("GOOGLE_MAPS_API_KEY_ENVIRONMENT_VARIABLE")
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 // Will read your private API key from local.properties file
@@ -56,6 +61,9 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [
+                GMapsAPIKey       : GMapsAPIKey
+        ]
     }
 
     buildTypes {
