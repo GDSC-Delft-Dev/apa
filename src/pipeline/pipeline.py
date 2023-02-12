@@ -1,10 +1,12 @@
 from modules.module import Module
 from modules.mosaicing import Mosaicing
+from modules.segmentation import Segmentation, SemanticSegmentation
 import cv2
 
 class Pipeline:
     def __init__(self):
-        self.chain: Module = Mosaicing()
+        MODEL_PATH = "../../notebooks/deepv3_seg"
+        self.chain: Module = SemanticSegmentation(MODEL_PATH)
 
     """
     Runs an instance of the pipeline

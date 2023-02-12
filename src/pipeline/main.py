@@ -4,7 +4,7 @@ import cv2
 
 def main():
     # Get test data
-    img = [cv2.imread(file) for file in glob.glob("test/data/mosaicing/farm/*.jpg")]
+    img = [cv2.imread(file) for file in glob.glob("test/data/segmentation/*.jpg")]
     
     # Run the pipeline
     pipeline = Pipeline()
