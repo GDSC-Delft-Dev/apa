@@ -42,18 +42,22 @@ def DilatedSpatialPyramidPooling(dspp_input):
     output = convolution_block(x, kernel_size=1)
     return output
 
-def DeepLabV3Plus(image_size: int, num_classes: int):
+def DeepLabV3Plus(image_size: int, num_classes: int, channels: int):
     """
     Architecture of the DeepLabv3+ model for multi-class semantic segmentation
     """
 
-    model_input = keras.Input(shape=(image_size, image_size, 3))
+    model_input = keras.Input(shape=(image_size, image_size, channels))
 
     # backbone model: ResNet50
-    resnet50 = keras.applications.ResNet50(
-        weights="imagenet", include_top=False, input_tensor=model_input
-    )
-
+    if channels == 3:
+        resnet50 = keras.applications.ResNet50(
+            weights="imagenet", include_top=False, input_tensor=model_input
+        )
+    else:
+        resnet50 = keras.applications.ResNet50(
+            weights=None, include_top=False, input_tensor=model_input
+        )
     x = resnet50.get_layer("conv4_block6_2_relu").output # extract low-level features
 
     x = DilatedSpatialPyramidPooling(x)
