@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:apa_app/views/loading.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Home extends StatefulWidget {
 
@@ -22,10 +23,8 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: const SafeArea(
-        child: Center (
-          child: Text('Interactive map to be added here', style: TextStyle(fontSize: 50),),
-        )
+      body: GoogleMap(
+            initialCameraPosition: CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 14),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -44,4 +43,5 @@ class _HomeState extends State<Home> {
   }
 
 }
+
 
