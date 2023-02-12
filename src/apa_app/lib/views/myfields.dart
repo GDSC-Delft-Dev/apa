@@ -34,6 +34,7 @@ class _MyFieldsState extends State<MyFields> {
         tooltip: 'Add field',
         child: const Icon(Icons.add, size: 35, color: Colors.white,),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 

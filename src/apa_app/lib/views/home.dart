@@ -15,6 +15,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  static final LatLng _kMapCenter = LatLng(51.984925, 4.322979);
+
+  static final CameraPosition _kInitialPosition =
+  CameraPosition(target: _kMapCenter, zoom: 15.0, tilt: 0, bearing: 0);
+
   @override
   Widget build(BuildContext context) {
 
@@ -24,7 +29,9 @@ class _HomeState extends State<Home> {
         title: Text(widget.title),
       ),
       body: GoogleMap(
-            initialCameraPosition: CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 14),
+            initialCameraPosition: _kInitialPosition,
+            mapType: MapType.hybrid,
+            myLocationButtonEnabled: true,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -38,6 +45,7 @@ class _HomeState extends State<Home> {
         tooltip: 'Add field',
         child: const Icon(Icons.add, size: 35, color: Colors.white,)
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
     );
 
   }
