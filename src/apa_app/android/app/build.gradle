@@ -23,6 +23,11 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+// Will read your private API key from local.properties file
+// *DISCLAIMER:* This plugin is primarily for hiding your keys from version control.
+// Since your key is part of the static binary, your API keys are still recoverable by decompiling an APK.
+// So, securing your key using other measures like adding restrictions (if possible) are recommended.
+apply plugin: 'com.google.secrets_gradle_plugin'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -47,7 +52,7 @@ android {
         applicationId "com.example.apa_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 20
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
