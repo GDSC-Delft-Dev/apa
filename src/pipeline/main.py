@@ -8,6 +8,7 @@ def main():
     # Get test data
     imgs = [cv2.imread(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
     masks = [cv2.imread(file) for file in glob.glob("test/data/mosaicing/farm/mask*.JPG")]
+    
     # Run the pipeline
     cfg = Config(modules=[Mosaicing])
     pipeline = Pipeline(cfg)
