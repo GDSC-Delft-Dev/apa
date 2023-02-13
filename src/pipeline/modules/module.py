@@ -16,9 +16,7 @@ class Module(Runnable):
     def __init__(self, name: str, type: Modules, data: Data):  
         self.name: str = name
         self.next: Module = None
-
         self.type: Modules = type
-        data.modules[self.type] = {}
 
     """
     Processes the image.
@@ -30,7 +28,9 @@ class Module(Runnable):
     def run(self, data: Data) -> any:
         # If there is a next module, then run it
         if self.next != None:
+            print(f"Preparing <{self.name}>")
             self.next.prepare(data)
+            print(f"Running <{self.name}>")
             return self.next.run(data)
 
         # Otherwise, return the data
@@ -41,7 +41,6 @@ class Module(Runnable):
         monitor = get_monitors()[0]
         print(img.shape, monitor.width, monitor.height)
         f = min(monitor.width / img.shape[0], monitor.height / img.shape[1])
-        print(f)
         if f < 1.0:
             img = cv2.resize(img, (int(img.shape[0] * f * 0.8), int(img.shape[1] * f * 0.8)))
         
@@ -54,7 +53,8 @@ class Module(Runnable):
     Prepares the module to be run.
     """
     def prepare(self, data: Data):
-        print(f"Running module <{self.name}>")
+        super().prepare(data)
+        data.modules[self.type] = {}
 
     """
     Adds the provided module to the chain.

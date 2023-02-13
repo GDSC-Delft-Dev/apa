@@ -10,14 +10,16 @@ class Runnable(ABC):
         self.name: str = name
 
     """
-    Abstract function for running the arbitrary logic.
+    Executes the logic of the runnable.
     """
     @abstractmethod
     def run(self, data: Data):      
         pass
 
     """
-    Prepares the runnable to be run.
+    Prepares the runnable to be run by initializing the space in the
+    pipeline data object.
     """
+    @abstractmethod
     def prepare(self, data: Data):
-        print(f"Running runnable <{self.name}>")
+        pass

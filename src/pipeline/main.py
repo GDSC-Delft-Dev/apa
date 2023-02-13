@@ -6,7 +6,6 @@ from templates import full_pipeline
 def main():
     # Get test data
     imgs = [cv2.imread(file) for file in glob.glob("test/data/mosaicing/farm/D*.jpg")]
-    print(imgs)
     
     # Run the pipeline
     pipeline = full_pipeline()

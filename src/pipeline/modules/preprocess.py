@@ -10,7 +10,8 @@ class Preprocess(Module):
     Perform data preprocessing on raw images.
     """
     def __init__(self, data: Data, input: any):
-        super(Preprocess, self).__init__("Preprocesisng", Modules.PREPROCESS, data)
+        super().__init__("Preprocesisng", Modules.PREPROCESS, data)
+        self.masks = input
 
     """
     Preprocesses the image(s) by multiplying by their respective mask, if any.
@@ -23,10 +24,8 @@ class Preprocess(Module):
         The preprocessed image(s).
     """ 
     def run(self, data: Data):
-        self.prepare() 
-            
         # Apply masks to eliminate invalid areas in images
-        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, data.modules[self.type]["masks"])]
+        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, self.masks)]
         return super().run(masked, rest=None, save=True)
 
 class AgricultureVisionPreprocess(Preprocess):
@@ -40,9 +39,6 @@ class AgricultureVisionPreprocess(Preprocess):
     """
     def __init__(self, data: Data, input: any):
         super().__init__(data, input)
-        data.modules[self.type] = {
-            "masks": input
-        }
  
     """
     Preprocesses the image(s) by multiplying by their respective mask provided by the dataset.
@@ -55,16 +51,14 @@ class AgricultureVisionPreprocess(Preprocess):
     Returns:
         The preprocessed image(s).
     """    
-    def run(self, data: Data):
-
-        self.prepare(data)
+    def run(self, data: Data):  
         # apply masks to eliminate invalid areas in images
 
-        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, data.modules[self.type]["masks"])]
+        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, self.masks)]
 
         percentiles = [(np.percentile(x, 5), np.percentile(x, 95)) for x in masked]
         bounds = [(max(0.0, p5 - 0.4 * (p95 - p5)), min(255.0, p95 + 0.4*(p95-p5))) 
                     for (p5, p95) in percentiles]
         data.modules[self.type]["clipping"] =\
             [np.clip(x, v_lower, v_upper).astype(np.uint8) for (x, (v_lower, v_upper)) in zip(data.input, bounds)]
-        return super(Preprocess, self).run(data)
+        return super().run(data)

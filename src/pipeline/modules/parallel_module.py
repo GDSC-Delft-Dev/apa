@@ -38,8 +38,9 @@ class ParallelModule(Module):
         # TODO: don't hardcode max_workers
         with ThreadPoolExecutor(max_workers=4) as executor:
             # Run the runnables
-            futures = {executor.submit(runnable.run, data): runnable for runnable in data.modules[self.type]["runnables"]}
-            
+            print("Parallel module running " + ', '.join(["<" + runnable.name + ">" for runnable in self.runnables]))
+            futures = {executor.submit(runnable.run, data): runnable for runnable in self.runnables}
+
             # Wait for completion
             # TODO: add validation
             wait(futures)
@@ -51,6 +52,10 @@ class ParallelModule(Module):
     Prepares the module to be run.
     """
     def prepare(self, data: Data):
+        # Initialize the module data
+        super().prepare(data)
         data.modules[self.type]["runnables"] = {}
+
+        # Initialize runnables' data
         for runnable in self.runnables:
             runnable.prepare(data)
