@@ -5,8 +5,11 @@ import 'package:apa_app/views/loading.dart';
 import 'package:apa_app/views/myfields.dart';
 import 'package:apa_app/views/flydrone.dart';
 import 'package:apa_app/views/settings.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future main() async {
+  // Allows env vars to be used in source code
+  await dotenv.load(fileName: "lib/.env");
   runApp(const MyApp());
 }
 

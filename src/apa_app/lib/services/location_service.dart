@@ -1,9 +1,10 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LocationService {
 
-  final String key = 'AIzaSyAawI0easc_9l11sxcphOIPREa6aw4aoOg';
+  var key = dotenv.env['GOOGLE_MAPS_API_KEY'];
 
   Future<String> getPlaceId(String input) async {
     final String url = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$input&inputtype=textquery&key=$key';
