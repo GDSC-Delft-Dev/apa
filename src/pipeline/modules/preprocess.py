@@ -1,4 +1,6 @@
 from .module import Module
+from .data import Data
+from .types import Modules
 import cv2
 import numpy as np
 
@@ -7,11 +9,11 @@ class Preprocess(Module):
     """
     Perform data preprocessing on raw images.
     """
-
-    def __init__(self, name: str = "Default preprocessing"):
-
-        self.name = name
-        super(Preprocess, self).__init__(name)
+    def __init__(self, data: Data, input: any):
+        super(Preprocess, self).__init__("Preprocesisng", Modules.PREPROCESS, data)
+        data.modules[self.type] = {
+            "masks": input
+        }
 
     """
     Preprocesses the image(s) by multiplying by their respective mask, if any.

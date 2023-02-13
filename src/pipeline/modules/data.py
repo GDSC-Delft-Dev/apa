@@ -13,7 +13,7 @@ Args:
 class Data:
     def __init__(self):
         self.input: list[Mat] | Mat = None
-        self.modules: dict([(module_type, {}) for module_type in Modules]) = {}
+        self.modules: dict([(module_type, {"input": {}}) for module_type in Modules]) = {}
         self.current: None | Modules = None
 
     """

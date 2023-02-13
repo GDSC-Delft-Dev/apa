@@ -19,12 +19,12 @@ class Pipeline:
 
         # Build the modules chain
         tail: Module = None
-        for module in config.modules:
+        for module, data in config.modules.iteritems():
             if self.head is None:
-                self.head = module(self.data_proto)
+                self.head = module(self.data_proto, data)
                 tail = self.head
             else:
-                self.tail.next = module(self.data_proto)
+                tail.next = module(self.data_proto, data)
                 tail = tail.next
 
     """
@@ -37,7 +37,7 @@ class Pipeline:
     Returns:
         The processed data.
     """
-    def run(self, img: Mat | list[Mat]) -> Data:
+    def run(self, img: Mat | list[Mat], ) -> Data:
         # Construct input data
         data = copy.deepcopy(self.data_proto)
         data.set(img)

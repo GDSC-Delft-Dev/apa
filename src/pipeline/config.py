@@ -1,5 +1,13 @@
 from modules.module import Module
+from mat import Mat
 
 class Config:
-    def __init__(self, modules: list[Module]):
-        self.modules: list[Module] = modules
+    """
+    Initializes the config.
+
+    Args:
+        modules: dictionary of modules to initialize and their initialization data
+    """
+    def __init__(self, modules: dict[Module, any]):
+        self.modules: dict[Module, any] = modules
+        

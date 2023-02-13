@@ -8,7 +8,7 @@ import cv2
 Pipeline module for mosaicing (stitching) images
 """
 class Mosaicing(Module):
-    def __init__(self, data: Data):
+    def __init__(self, data: Data, input: any):
         super().__init__("Mosaicing", Modules.MOSAIC, data)
 
     """

@@ -7,4 +7,4 @@ class Modules(Enum):
     PREPROCESS = 0,
     MOSAIC = 1,
     INDEX = 2,
-    INSIGHT = 3
+    INSIGHT = 3,
