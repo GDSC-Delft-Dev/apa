@@ -25,15 +25,12 @@ class Preprocess(Module):
     Returns:
         The preprocessed image(s).
     """ 
-    def run(self, img: list[cv2.Mat], rest: any) -> list[cv2.Mat]:
+    def run(self, data: Data):
         self.prepare() 
-        if rest == None:
-            return super().run(img, rest=None, save=True)
-        # apply masks to eliminate invalid areas in images
-        masked = [cv2.multiply(x, mask) for (x, mask) in zip(img, rest)]
+            
+        # Apply masks to eliminate invalid areas in images
+        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, data.modules[self.type]["masks"])]
         return super().run(masked, rest=None, save=True)
-
-
 
 class AgricultureVisionPreprocess(Preprocess):
 
@@ -60,15 +57,15 @@ class AgricultureVisionPreprocess(Preprocess):
     Returns:
         The preprocessed image(s).
     """    
-    def run(self, img: list[cv2.Mat], rest: any) -> list[cv2.Mat]:
+    def run(self, data: Data):
 
         self.prepare()
         # apply masks to eliminate invalid areas in images
 
-        masked = [cv2.multiply(x, mask) for (x, mask) in zip(img, rest)]
+        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, data.modules[self.type]["masks"])]
 
         percentiles = [(np.percentile(x, 5), np.percentile(x, 95)) for x in masked]
         bounds = [(max(0.0, p5 - 0.4 * (p95 - p5)), min(255.0, p95 + 0.4*(p95-p5))) 
                     for (p5, p95) in percentiles]
-        clipping = [np.clip(x, v_lower, v_upper).astype(np.uint8) for (x, (v_lower, v_upper)) in zip(img, bounds)]
+        clipping = [np.clip(x, v_lower, v_upper).astype(np.uint8) for (x, (v_lower, v_upper)) in zip(data.input, bounds)]
         return super(Preprocess, self).run(clipping, rest=None, save=True)

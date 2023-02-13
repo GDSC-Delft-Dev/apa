@@ -40,7 +40,7 @@ class Mosaicing(Module):
             if status != cv2.Stitcher_OK:
                 print("Error stitching images: code " + str(status))
                 raise Exception("The stiching failed")
-            data.modules[Modules.MOSAIC]["stitched"] = stitched
+            data.modules[self.type]["stitched"] = stitched
             
         # Run the next module
         return super().run(data)
