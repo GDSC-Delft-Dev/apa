@@ -41,3 +41,21 @@ pipeline.run(imgs)
 
 Note that the input images must be wrapped in the `Mat` class (wrapping a `cv2.Mat` class) to support images with various multispectral layouts.
 
+### Implementing modules
+The pipeline modules utilize OOP principles heavily in order to be chainable, and to enable simple performance reporting and analytics. We discern three types of module-related objects and the pipeline data object:
+
+<img src='uml.png'>
+
+To add functionality, implement one of these interfaces.
+
+#### Runnable
+The runnable is the simplest form of a pipeline element. While it is the building block of modules, the user can implement Runnables that are run by modules (such as `NDVI`).
+
+#### Module
+The module is a logical part of the image processing pipeline, chained sequentially with other pipelines. A module will perform its functionality when being `run()` and save the relevant data in the pipeline data object that will be passed to the following module.
+
+#### Parallel module
+The parallel module is a module that can run multiple threads of execution at the same time, essentially allowing parallel module invocations. Parallel modules implement logical groups of functionalities, such as the calculation of all indicies (e.g. `NDVI` and `Mositure`) that do not rely on each other.
+
+#### Pipeline data object
+The data object contains all data relevant to the pipeline job. The pipeline initializes the data object dynamically through the use of the `prepare()` method. In contrast to constructors, the pipeline prepares modules in a top-down fashion, first adding top-level tree objects (e.g. `indicies` before `indicies.NDVI`).

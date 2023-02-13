@@ -13,18 +13,8 @@ class Index(ParallelModule):
     Initializes the index module and its runnables.
     """
     def __init__(self, data: Data, input: any):
-        super().__init__("Index", Modules.INDEX, data)
-        data.modules[self.type]["indicies"] = {}
-
-        # TODO: don't harcode runnables
-        self.runnables: list[Runnable] = []
-        for runnable in [NDVI]:
-            self.runnables.append(runnable(data))
-
-
+        super().__init__("Index", Modules.INDEX, [NDVI], data)
+        
     def prepare(self, data: Data):
+        data.modules[self.type]["indicies"] = {}
         super().prepare(data)
-
-        for index in self.runnables:
-                self.runnables[index].prepare(data)
-            

@@ -11,9 +11,20 @@ Represents an arbitrary image processing pipeline module that can
 run multiple runnables at the same time.
 """
 class ParallelModule(Module):
-    def __init__(self, name: str, type: Modules, data: Data):  
+    """
+    Initializes the parallel module.
+
+    Args:
+        name: the name of the module
+        type: the type of the module
+        runnables: list of runnables to run in parallel
+        data: the pipeline data object
+    """
+    def __init__(self, name: str, type: Modules, runnables: list[Runnable], data: Data):  
         super().__init__(name, type, data)
-        data.modules[self.type]["runnables"] = {}
+
+        # Initialize runnables
+        self.runnables: list[Runnable] = [runnable(data) for runnable in runnables] 
 
     """
     Processes the image using the runnables.
@@ -40,4 +51,6 @@ class ParallelModule(Module):
     Prepares the module to be run.
     """
     def prepare(self, data: Data):
-        print(f"Running parallel module <{self.name}>")
+        data.modules[self.type]["runnables"] = {}
+        for runnable in self.runnables:
+            runnable.prepare(data)

@@ -6,14 +6,14 @@ from .data import Data
 Represents arbitrary runnable logic for image procesing.
 """
 class Runnable(ABC):
-    def __init__(self, name: str):
+    def __init__(self, name: str, data: Data):
         self.name: str = name
 
     """
     Abstract function for running the arbitrary logic.
     """
     @abstractmethod
-    def run(self, data: Data) -> cv2.Mat:
+    def run(self, data: Data):      
         pass
 
     """
