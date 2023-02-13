@@ -12,19 +12,19 @@ class Pipeline:
     """
     def __init__(self, config: Config):
         self.head: Module = None
-        self.tail: Module = None
 
         # Build the data object
         self.data_proto: Data = Data()
 
         # Build the modules chain
+        tail: Module = None
         for module in config.modules:
             if self.head is None:
                 self.head = module(self.data_proto)
-                self.tail = self.head
+                tail = self.head
             else:
                 self.tail.next = module(self.data_proto)
-                self.tail = self.tail.next
+                tail = tail.next
 
     """
     Runs the pipeline on the provided input images.
