@@ -1,14 +1,15 @@
 from pipeline import Pipeline
 import glob
 import cv2
-from templates.full import training_pipline
+from templates import full_pipeline
 
 def main():
     # Get test data
-    imgs = [cv2.imread(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
+    imgs = [cv2.imread(file) for file in glob.glob("test/data/mosaicing/farm/D*.jpg")]
+    print(imgs)
     
     # Run the pipeline
-    pipeline = training_pipline()
+    pipeline = full_pipeline()
     res = pipeline.run(imgs)
 
     # Print the result

@@ -9,17 +9,22 @@ from ..runnable import Runnable
 Pipeline module for calculating indicies
 """
 class Index(ParallelModule):
-    def __init__(self):
-        super().__init__("Index")
-        self.runnables: dict[Indicies, Runnable] = {
-            Indicies.NDVI: NDVI
-        }
+    """
+    Initializes the index module and its runnables.
+    """
+    def __init__(self, data: Data, input: any):
+        super().__init__("Index", Modules.INDEX, data)
+        data.modules[self.type]["indicies"] = {}
+
+        # TODO: don't harcode runnables
+        self.runnables: list[Runnable] = []
+        for runnable in [NDVI]:
+            self.runnables.append(runnable(data))
+
 
     def prepare(self, data: Data):
         super().prepare(data)
-        data.modules[Modules.INDEX] = {
-            "indicies": {}
-        }
 
         for index in self.runnables:
-            self.runnables[index].prepare(data)
+                self.runnables[index].prepare(data)
+            
