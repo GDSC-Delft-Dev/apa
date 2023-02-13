@@ -1,0 +1,6 @@
+notebook==6.5.2
+pandas==1.5.2
+numpy==1.24.1
+opencv-python==4.7.0.68
+matplotlib==3.6.2
+screeninfo==0.8.1
