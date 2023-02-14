@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from .data import Data
 
 """
-Represents arbitrary runnable logic for image procesing.
+Represents arbitrary runnable logic for image processing.
 """
 class Runnable(ABC):
     def __init__(self, name: str, data: Data):

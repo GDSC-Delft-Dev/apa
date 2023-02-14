@@ -12,10 +12,9 @@ def full_pipeline() -> Pipeline:
     cfg = Config(modules={Mosaicing: None, Index: None})
     return Pipeline(cfg)
 
-def training_pipline() -> Pipeline:
+def training_pipeline() -> Pipeline:
     # Get the masks
     masks = [cv2.imread(file) for file in glob.glob("../test/data/mosaicing/farm/mask*.JPG")]
-
     # Run the pipeline
     cfg = Config(modules={AgricultureVisionPreprocess: masks, Mosaicing: None})
     return Pipeline(cfg)
