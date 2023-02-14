@@ -45,3 +45,14 @@ class Pipeline:
         # Run the chain
         self.head.run(data)
         return data
+        
+    """
+    Prints out the current state of the pipeline.
+    """
+    def show(self):
+        print("-- Pipeline --")
+        tail = self.head
+        while tail:
+            print(f"<{tail.name}>")
+            tail = tail.next
+        print("----")

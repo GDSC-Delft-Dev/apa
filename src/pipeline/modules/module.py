@@ -55,15 +55,3 @@ class Module(Runnable):
     def prepare(self, data: Data):
         super().prepare(data)
         data.modules[self.type] = {}
-
-    """
-    Adds the provided module to the chain.
-    
-    Args:
-        module: the module to add to the chain
-    """
-    def add(self, module: Module):
-        if self.next:
-            self.next.add(module)
-        self.next = module
-        print(f"Added module <{self.name}>")
