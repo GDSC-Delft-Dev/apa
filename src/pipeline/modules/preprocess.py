@@ -1,4 +1,6 @@
 from .module import Module
+from .data import Data
+from .types import Modules
 import cv2
 import numpy as np
 
@@ -7,11 +9,9 @@ class Preprocess(Module):
     """
     Perform data preprocessing on raw images.
     """
-
-    def __init__(self, name: str = "Default preprocessing"):
-
-        self.name = name
-        super(Preprocess, self).__init__(name)
+    def __init__(self, data: Data, input: any):
+        super().__init__("Preprocesisng", Modules.PREPROCESS, data)
+        self.masks = input
 
     """
     Preprocesses the image(s) by multiplying by their respective mask, if any.
@@ -23,15 +23,10 @@ class Preprocess(Module):
     Returns:
         The preprocessed image(s).
     """ 
-    def run(self, img: list[cv2.Mat], rest: any) -> list[cv2.Mat]:
-        self.prepare() 
-        if rest == None:
-            return super().run(img, rest=None, save=True)
-        # apply masks to eliminate invalid areas in images
-        masked = [cv2.multiply(x, mask) for (x, mask) in zip(img, rest)]
+    def run(self, data: Data):
+        # Apply masks to eliminate invalid areas in images
+        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, self.masks)]
         return super().run(masked, rest=None, save=True)
-
-
 
 class AgricultureVisionPreprocess(Preprocess):
 
@@ -42,10 +37,8 @@ class AgricultureVisionPreprocess(Preprocess):
     The preprocessing applied is inspired from the 'Farmland image preprocessing' section in
     the corresponding paper.
     """
-
-    def __init__(self):
-        super(AgricultureVisionPreprocess, self).__init__("Agriculture Vision dataset preprocessing")
-
+    def __init__(self, data: Data, input: any):
+        super().__init__(data, input)
  
     """
     Preprocesses the image(s) by multiplying by their respective mask provided by the dataset.
@@ -58,15 +51,16 @@ class AgricultureVisionPreprocess(Preprocess):
     Returns:
         The preprocessed image(s).
     """    
-    def run(self, img: list[cv2.Mat], rest: any) -> list[cv2.Mat]:
-
-        self.prepare()
+    def run(self, data: Data):  
         # apply masks to eliminate invalid areas in images
+        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, self.masks)]
 
-        masked = [cv2.multiply(x, mask) for (x, mask) in zip(img, rest)]
-
+        # calculate the 5th and 95th percentile in the data
         percentiles = [(np.percentile(x, 5), np.percentile(x, 95)) for x in masked]
+        # create lower and upper bounds based on the percentiles
         bounds = [(max(0.0, p5 - 0.4 * (p95 - p5)), min(255.0, p95 + 0.4*(p95-p5))) 
                     for (p5, p95) in percentiles]
-        clipping = [np.clip(x, v_lower, v_upper).astype(np.uint8) for (x, (v_lower, v_upper)) in zip(img, bounds)]
-        return super(Preprocess, self).run(clipping, rest=None, save=True)
+        # use the created bounds to clip the input data
+        data.modules[self.type]["clipping"] =\
+            [np.clip(x, v_lower, v_upper).astype(np.uint8) for (x, (v_lower, v_upper)) in zip(data.input, bounds)]
+        return super().run(data)
