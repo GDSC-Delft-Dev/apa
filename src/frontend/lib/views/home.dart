@@ -83,22 +83,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _setMarker(_kMapDelft);
-  // }
-  //
-  // void _setMarker(LatLng point) {
-  //   setState(() {
-  //     _markers.add(
-  //       Marker(
-  //           markerId: MarkerId('marker'),
-  //           position: point),
-  //     );
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
 

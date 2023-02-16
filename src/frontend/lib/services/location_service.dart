@@ -2,6 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+/// Queries Google Maps API to fetch the location that user is searching for
+/// e.g. relates to user input in Google Maps search bar
 class LocationService {
 
   var key = dotenv.env['GOOGLE_MAPS_API_KEY'];
@@ -11,7 +13,6 @@ class LocationService {
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
     var placeId = json['candidates'][0]['place_id'] as String;
-    print(placeId);
     return placeId;
   }
 
@@ -20,9 +21,7 @@ class LocationService {
     final String url = 'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&inputtype=textquery&key=$key';
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
-    // Cast as map
-    var results = json['result'] as Map<String, dynamic>;
-    print(results);
+    var results = json['result'] as Map<String, dynamic>; // Cast to map
     return results;
   }
 
