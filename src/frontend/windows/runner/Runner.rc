@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "apa_app" "\0"
+            VALUE "FileDescription", "frontend" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "apa_app" "\0"
+            VALUE "InternalName", "frontend" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "apa_app.exe" "\0"
-            VALUE "ProductName", "apa_app" "\0"
+            VALUE "ProductName", "frontend" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
