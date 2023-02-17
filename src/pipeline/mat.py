@@ -1,17 +1,17 @@
 from __future__ import annotations
-from enum import Enum
+from enum import IntEnum
 import cv2
 import numpy as np
 
 """
 Defines channel types for the input images
 """
-class Channels(Enum):
-    R = 0,
-    G = 1,
-    B = 2,
-    NIR = 3,
-    FIR = 4,
+class Channels(IntEnum):
+    R = 0
+    G = 1
+    B = 2
+    NIR = 3
+    FIR = 4
     T = 5
 
 default_channels = [Channels.R, Channels.G, Channels.B]
@@ -19,20 +19,16 @@ default_channels = [Channels.R, Channels.G, Channels.B]
 """
 Multispectral cv2.Mat with channel naming support.
 """
-class Mat(cv2.Mat):
+class Mat():
     """
     Initializes the mat.
 
     Args:
-        shape: the shape of the mat (height, width, channels)
-        data: 
+        arr: the image array
+        channels: list of channels in the image array
     """
-    def __init__(self, shape, data: np.ndarray, channels: list[Channels] = default_channels):
-        # Initialize the cv2.Mat
-        super.__init__(shape)
-        self[:,:,:] = data
-
-        # Add channel data
+    def __init__(self, arr: np.ndarray, channels: list[Channels] = default_channels):
+        self.arr = arr
         self.channels: list[Channels] = channels
 
     """
@@ -47,7 +43,7 @@ class Mat(cv2.Mat):
     @classmethod
     def read(cls, path: str) -> Mat:
         mat = cv2.imread(path)
-        return cls(mat.shape, np.asarray(mat[:,:]))
+        return cls(mat, channels = default_channels)
 
     """
     Full reads an image with an arbitrary number of channels from multiple
@@ -73,14 +69,23 @@ class Mat(cv2.Mat):
             assert(shape == mat.shape[:2])
 
         # Flatten channels
-        channels=sum(paths.values(), [])
+        channels = sum(paths.values(), [])
 
         # Combine arrays
-        data = np.concatenate([np.asarray(mat[:,:]) for mat in mats], axis=0)
+        arr = np.concatenate([np.asarray(mat[:,:]) for mat in mats], axis=0)
         shape.append(len(channels))
 
         # Return the combined data
-        return cls(shape, data, channels=channels)
+        return cls(shape, data=data, channels=channels)
+
+    """
+    Returns the underlying mat.
+
+    Returns:
+        The underlying mat
+    """
+    def get(self) -> cv2.Mat:
+        return self.arr
     
     """
     Provides the specified channels of the mat.
@@ -93,16 +98,12 @@ class Mat(cv2.Mat):
     """
     def __getitem__(self, key: Channels | list[Channels]) -> Mat:
         # Make sure the input is an array
-        if key is not list:
+        if not isinstance(key, list):
             key = [key]
 
-        # Make the shape
-        shape = self.shape
-        shape[2] = len(key)
-
         # Get data
-        data = np.concatenate([np.asarray(self[:,:,self.channels.index(channel)]) for channel in key])
+        arr = self.arr[:,:,[self.channels.index(channel) for channel in key]]
 
         # Return the new mat
-        return Mat(shape, data, channels=key)
+        return Mat(arr, channels=key)
 
