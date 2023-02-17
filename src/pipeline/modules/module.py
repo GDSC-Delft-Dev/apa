@@ -12,8 +12,12 @@ Represents an arbitrary image processing pipeline module.
 class Module(Runnable):
     """
     Initializes the module metadata and the data object.
+
+    Args:
+        name: the name of the module
+        type: the type of the module
     """
-    def __init__(self, name: str, type: Modules, data: Data):  
+    def __init__(self, name: str, type: Modules):  
         self.name: str = name
         self.next: Module = None
         self.type: Modules = type

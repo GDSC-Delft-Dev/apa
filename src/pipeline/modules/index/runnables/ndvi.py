@@ -4,13 +4,26 @@ from ..indicies import Indicies
 from mat import Channels
 import numpy as np
 
+"""
+The Normalized Differential Vegetation Index runnable.
+https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index
+"""
 class NDVI(Runnable):
     def __init__(self, data: Data):
         super().__init__("NDVI", data)
         self.type = Indicies.NDVI
 
     """
-    Computes the NDVI map on the processed image.
+    Computes the NDVI map on the processed image. The values inare saved
+    in the runnable's index field. 
+
+    range - (-1.0, 1.0); Uue the RdYlGn cmap to display.
+    
+    Args:
+        data: the pipeline data object with the stitched images
+
+    Returns:
+        Whether the execution was successful.
     """
     def run(self, data: Data) -> bool:
         try:
@@ -46,6 +59,9 @@ class NDVI(Runnable):
 
     """
     Prepares the NDVI data space.
+
+    Args:
+        data: the pipeline data object
     """
     def prepare(self, data: Data):
         super().prepare(data)

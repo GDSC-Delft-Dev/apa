@@ -15,13 +15,13 @@ class Mosaicing(Module):
     Sitches the images to create an orthomosaic image of the farm.
     
     Args:
-        images: the images to stich
+        data: the pipeline data object with the input images
 
     Raises:
         Exception: when the sticher fails to stich the images
 
     Returns:
-        The stiched image
+        The stiched image.
     """
     def run(self, data: Data):
         self.prepare(data)
