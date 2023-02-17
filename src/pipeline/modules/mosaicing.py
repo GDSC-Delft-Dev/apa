@@ -36,11 +36,13 @@ class Mosaicing(Module):
             stitcher.setWaveCorrection(False)
 
             # Run the algorithm
-            status, stitched = stitcher.stitch(data.input)
+            status, stitched = stitcher.stitch([mat.get() for mat in data.input])
             if status != cv2.Stitcher_OK:
                 print("Error stitching images: code " + str(status))
                 raise Exception("The stiching failed")
-            data.modules[self.type]["stitched"] = stitched
+
+            # Make a mat
+            data.modules[self.type]["stitched"] = Mat(stitched, data.input[0].channels)
             
         # Run the next module
         return super().run(data)

@@ -56,6 +56,7 @@ class Mat():
     Returns:
         The loaded Mat.
     """
+    # TODO: Warning - untested
     @classmethod
     def fread(cls, paths: dict[str, list[Channels]]) -> Mat:
         # Load the images
@@ -72,20 +73,19 @@ class Mat():
         channels = sum(paths.values(), [])
 
         # Combine arrays
-        arr = np.concatenate([np.asarray(mat[:,:]) for mat in mats], axis=0)
-        shape.append(len(channels))
+        arr = np.concatenate([np.asarray(mat[:,:,:]) for mat in mats], axis=2)
 
         # Return the combined data
-        return cls(shape, data=data, channels=channels)
+        return cls(shape, arr, channels=channels)
 
     """
-    Returns the underlying mat.
+    Provides a view of the underlying image array.
 
     Returns:
-        The underlying mat
+        A view of the underlying image array.
     """
     def get(self) -> cv2.Mat:
-        return self.arr
+        return self.arr.view()
     
     """
     Provides the specified channels of the mat.
@@ -94,7 +94,7 @@ class Mat():
         key: channel or list of channels to return
 
     Returns:
-        Ndarray of the specified channels.
+        Mat with the specified channels.
     """
     def __getitem__(self, key: Channels | list[Channels]) -> Mat:
         # Make sure the input is an array
@@ -102,8 +102,9 @@ class Mat():
             key = [key]
 
         # Get data
+        print([self.channels.index(channel) for channel in key])
         arr = self.arr[:,:,[self.channels.index(channel) for channel in key]]
 
-        # Return the new mat
+        # Otherwise, return the new mat
         return Mat(arr, channels=key)
 
