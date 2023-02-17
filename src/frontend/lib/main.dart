@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:apa_app/views/home.dart';
-import 'package:apa_app/views/addfield.dart';
-import 'package:apa_app/views/loading.dart';
-import 'package:apa_app/views/myfields.dart';
-import 'package:apa_app/views/flydrone.dart';
-import 'package:apa_app/views/settings.dart';
+import 'package:frontend/views/home.dart';
+import 'package:frontend/views/addfield.dart';
+import 'package:frontend/views/loading.dart';
+import 'package:frontend/views/myfields.dart';
+import 'package:frontend/views/flydrone.dart';
+import 'package:frontend/views/settings.dart';
+import 'package:frontend/widgets/bottom_navbar_widget.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
@@ -66,28 +67,9 @@ class _MainPageState extends State<MainPage> {
         index: currIndex,
         children: screens,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currIndex,
-          onTap: (idx) => setState(() => currIndex = idx),
-          backgroundColor: Colors.blueAccent,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white70,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'Map',
-              backgroundColor: Colors.blueAccent,),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_chart_rounded),
-              label: 'My fields',
-              backgroundColor: Colors.blueAccent,),
-            BottomNavigationBarItem(icon: Icon(Icons.airplanemode_active),
-                label: 'Fly drone',
-                backgroundColor: Colors.blueAccent),
-            BottomNavigationBarItem(icon: Icon(Icons.settings),
-                label: 'Settings',
-                backgroundColor: Colors.blueAccent),
-          ]
+      bottomNavigationBar: MyBottomNavigationBar(
+        currentIndex: currIndex,
+        onItemSelected: (idx) => setState(() => currIndex = idx),
       ),
     );
   }

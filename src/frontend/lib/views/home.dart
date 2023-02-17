@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:apa_app/views/loading.dart';
-import 'package:apa_app/services/location_service.dart';
+import 'package:frontend/views/loading.dart';
+import 'package:frontend/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Home extends StatefulWidget {
