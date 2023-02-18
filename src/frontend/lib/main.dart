@@ -11,9 +11,11 @@ import 'package:firebase_core/firebase_core.dart';
 
 Future main() async {
   // Allows env vars to be used in source code
-  await dotenv.load(fileName: "lib/.env");
+  final dotenvFuture = dotenv.load(fileName: "lib/.env");
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  final firebaseFuture = Firebase.initializeApp();
+  // Parallellize laoding of env vars and initializing Firebase
+  await Future.wait([dotenvFuture, firebaseFuture]);
   runApp(const MyApp());
 }
 
