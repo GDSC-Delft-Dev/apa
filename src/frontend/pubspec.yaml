@@ -41,6 +41,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   # Firebase database
   cloud_firestore: ^4.4.2
+  firebase_auth: ^4.2.8
 
 dev_dependencies:
   # A build system for Dart code generation and modular compilation.
