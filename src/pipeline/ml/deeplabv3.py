@@ -33,6 +33,7 @@ def convolution_block(
         use_bias=use_bias,
         kernel_initializer=keras.initializers.HeNormal(),
     )(block_input)
+    # do batch normalization on the convolution result
     x = layers.BatchNormalization()(x)
     return tf.nn.relu(x)
 
@@ -77,7 +78,6 @@ def DeepLabV3Plus(image_size: int, num_classes: int, channels: int):
             weights=None, include_top=False, input_tensor=model_input
         )
     x = resnet50.get_layer("conv4_block6_2_relu").output
-
     x = DilatedSpatialPyramidPooling(x)
 
     # upsampling to recover dimensions after pooling
@@ -98,6 +98,3 @@ def DeepLabV3Plus(image_size: int, num_classes: int, channels: int):
 
     model_output = layers.Conv2D(num_classes, kernel_size=(1, 1), padding="same")(x)
     return keras.Model(inputs=model_input, outputs=model_output)
-
-
-

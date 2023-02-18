@@ -5,7 +5,7 @@ import cv2
 
 class Pipeline:
     def __init__(self):
-        MODEL_PATH = "../../notebooks/deepv3_seg"
+        MODEL_PATH = "./ml/deepv3_seg"
         self.chain: Module = SemanticSegmentation(MODEL_PATH)
 
     """
