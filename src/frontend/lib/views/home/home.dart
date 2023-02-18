@@ -50,8 +50,7 @@ class _HomeState extends State<Home> {
       fillColor: Colors.transparent
   );
 
-  // For creating custom polygons by tapping
-  Set<Marker> _markers = Set<Marker>();
+  // For creating custom polygons by tappingdelft
   Set<Polygon> _polygons = Set<Polygon>();
   List<LatLng> polygonLatLngs = <LatLng>[];
   int _polygonIdCounter = 1;

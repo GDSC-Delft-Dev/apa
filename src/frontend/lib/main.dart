@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/home.dart';
-import 'package:frontend/views/addfield.dart';
+import 'package:frontend/views/home/home.dart';
+import 'package:frontend/views/addfield/addfield.dart';
 import 'package:frontend/views/loading.dart';
-import 'package:frontend/views/myfields.dart';
-import 'package:frontend/views/flydrone.dart';
-import 'package:frontend/views/settings.dart';
-import 'package:frontend/widgets/bottom_navbar_widget.dart';
+import 'package:frontend/views/myfields/myfields.dart';
+import 'package:frontend/views/flydrone/flydrone.dart';
+import 'package:frontend/views/settings/settings.dart';
+import 'package:frontend/views/wrapper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -14,7 +14,7 @@ Future main() async {
   final dotenvFuture = dotenv.load(fileName: "lib/.env");
   WidgetsFlutterBinding.ensureInitialized();
   final firebaseFuture = Firebase.initializeApp();
-  // Parallellize laoding of env vars and initializing Firebase
+  // Parallelize loading of env vars and initializing Firebase
   await Future.wait([dotenvFuture, firebaseFuture]);
   runApp(const MyApp());
 }
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const MainPage(),
+        '/': (context) => Wrapper(),
         '/load': (context) => Loading(),
         '/home': (context) => const Home(title: 'APA'),
         '/add': (context) => const AddField(),
@@ -44,39 +44,4 @@ class MyApp extends StatelessWidget {
 
     );
   }
-}
-
-class MainPage extends StatefulWidget {
-
-  const MainPage({super.key});
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-
-  int currIndex = 0;
-  final screens = [
-    Home(title: 'APA'),
-    MyFields(),
-    FlyDrone(droneName: 'DJI Mavic 3'),
-    Settings(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // Ensures state of all children are preserved
-      body: IndexedStack(
-        index: currIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: MyBottomNavigationBar(
-        currentIndex: currIndex,
-        onItemSelected: (idx) => setState(() => currIndex = idx),
-      ),
-    );
-  }
-
 }
