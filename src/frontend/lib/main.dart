@@ -7,10 +7,13 @@ import 'package:frontend/views/flydrone.dart';
 import 'package:frontend/views/settings.dart';
 import 'package:frontend/widgets/bottom_navbar_widget.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 Future main() async {
   // Allows env vars to be used in source code
   await dotenv.load(fileName: "lib/.env");
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

@@ -1,13 +1,14 @@
 buildscript {
     ext.kotlin_version = '1.7.10'
     repositories {
-        google()
-        mavenCentral()
+        google()  // Google's Maven repository
+        mavenCentral()  // Maven Central repository
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.15' // Google services Gradle plugin (for Firebase e.g.)
     }
 }
 
