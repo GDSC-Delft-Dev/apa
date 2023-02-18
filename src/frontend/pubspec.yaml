@@ -42,6 +42,7 @@ dependencies:
   # Firebase database
   cloud_firestore: ^4.4.2
   firebase_auth: ^4.2.8
+  provider: ^6.0.5
 
 dev_dependencies:
   # A build system for Dart code generation and modular compilation.
