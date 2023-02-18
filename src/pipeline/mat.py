@@ -102,7 +102,6 @@ class Mat():
             key = [key]
 
         # Get data
-        print([self.channels.index(channel) for channel in key])
         arr = self.arr[:,:,[self.channels.index(channel) for channel in key]]
 
         # Otherwise, return the new mat

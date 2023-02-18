@@ -3,6 +3,7 @@ from ...data import Data, Modules
 from ..indicies import Indicies
 from mat import Channels
 import numpy as np
+import matplotlib.pyplot as plt
 
 """
 The Normalized Differential Vegetation Index runnable.
@@ -17,7 +18,8 @@ class NDVI(Runnable):
     Computes the NDVI map on the processed image. The values inare saved
     in the runnable's index field. 
 
-    range - (-1.0, 1.0); Uue the RdYlGn cmap to display.
+    range - (-1.0, 1.0); 
+    Use plt.imshow(ndvi, cmap='RdYlGn', vmin=-1.0, vmax=1.0) to preview.
     
     Args:
         data: the pipeline data object with the stitched images
@@ -28,12 +30,14 @@ class NDVI(Runnable):
     def run(self, data: Data) -> bool:
         try:
             # Get the channels
-            nir = data.modules[Modules.MOSAIC]["stitched"][Channels.NIR].get()
+            nir = data.modules[Modules.MOSAIC]["stitched"][Channels.B].get()
             red = data.modules[Modules.MOSAIC]["stitched"][Channels.R].get()
 
             # Calculate 
             ndvi = self.calculate(nir, red)
             data.modules[Modules.INDEX]["runnables"][self.type]["index"] = ndvi
+            plt.imshow(ndvi, cmap='RdYlGn', vmin=-1.0, vmax=1.0)
+            plt.show()
             return True
 
         # Catch exception

@@ -17,7 +17,7 @@ class Module(Runnable):
         name: the name of the module
         type: the type of the module
     """
-    def __init__(self, name: str, type: Modules):  
+    def __init__(self, name: str, type: Modules, data: Data):  
         self.name: str = name
         self.next: Module = None
         self.type: Modules = type
