@@ -71,11 +71,11 @@ flutter doctor
 In order to be able to use Google Maps API, several steps need to be taken with regards to private key configuration.
 
 - Create an account in https://console.developers.google.com/ and add our APA project (if not done so yet), in order to fetch your private API key for Google Maps.
-- To run on Android - add the following to the `src/apa_app/android/local.properties` file:
+- To run on Android - add the following to the `src/frontend/android/local.properties` file:
 ````
 GMapsAPIKey={YOUR_PRIVATE_GOOGLE_MAPS_API_KEY}
 ````` 
-- To run on iOS - add the following to the `src/apa_app/ios/Flutter/Debug.xcconfig` file:
+- To run on iOS - add the following to the `src/frontend/ios/Flutter/Debug.xcconfig` file:
 ```` 
 #include "Generated.xcconfig"
 GOOGLE_MAPS_API_KEY={YOUR_PRIVATE_GOOGLE_MAPS_API_KEY}

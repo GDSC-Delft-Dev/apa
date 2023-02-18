@@ -38,7 +38,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
-    namespace 'com.example.frontend'
+//    namespace 'com.example.frontend'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
