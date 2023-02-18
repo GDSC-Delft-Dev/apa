@@ -6,6 +6,7 @@ from mat import Mat
 from modules.data import Data
 from config import Config
 import copy
+import numpy as np
 
 class Pipeline:
     """
@@ -38,6 +39,11 @@ class Pipeline:
         The processed data.
     """
     def run(self, imgs: Mat | list[Mat]) -> Data:
+        # Verify input integrity
+        # Check that the channels of all images are the same
+        channels = [img.channels for img in imgs]
+        assert(channels.count(channels[0]) == len(channels))
+
         # Construct input data
         data = copy.deepcopy(self.data_proto)
         data.set(imgs)
