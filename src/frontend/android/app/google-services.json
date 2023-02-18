@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "180246453185",
+    "project_id": "apa-frontend-dd36c",
+    "storage_bucket": "apa-frontend-dd36c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180246453185:android:343852f1a010ac534cad40",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180246453185-sunokfpp6fdoia3krp0r0lp3glt1hbtv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfJh6MO267y_hGyg-u4tE3XNERKyALebs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "180246453185-sunokfpp6fdoia3krp0r0lp3glt1hbtv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
