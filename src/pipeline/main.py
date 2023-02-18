@@ -1,14 +1,20 @@
 from pipeline import Pipeline
 import glob
 import cv2
+from templates import full_pipeline
+from modules.mosaicing import Mosaicing
+from mat import Mat, Channels
 
 def main():
     # Get test data
-    img = [cv2.imread(file) for file in glob.glob("test/data/segmentation/*.jpg")]
-    
+    imgs = [Mat.read(file) for file in glob.glob("test/data/mosaicing/farm/D*.jpg")]
     # Run the pipeline
-    pipeline = Pipeline()
-    pipeline.run(img, None)
+    pipeline = full_pipeline()
+    pipeline.show()
+    res = pipeline.run(imgs)
+
+    # Print the result
+    print(res)
 
 if __name__ == "__main__":
     main()
