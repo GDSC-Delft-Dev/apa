@@ -34,7 +34,7 @@ class AuthService {
     }
   }
 
-  // TODO: Register with email and password
+  // TODO: Register with email and password and call updateUserData in farmers_store
 
   // Sign out user
   Future signOut() async {
