@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/services/auth_service.dart';
 
+/// This screen allows users to see their profile info
+/// as well as settings
 class Settings extends StatefulWidget {
 
   const Settings({super.key});

@@ -8,6 +8,7 @@ import '../../models/field_model.dart';
 import '../addfield/addfield.dart';
 import 'fields_list.dart';
 
+/// This screen allows users to inspect and manage all of their fields
 class MyFields extends StatefulWidget {
 
   const MyFields({super.key});

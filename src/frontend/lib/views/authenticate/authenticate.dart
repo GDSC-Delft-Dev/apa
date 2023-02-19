@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/authenticate/sign_in.dart';
 
+/// This screen handles user authentication (logging in e.g.)
 class Authenticate extends StatefulWidget {
 
   @override

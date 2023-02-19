@@ -6,6 +6,8 @@ import 'package:frontend/views/loading.dart';
 import 'package:frontend/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+/// This is the first screen within the application that the user encounters
+/// It contains a Google Map to indicate all fields owned by the user
 class Home extends StatefulWidget {
 
   const Home({super.key, required this.title});

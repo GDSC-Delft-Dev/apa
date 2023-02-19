@@ -3,6 +3,7 @@ import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/widgets/text_input.dart';
 import '../loading.dart';
 
+/// This screen allows user sign-in using e-mail and password
 class SignIn extends StatefulWidget {
 
   @override

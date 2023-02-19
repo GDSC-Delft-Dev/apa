@@ -5,8 +5,8 @@ import 'package:frontend/views/flydrone/flydrone.dart';
 import 'package:frontend/views/settings/settings.dart';
 import 'package:frontend/widgets/bottom_navbar.dart';
 
-/// Will return either the home screen or login screen upon entering the app
-
+/// Main screen that the user sees
+/// Depending on the index that is selected by the user through icons in the bottom nav bar
 class MainPage extends StatefulWidget {
 
   const MainPage({super.key});

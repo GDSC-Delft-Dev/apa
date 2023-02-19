@@ -1,5 +1,6 @@
+
 /// Represents a user of the Terrafarm app
-/// Note that "UserModel" is used rather than "User", in order to distinguish between our model and the Firebase User class
+/// Note that Firebase Authentication has a class called "User"
 class UserModel {
 
   final String uid;
