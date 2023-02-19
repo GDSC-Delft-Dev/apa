@@ -145,6 +145,7 @@ class _HomeState extends State<Home> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'home_add',
         onPressed: () async {
           await Navigator.push(
             context,

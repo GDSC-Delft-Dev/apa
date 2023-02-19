@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/home/home.dart';
-import 'package:frontend/views/myfields/myfields.dart';
+import 'package:frontend/views/myfields/my_fields.dart';
 import 'package:frontend/views/flydrone/flydrone.dart';
 import 'package:frontend/views/settings/settings.dart';
 import 'package:frontend/widgets/bottom_navbar.dart';

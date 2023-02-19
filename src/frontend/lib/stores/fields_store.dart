@@ -1,11 +1,13 @@
 import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/field_model.dart';
 
 /// Handles CRUD operations for the 'fields' collection in Firestore
 class FieldsStore {
 
   // the farmer uid that this fields collection corresponds to
+  // TODO: add field uid?
   final String uid;
 
   FieldsStore({required this.uid});
@@ -14,7 +16,7 @@ class FieldsStore {
   final CollectionReference fieldsCollection = FirebaseFirestore.instance.collection('fields');
 
   /// Updates attribute values for an instance in the 'fields' collection
-  Future updateFieldData(String uid, String name, Float area) async {
+  Future updateFieldData(String name, double area) async {
     return await fieldsCollection.doc(uid).set({
       'field_name': name,
       'area': area
@@ -24,9 +26,19 @@ class FieldsStore {
     });
   }
 
+  List <FieldModel> _fieldListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+      return FieldModel(
+          fieldName: doc.get('field_name') ?? '',
+          area: doc.get('area') ?? 0
+      );
+    }).toList();
+  }
+
   /// Fetches fields stream from Firestore
-  Stream<QuerySnapshot> get fields {
-    return fieldsCollection.snapshots();
+  Stream<List<FieldModel>> get fields {
+    return fieldsCollection.snapshots()
+    .map(_fieldListFromSnapshot);
   }
 
 }

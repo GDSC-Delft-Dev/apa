@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:frontend/models/farmer_model.dart';
+import 'package:frontend/models/user_model.dart';
 
 /// Handles user authentication by communicating with Firebase Authentication
 class AuthService {
@@ -7,19 +7,19 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Create user object based on FirebaseUser
-  Farmer? _userFromFirebaseUser(User? user) {
-    return user != null ? Farmer(uid: user.uid) : null;
+  UserModel? _userModelFromFirebaseUser(User? user) {
+    return user != null ? UserModel(uid: user.uid) : null;
   }
 
   // Listens to authentication changes using Firebase stream
   // Firebase User when user logs in
   // Null when user signs out
-  Stream<Farmer?> get user {
+  Stream<UserModel?> get user {
     return _auth.authStateChanges()
-        .map((User? user) => _userFromFirebaseUser(user));
+        .map((User? user) => _userModelFromFirebaseUser(user));
   }
 
-  // Sign in with email and password
+  /// Sign in with email and password
   Future signInWithEmailAndPwd(String email, String pwd) async {
     try {
       final credential = await _auth.signInWithEmailAndPassword(email: email, password: pwd);
@@ -34,9 +34,7 @@ class AuthService {
     }
   }
 
-  // TODO: Register with email and password and call updateUserData in farmers_store
-
-  // Sign out user
+  /// Sign out user
   Future signOut() async {
     try {
       return await _auth.signOut();

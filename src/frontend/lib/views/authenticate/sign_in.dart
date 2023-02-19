@@ -27,7 +27,7 @@ class _SignInState extends State<SignIn> {
         backgroundColor: Colors.grey[200],
         appBar: AppBar(
         elevation: 0.0,
-        title: Text('Welcome to TerraFarm'),
+        title: Text('Welcome to Terrafarm'),
         ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
