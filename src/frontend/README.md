@@ -68,6 +68,13 @@ flutter doctor
 
 ## How to use
 
+You can use the following dummy credentials for logging into the application:
+````
+e-mail: andyzaidman42@tudelft.net
+password: andy12345
+````
+For all invalid authentication attempts, an error message will be displayed.
+
 In order to be able to use Google Maps API, several steps need to be taken with regards to private key configuration.
 
 - Create an account in https://console.developers.google.com/ and add our APA project (if not done so yet), in order to fetch your private API key for Google Maps.
@@ -129,6 +136,8 @@ The following routes are defined in `main.dart`
         '/settings': (context) => const Settings(),
       }
 ````
+Upon logging in, the user will be redirected to the `MainPage()`, which is the screen that the user sees currently.
+Which screen is displayed depends on which icon is toggled in the bottom navigation bar.
 
 <!-- ## Data models
 ## Services
