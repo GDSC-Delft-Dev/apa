@@ -121,16 +121,13 @@ lib/
 | - stores/ - Contains store(s) for state-management of your application, to connect the reactive data of your application with the UI
 |- utils/ - Contains the common utility functions of the application
 |- main.dart - Starting point of the application - all the application level configurations are defined in this file i.e, theme, routes, title, orientation etc.
-|- wrapper.dart - Listens for authentication status changes - will return main page if logged in or login screen if not logged in
-|- mainpage.dart - Renders screen that the user sees currently - which screen is displayed depends on which icon is toggled in the bottom navigation bar.
-|- loading.dart - Displayed whenever user has to wait for response
 ````
 
 ## Routes
 The following routes are defined in `main.dart`
 ````
       routes: {
-        '/': (context) => const MainPage(),
+        '/': (context) => const Wrapper(),
         '/load': (context) => Loading(),
         '/home': (context) => const Home(title: 'APA'),
         '/add': (context) => const AddField(),
@@ -139,6 +136,8 @@ The following routes are defined in `main.dart`
         '/settings': (context) => const Settings(),
       }
 ````
+The initial route that is entered is the `Wrapper()`, which listens for authentication status changes - will return `MainPage()` if logged in or `Authenticate()` if not logged in (both under `views/`).
+`MainPage()` renders screen that the user sees currently - which screen is displayed depends on which icon is toggled in the bottom navigation bar.
 
 <!-- ## Data models
 ## Services
