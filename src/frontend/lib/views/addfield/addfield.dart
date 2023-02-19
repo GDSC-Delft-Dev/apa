@@ -23,6 +23,8 @@ class _AddFieldState extends State<AddField> {
               child: ElevatedButton(
                     child: Text('Add dummy field'),
                     onPressed: () async => {
+                      // TODO: add new field instead of updating
+                      // TODO: fetch current user uid
                       await FieldsStore(uid: 'lQj5N2d1OsZisXPCY20pJfWxlr03')
                           .updateFieldData('Potato field 1', 13.40)
                     }
