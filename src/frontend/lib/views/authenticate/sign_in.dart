@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/widgets/text_input.dart';
+import '../loading.dart';
 
 class SignIn extends StatefulWidget {
 
@@ -12,6 +14,7 @@ class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   // Text field state
   String email = '';
@@ -20,7 +23,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
         backgroundColor: Colors.grey[200],
         appBar: AppBar(
         elevation: 0.0,
@@ -34,18 +37,18 @@ class _SignInState extends State<SignIn> {
             children: <Widget>[
               SizedBox(height: 20.0),
               TextFormField(
+                decoration: userTextInput.copyWith(hintText: 'Email'),
                 validator: (val) => val!.isEmpty ? 'Enter an e-mail' : null,
                 onChanged: (val) {
-                  // TODO: validate user email
                   setState(() => email = val);
                 },
               ),
               SizedBox(height: 20.0),
               TextFormField(
                 obscureText: true, // hide password entered
+                decoration: userTextInput.copyWith(hintText: 'Password'),
                 validator: (val) => val!.length < 6 ? 'Enter a password 6+ chars long' : null,
                 onChanged: (val) {
-                  // TODO: validate user password
                   setState(() => pwd = val);
                 },
               ),
@@ -56,13 +59,12 @@ class _SignInState extends State<SignIn> {
                     style: TextStyle(color: Colors.white),
                   ),
                 onPressed: () async {
-                    // TODO: remove prints
-                  print(email);
-                  print(pwd);
                   if (_formKey.currentState!.validate()) {
+                    setState(() => loading = true); // Show loading screen
                     dynamic result = await _auth.signInWithEmailAndPwd(email, pwd);
                     if (result == null) {
                       setState(() => error = 'Could not sign in with those credentials!');
+                      loading = false; // Go back to login screen
                     }
                   }
                 },

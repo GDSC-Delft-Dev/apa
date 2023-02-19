@@ -3,7 +3,7 @@ import 'package:frontend/views/home/home.dart';
 import 'package:frontend/views/myfields/myfields.dart';
 import 'package:frontend/views/flydrone/flydrone.dart';
 import 'package:frontend/views/settings/settings.dart';
-import 'package:frontend/widgets/bottom_navbar_widget.dart';
+import 'package:frontend/widgets/bottom_navbar.dart';
 
 /// Will return either the home screen or login screen upon entering the app
 
