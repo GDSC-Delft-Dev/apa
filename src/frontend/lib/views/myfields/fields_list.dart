@@ -16,13 +16,13 @@ class _FieldListState extends State<FieldList> {
   Widget build(BuildContext context) {
 
     final fields = Provider.of<List<FieldModel>>(context);
-    fields.forEach((field) {
-      print(field.fieldName);
-      print(field.area);
-    });
 
     return Scaffold(
-      body: Text(fields.toString()),
+      body: Column(
+        children: [
+          for (var field in fields) Center(child: Text(field.fieldName))
+        ],
+      ),
     );
   }
 
