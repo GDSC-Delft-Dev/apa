@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Auto-generated files by FlutterFire containing sensitive project info
+/lib/firebase_options.dart
+
+#/android/app/google-services.json
+
+
