@@ -26,7 +26,7 @@ class _MyFieldsState extends State<MyFields> {
     // StreamProvider listens to changes in Firestore collection 'fields'
     return StreamProvider<List<FieldModel>>.value(
       // TODO: get current user uid
-      value: FieldsStore(uid: 'lQj5N2d1OsZisXPCY20pJfWxlr03').fields,
+      value: FieldsStore(uid: 'NlDfTwwMaYaVB1eTYYIkAdSDkMg1').fields,
       initialData: [],
       child: Scaffold(
           appBar: AppBar(

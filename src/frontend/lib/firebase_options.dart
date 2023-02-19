@@ -44,39 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDSVXiHQZzxtLqHNoBNRyv9fEgjI4_txiQ',
-    appId: '1:180246453185:web:55a8298bd9d6a0514cad40',
-    messagingSenderId: '180246453185',
-    projectId: 'apa-frontend-dd36c',
-    authDomain: 'apa-frontend-dd36c.firebaseapp.com',
-    storageBucket: 'apa-frontend-dd36c.appspot.com',
+    apiKey: 'AIzaSyDrpELbr0ejdRTXsHLf1Ny_izSurlkoo_o',
+    appId: '1:389517956549:web:be187fbe6f9ade1387e7ac',
+    messagingSenderId: '389517956549',
+    projectId: 'terrafarm-378218',
+    authDomain: 'terrafarm-378218.firebaseapp.com',
+    storageBucket: 'terrafarm-378218.appspot.com',
+    measurementId: 'G-QP3DR51SFJ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCfJh6MO267y_hGyg-u4tE3XNERKyALebs',
-    appId: '1:180246453185:android:343852f1a010ac534cad40',
-    messagingSenderId: '180246453185',
-    projectId: 'apa-frontend-dd36c',
-    storageBucket: 'apa-frontend-dd36c.appspot.com',
+    apiKey: 'AIzaSyCHLMhmXm75l7Vmh-JxQZ3xlwUc6Lm87Eo',
+    appId: '1:389517956549:android:8e25772fa7c4fc7787e7ac',
+    messagingSenderId: '389517956549',
+    projectId: 'terrafarm-378218',
+    storageBucket: 'terrafarm-378218.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCcVA4F9t8j8zw1syB2w7XHNDviI6HOPs8',
-    appId: '1:180246453185:ios:0bc7a512a552fd7d4cad40',
-    messagingSenderId: '180246453185',
-    projectId: 'apa-frontend-dd36c',
-    storageBucket: 'apa-frontend-dd36c.appspot.com',
-    iosClientId: '180246453185-8oaim7a1f8btoo3tldkdvmdk8uf5us05.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCh9pRw38mPNV3e_aKbJt10i7xALI_WVQU',
+    appId: '1:389517956549:ios:ed471d25934d0f3387e7ac',
+    messagingSenderId: '389517956549',
+    projectId: 'terrafarm-378218',
+    storageBucket: 'terrafarm-378218.appspot.com',
+    iosClientId: '389517956549-7j8djai8nq13r1ed099mtkihejjtr40o.apps.googleusercontent.com',
     iosBundleId: 'com.example.apaApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCcVA4F9t8j8zw1syB2w7XHNDviI6HOPs8',
-    appId: '1:180246453185:ios:0bc7a512a552fd7d4cad40',
-    messagingSenderId: '180246453185',
-    projectId: 'apa-frontend-dd36c',
-    storageBucket: 'apa-frontend-dd36c.appspot.com',
-    iosClientId: '180246453185-8oaim7a1f8btoo3tldkdvmdk8uf5us05.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCh9pRw38mPNV3e_aKbJt10i7xALI_WVQU',
+    appId: '1:389517956549:ios:ed471d25934d0f3387e7ac',
+    messagingSenderId: '389517956549',
+    projectId: 'terrafarm-378218',
+    storageBucket: 'terrafarm-378218.appspot.com',
+    iosClientId: '389517956549-7j8djai8nq13r1ed099mtkihejjtr40o.apps.googleusercontent.com',
     iosBundleId: 'com.example.apaApp',
   );
 }
