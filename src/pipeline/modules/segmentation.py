@@ -27,7 +27,7 @@ class SemanticSegmentation(Module):
     """
     def run(self, data: Data):
         self.prepare(data)
-        model = keras.models.load_model(self.paths[data.input[0].channels])
+        model = keras.models.load_model(self.paths[len(data.input[0].channels)])
         predictions = []
         for image in data.modules[Modules.PREPROCESS]["clipping"]:
             predictions.append(model.predict(np.expand_dims((image.get()), axis=0)))

@@ -3,6 +3,7 @@ from .data import Data
 from mat import Mat
 from .types import Modules
 import cv2
+import numpy as np
 
 """
 Pipeline module for mosaicing (stitching) images
@@ -42,7 +43,26 @@ class Mosaicing(Module):
                 raise Exception("The stiching failed")
 
             # Make a mat
-            data.modules[self.type]["stitched"] = Mat(stitched, data.input[0].channels)
+            stitched = Mat(stitched, data.input[0].channels) 
+            data.modules[self.type]["stitched"] = stitched
+
+            # split the image into equal patches for the segmentation module
+            # height and width of the patches
+            height = width = 512
+            channels = data.input[0].channels
+
+            # Calculate the number of patches to create
+            num_patches_horizontal = stitched.get().shape[1] // width
+            num_patches_vertical = stitched.get().shape[0] // height
+
+            patches: list[Mat] = []
+            # Loop through the image and extract each patch
+            for i in range(num_patches_vertical):
+                for j in range(num_patches_horizontal):
+                    patch = stitched.get()[i*height:(i+1)*height, j*width:(j+1)*width, :]
+                    patches.append(Mat(patch, channels))
+            # save the calculated patches for further usage
+            data.modules[self.type]["patches"] = patches
             
         # Run the next module
         return super().run(data)

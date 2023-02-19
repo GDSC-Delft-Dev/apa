@@ -56,17 +56,18 @@ class AgricultureVisionPreprocess(Preprocess):
     """    
     def run(self, data: Data):  
         if self.masks is None: # there are no available masks for the input data
-            masked = [x.get() for x in data.input]
+            masked = [x.get() for x in data.modules[Modules.MOSAIC]["patches"]]
         else: # apply masks to eliminate invalid areas in images
-            masked = [cv2.multiply(x.get(), mask) for (x, mask) in zip(data.input, self.masks)]
+            masked = [cv2.multiply(x.get(), mask) 
+                for (x, mask) in zip(data.modules[Modules.MOSAIC]["patches"], self.masks)]
 
         # calculate the 5th and 95th percentile in the data
-        percentiles = [(np.percentile(x.get(), 5), np.percentile(x.get(), 95)) for x in masked]
+        percentiles = [(np.percentile(x, 5), np.percentile(x, 95)) for x in masked]
         # create lower and upper bounds based on the percentiles
         bounds = [(max(0.0, p5 - 0.4 * (p95 - p5)), min(255.0, p95 + 0.4*(p95-p5))) 
                     for (p5, p95) in percentiles]
         # use the created bounds to clip the input data
         data.modules[self.type]["clipping"] =\
             [Mat(np.clip(x.get(), v_lower, v_upper).astype(np.uint8), data.input[0].channels) 
-                for (x, (v_lower, v_upper)) in zip(data.input, bounds)]
+                for (x, (v_lower, v_upper)) in zip(data.modules[Modules.MOSAIC]["patches"], bounds)]
         return super().run(data)

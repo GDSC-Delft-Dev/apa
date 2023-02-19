@@ -1,6 +1,6 @@
 from modules.module import Module
 from modules.mosaicing import Mosaicing
-from modules.segmentation import Segmentation, SemanticSegmentation
+from modules.segmentation import SemanticSegmentation
 import cv2
 from mat import Mat
 from modules.data import Data
