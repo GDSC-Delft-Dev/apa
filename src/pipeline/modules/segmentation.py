@@ -23,8 +23,7 @@ class SemanticSegmentation(Module):
     used to highlight areas of interest.
 
     Args:
-        img: the input image(s)
-        rest: non-specific module arguments
+        data: the pipeline data object with the input images
     """
     def run(self, data: Data):
         self.prepare(data)
