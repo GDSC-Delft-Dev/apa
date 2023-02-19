@@ -70,7 +70,7 @@ flutter doctor
 
 In order to be able to use Google Maps API, several steps need to be taken with regards to private key configuration.
 
-- Create an account in https://console.developers.google.com/ and add our APA project (if not done so yet), in order to fetch your private API key for Google Maps.
+- Navigate to this Terrafarm project under the Google Cloud console to access the private API key for Google Maps (restricted access however).
 - To run on Android - add the following to the `src/apa_app/android/local.properties` file:
 ````
 GMapsAPIKey={YOUR_PRIVATE_GOOGLE_MAPS_API_KEY}
