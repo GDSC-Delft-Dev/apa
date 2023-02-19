@@ -16,6 +16,8 @@ To make the code extendible, maintainable, and multithreaded, the pipeline is di
 - Mosaicing module - transforms the flyover images into a single farmland bird's eye view image
 - Index module - computes pixel-level indicies that provide general information about the field
 - Insight module - evaluates the database and indicies to provide actionable and localized insights that identify issues and improve farming efficiency
+- Segmentation module - computes pixel-level masks for a number of different annotations that can be directly shown to the user
+- Preprocessing module - performs a number of image preprocessing steps depending on the usage of the result further in the pipeline. Most commonly it is a prerequisite before the Index and Segmentation module
 
 Each module automatically verifies its dependencies (e.g. to identify moisture content near-infrared spectrum is required) and provide statistics about no. of executions, success rates, and processing times.
 
