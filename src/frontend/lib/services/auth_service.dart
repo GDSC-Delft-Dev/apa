@@ -19,10 +19,22 @@ class AuthService {
         .map((User? user) => _userFromFirebaseUser(user));
   }
 
-
   // Sign in with email and password
+  Future signInWithEmailAndPwd(String email, String pwd) async {
+    try {
+      final credential = await _auth.signInWithEmailAndPassword(email: email, password: pwd);
+      User? user = credential.user;
+      print(user?.uid);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user with that e-mail!');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user!');
+      }
+    }
+  }
 
-  // Register with email and password
+  // TODO: Register with email and password
 
   // Sign out user
   Future signOut() async {

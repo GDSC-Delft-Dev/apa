@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/services/auth_service.dart';
 
 class Settings extends StatefulWidget {
 
@@ -11,6 +12,8 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
 
+  final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,8 +22,19 @@ class _SettingsState extends State<Settings> {
         ),
         backgroundColor: Colors.grey[200],
         body: Center(
-          child: Text('Profile info and settings here', style: TextStyle(fontSize: 50),),
-        )
+          child: Column(
+            children: [
+              Text('Profile info and settings here', style: TextStyle(fontSize: 50),),
+              ElevatedButton(
+                  child: Text(
+                    'Log out'
+                  ),
+                onPressed: () async {
+                    await _auth.signOut();
+                }),
+            ],
+          ),
+        ),
     );
   }
 
