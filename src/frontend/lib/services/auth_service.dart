@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:frontend/models/user_model.dart';
+import 'package:frontend/models/farmer_model.dart';
 
 /// Handles user authentication by communicating with Firebase Authentication
 class AuthService {

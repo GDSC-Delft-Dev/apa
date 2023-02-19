@@ -3,7 +3,7 @@ import 'package:frontend/views/authenticate/authenticate.dart';
 import 'package:frontend/views/mainpage.dart';
 import 'package:provider/provider.dart';
 
-import '../models/user_model.dart';
+import '../models/farmer_model.dart';
 
 /// Listens for authentication changes using Firebase streams
 /// Will return main page if logged in or login screen if not logged in

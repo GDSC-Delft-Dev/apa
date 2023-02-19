@@ -7,7 +7,7 @@ import 'package:frontend/views/myfields/myfields.dart';
 import 'package:frontend/views/flydrone/flydrone.dart';
 import 'package:frontend/views/settings/settings.dart';
 import 'package:frontend/views/wrapper.dart';
-import 'package:frontend/models/user_model.dart';
+import 'package:frontend/models/farmer_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';

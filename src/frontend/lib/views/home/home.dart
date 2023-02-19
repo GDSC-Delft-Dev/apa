@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/views/addfield/addfield.dart';
 import 'package:frontend/views/loading.dart';
 import 'package:frontend/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -148,7 +149,7 @@ class _HomeState extends State<Home> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Loading(),
+              builder: (context) => const AddField(),
             )
           );
         },
