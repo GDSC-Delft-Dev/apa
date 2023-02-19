@@ -7,7 +7,7 @@ from mat import Mat, Channels
 
 def main():
     # Get test data
-    imgs = [Mat.read(file) for file in glob.glob("test/data/mosaicing/farm/D*.jpg")]
+    imgs = [Mat.read(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
     # Run the pipeline
     pipeline = full_pipeline()
     pipeline.show()
