@@ -68,6 +68,7 @@ flutter doctor
 
 ## How to use
 
+### Logging into the app
 You can use the following dummy credentials for logging into the application:
 ````
 e-mail: andyzaidman42@tudelft.net
@@ -75,6 +76,18 @@ password: andy12345
 ````
 For all invalid authentication attempts, an error message will be displayed.
 
+### Firebase
+
+Follow [these instructions](https://firebase.google.com/docs/flutter/setup?platform=ios) in order to configure Firebase into your local project.
+Note that `flutterfire configure` will auto-create files containing private project details:
+- `...apa/src/frontend/android/app/google-services.json`
+- `...apa/src/frontend/lib/firebase_options.dart`
+- `...apa/src/frontend/ios/firebase_app_id_file.json`
+- `...apa/src/frontend/ios/Runner/GoogleService-Info.plist`
+
+All of these are gitignored, but make sure these are added to your local project.
+
+### Google Maps API
 In order to be able to use Google Maps API, several steps need to be taken with regards to private key configuration.
 
 - Create an account in https://console.developers.google.com/ and add our APA project (if not done so yet), in order to fetch your private API key for Google Maps.
