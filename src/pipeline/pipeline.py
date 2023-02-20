@@ -1,6 +1,6 @@
 from modules.module import Module
 from modules.mosaicing import Mosaicing
-from modules.preprocess import Preprocess, AgricultureVisionPreprocess
+from modules.segmentation import SemanticSegmentation
 import cv2
 from mat import Mat
 from modules.data import Data
@@ -27,7 +27,6 @@ class Pipeline:
             else:
                 tail.next = module(self.data_proto, input)
                 tail = tail.next
-
     """
     Runs the pipeline on the provided input images.
 

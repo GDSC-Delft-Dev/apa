@@ -1,6 +1,7 @@
 from .module import Module
 from .data import Data
 from .types import Modules
+from mat import Mat
 import cv2
 import numpy as np
 
@@ -12,7 +13,6 @@ class Preprocess(Module):
     def __init__(self, data: Data, input: any):
         super().__init__("Preprocesisng", Modules.PREPROCESS, data)
         self.masks = input
-
     """
     Preprocesses the image(s) by multiplying by their respective mask, if any.
 
@@ -24,9 +24,12 @@ class Preprocess(Module):
         The preprocessed image(s).
     """ 
     def run(self, data: Data):
-        # Apply masks to eliminate invalid areas in images
-        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, self.masks)]
-        return super().run(masked, rest=None, save=True)
+        if self.masks is None: # there are no masks available
+            data.modules[self.type]["masked"] = data.input
+        else: # Apply masks to eliminate invalid areas in images 
+            masked = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels) for (x, mask) in zip(data.input, self.masks)]
+            data.modules[self.type]["masked"] = masked
+        return super().run(data)
 
 class AgricultureVisionPreprocess(Preprocess):
 
@@ -52,8 +55,11 @@ class AgricultureVisionPreprocess(Preprocess):
         The preprocessed image(s).
     """    
     def run(self, data: Data):  
-        # apply masks to eliminate invalid areas in images
-        masked = [cv2.multiply(x, mask) for (x, mask) in zip(data.input, self.masks)]
+        if self.masks is None: # there are no available masks for the input data
+            masked = [x.get() for x in data.modules[Modules.MOSAIC]["patches"]]
+        else: # apply masks to eliminate invalid areas in images
+            masked = [cv2.multiply(x.get(), mask) 
+                for (x, mask) in zip(data.modules[Modules.MOSAIC]["patches"], self.masks)]
 
         # calculate the 5th and 95th percentile in the data
         percentiles = [(np.percentile(x, 5), np.percentile(x, 95)) for x in masked]
@@ -62,5 +68,6 @@ class AgricultureVisionPreprocess(Preprocess):
                     for (p5, p95) in percentiles]
         # use the created bounds to clip the input data
         data.modules[self.type]["clipping"] =\
-            [np.clip(x, v_lower, v_upper).astype(np.uint8) for (x, (v_lower, v_upper)) in zip(data.input, bounds)]
+            [Mat(np.clip(x.get(), v_lower, v_upper).astype(np.uint8), data.input[0].channels) 
+                for (x, (v_lower, v_upper)) in zip(data.modules[Modules.MOSAIC]["patches"], bounds)]
         return super().run(data)

@@ -7,4 +7,5 @@ class Modules(Enum):
     PREPROCESS = "Preprocess",
     MOSAIC = "Mosaic",
     INDEX = "Index",
-    INSIGHT = "Insight"
+    INSIGHT = "Insight",
+    SEGMENTATION = "Segmentation"
