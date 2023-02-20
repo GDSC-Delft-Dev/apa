@@ -68,6 +68,26 @@ flutter doctor
 
 ## How to use
 
+### Logging into the app
+You can use the following dummy credentials for logging into the application:
+````
+e-mail: andyzaidman42@tudelft.net
+password: andy12345
+````
+For all invalid authentication attempts, an error message will be displayed.
+
+### Firebase
+
+Follow [these instructions](https://firebase.google.com/docs/flutter/setup?platform=ios) in order to configure Firebase into your local project.
+Note that `flutterfire configure` will auto-create files containing private project details:
+- `...apa/src/frontend/android/app/google-services.json`
+- `...apa/src/frontend/lib/firebase_options.dart`
+- `...apa/src/frontend/ios/firebase_app_id_file.json`
+- `...apa/src/frontend/ios/Runner/GoogleService-Info.plist`
+
+All of these are gitignored, but make sure these are added to your local project.
+
+### Google Maps API
 In order to be able to use Google Maps API, several steps need to be taken with regards to private key configuration.
 
 - Navigate to this Terrafarm project under the Google Cloud console to access the private API key for Google Maps (restricted access however).
@@ -75,7 +95,7 @@ In order to be able to use Google Maps API, several steps need to be taken with 
 ````
 GMapsAPIKey={YOUR_PRIVATE_GOOGLE_MAPS_API_KEY}
 ````` 
-- To run on iOS - add the following to the `src/apa_app/ios/Flutter/Debug.xcconfig` file:
+- To run on iOS - add the following to the `src/frontend/ios/Flutter/Debug.xcconfig` file:
 ```` 
 #include "Generated.xcconfig"
 GOOGLE_MAPS_API_KEY={YOUR_PRIVATE_GOOGLE_MAPS_API_KEY}
@@ -120,7 +140,7 @@ lib/
 The following routes are defined in `main.dart`
 ````
       routes: {
-        '/': (context) => const MainPage(),
+        '/': (context) => const Wrapper(),
         '/load': (context) => Loading(),
         '/home': (context) => const Home(title: 'APA'),
         '/add': (context) => const AddField(),
@@ -129,6 +149,8 @@ The following routes are defined in `main.dart`
         '/settings': (context) => const Settings(),
       }
 ````
+The initial route that is entered is the `Wrapper()`, which listens for authentication status changes - will return `MainPage()` if logged in or `Authenticate()` if not logged in (both under `views/`).
+`MainPage()` renders screen that the user sees currently - which screen is displayed depends on which icon is toggled in the bottom navigation bar.
 
 <!-- ## Data models
 ## Services

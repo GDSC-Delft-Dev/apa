@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+/// This screen is displayed whenever the user has to wait for some response
 class Loading extends StatefulWidget {
   @override
   _LoadingState createState() => _LoadingState();

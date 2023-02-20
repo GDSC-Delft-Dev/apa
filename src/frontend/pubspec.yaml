@@ -39,6 +39,10 @@ dependencies:
   http: ^0.13.5
   # A better way to handle environment variables using `.env` file.
   flutter_dotenv: ^5.0.2
+  # Firebase database
+  cloud_firestore: ^4.4.2
+  firebase_auth: ^4.2.8
+  provider: ^6.0.5
 
 dev_dependencies:
   # A build system for Dart code generation and modular compilation.

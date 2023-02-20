@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/views/addfield/addfield.dart';
 import 'package:frontend/views/loading.dart';
 import 'package:frontend/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+/// This is the first screen within the application that the user encounters
+/// It contains a Google Map to indicate all fields owned by the user
 class Home extends StatefulWidget {
 
   const Home({super.key, required this.title});
@@ -50,8 +53,7 @@ class _HomeState extends State<Home> {
       fillColor: Colors.transparent
   );
 
-  // For creating custom polygons by tapping
-  Set<Marker> _markers = Set<Marker>();
+  // For creating custom polygons by tappingdelft
   Set<Polygon> _polygons = Set<Polygon>();
   List<LatLng> polygonLatLngs = <LatLng>[];
   int _polygonIdCounter = 1;
@@ -145,11 +147,12 @@ class _HomeState extends State<Home> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'home_add',
         onPressed: () async {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Loading(),
+              builder: (context) => const AddField(),
             )
           );
         },
