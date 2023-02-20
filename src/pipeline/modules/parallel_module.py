@@ -3,7 +3,7 @@ import cv2
 from .module import Module
 from .data import Data
 from .runnable import Runnable
-from .types import Modules
+from .modules import Modules
 from concurrent.futures import ThreadPoolExecutor, wait
 
 """

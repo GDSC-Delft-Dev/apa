@@ -1,6 +1,6 @@
 from __future__ import annotations
 from mat import Mat
-from .types import Modules
+from .modules import Modules
 
 """
 Represents the pipeline data object.

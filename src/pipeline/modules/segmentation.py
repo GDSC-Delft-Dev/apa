@@ -1,7 +1,7 @@
 from modules.module import Module
 from tensorflow import keras
 from .data import Data
-from .types import Modules
+from .modules import Modules
 import numpy as np
 import cv2
 

@@ -1,6 +1,6 @@
 from .module import Module
 from .data import Data
-from .types import Modules
+from .modules import Modules
 from mat import Mat
 import cv2
 import numpy as np

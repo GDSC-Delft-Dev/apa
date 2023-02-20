@@ -1,7 +1,7 @@
 from .module import Module
 from .data import Data
 from mat import Mat
-from .types import Modules
+from .modules import Modules
 import cv2
 import numpy as np
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 from screeninfo import get_monitors
 from .runnable import Runnable
 from .data import Data
-from .types import Modules
+from .modules import Modules
 from mat import Mat
 import cv2
 
