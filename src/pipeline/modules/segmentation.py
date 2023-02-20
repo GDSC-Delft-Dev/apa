@@ -26,7 +26,6 @@ class SemanticSegmentation(Module):
         data: the pipeline data object with the input images
     """
     def run(self, data: Data):
-        self.prepare(data)
         model = keras.models.load_model(self.paths[len(data.input[0].channels)])
         predictions = []
         for image in data.modules[Modules.PREPROCESS]["clipping"]:
