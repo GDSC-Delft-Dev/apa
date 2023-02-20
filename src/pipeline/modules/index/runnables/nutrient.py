@@ -11,11 +11,10 @@ Nutrient deficiency runnable.
 """
 class Nutrient(Runnable):
 
-    def __init__(self, data: Data):
+    def __init__(self, data: Data) -> None:
         super().__init__("NUTRIENT", data)
         self.type = Indicies.NUTRIENT
 
-    
     def run(self, data: Data) -> bool:
         try:
             # take the calculated masks from the segmentation module
@@ -25,6 +24,7 @@ class Nutrient(Runnable):
             patches = data.modules[Modules.SEGMENTATION]["patches"]
             results = self.calculate(masks, patches)
             data.modules[Modules.INDEX]["runnables"][self.type]["index"] = results
+            return True
         except Exception as e:
             print("Nutrient calculation failed!")
             print(e)
@@ -40,7 +40,7 @@ class Nutrient(Runnable):
     Returns:
         Nutrient deficit map
     """
-    def calculate(self, masks, patches) -> list[np.array]:
+    def calculate(self, masks, patches) -> list[np.ndarray]:
         results = [cv2.addWeighted(mask, 1, image, 1, 0, image) for mask, image in zip(masks, patches)]
         # TODO: concat the results
         return results

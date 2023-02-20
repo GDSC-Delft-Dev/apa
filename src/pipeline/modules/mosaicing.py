@@ -4,12 +4,13 @@ from mat import Mat
 from .modules import Modules
 import cv2
 import numpy as np
+from typing import Any
 
 """
 Pipeline module for mosaicing (stitching) images
 """
 class Mosaicing(Module):
-    def __init__(self, data: Data, input: any):
+    def __init__(self, data: Data, input: Any) -> None:
         super().__init__("Mosaicing", Modules.MOSAIC, data)
 
     """
@@ -24,12 +25,12 @@ class Mosaicing(Module):
     Returns:
         The stiched image.
     """
-    def run(self, data: Data):
+    def run(self, data: Data) -> Data:
         self.prepare(data)
         
         # Check if there are multiple input images
         if isinstance(data.input, Mat):
-            data.stitched = data.input
+            data.modules[self.type]["stitched"] = data.input
 
         else:
             # Initiate the stitcher

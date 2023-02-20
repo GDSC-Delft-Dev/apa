@@ -3,14 +3,14 @@ from tensorflow import keras
 from .data import Data
 from .modules import Modules
 import numpy as np
-import cv2
+from typing import Any
 
 """
 Perform semantic segmentation using the DeepLabV3+ model.
 """
 class SemanticSegmentation(Module):
 
-    def __init__(self, data: Data, input: any):
+    def __init__(self, data: Data, input: Any):
         super(SemanticSegmentation, self).__init__("Semantic Segmentation DeepLabv3+", 
             Modules.SEGMENTATION, data)
         self.paths = input # paths to model atrifacts 

@@ -65,7 +65,7 @@ class Mat():
         # Verify that the number of channels match and the
         # dimensions match
         shape = mats[0].shape[:2]
-        for mat, channels in zip(mats, dict.values()):
+        for mat, channels in zip(mats, paths.values()): #type: tuple[cv2.Mat, list[Channels]]
             assert(mat.ndim == len(channels))
             assert(shape == mat.shape[:2])
 
@@ -86,6 +86,19 @@ class Mat():
     """
     def get(self) -> cv2.Mat:
         return self.arr.view()
+
+
+    """
+    Makes a copy of this wrapper with a new image array.
+
+    Args:
+        arr: the new image array
+
+    Returns:
+        A copy of this wrapper with the new image array.
+    """
+    def make(self, arr: cv2.Mat) -> Mat:
+        return Mat(arr, channels=self.channels)
     
     """
     Provides the specified channels of the mat.

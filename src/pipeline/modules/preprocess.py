@@ -3,6 +3,7 @@ from .data import Data
 from .modules import Modules
 from mat import Mat
 import cv2
+from typing import Any
 import numpy as np
 
 
@@ -10,7 +11,7 @@ class Preprocess(Module):
     """
     Perform data preprocessing on raw images.
     """
-    def __init__(self, data: Data, input: any):
+    def __init__(self, data: Data, input: Any):
         super().__init__("Preprocesisng", Modules.PREPROCESS, data)
         self.masks = input
     """
@@ -40,7 +41,7 @@ class AgricultureVisionPreprocess(Preprocess):
     The preprocessing applied is inspired from the 'Farmland image preprocessing' section in
     the corresponding paper.
     """
-    def __init__(self, data: Data, input: any):
+    def __init__(self, data: Data, input: Any):
         super().__init__(data, input)
  
     """

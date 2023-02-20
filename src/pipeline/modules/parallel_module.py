@@ -5,6 +5,7 @@ from .data import Data
 from .runnable import Runnable
 from .modules import Modules
 from concurrent.futures import ThreadPoolExecutor, wait
+from typing import Type
 
 """
 Represents an arbitrary image processing pipeline module that can
@@ -20,11 +21,11 @@ class ParallelModule(Module):
         runnables: list of runnables to run in parallel
         data: the pipeline data object
     """
-    def __init__(self, name: str, type: Modules, runnables: list[Runnable], data: Data):  
+    def __init__(self, name: str, type: Modules, runnables: list[Type[Runnable]], data: Data):  
         super().__init__(name, type, data)
 
         # Initialize runnables
-        self.runnables: list[Runnable] = [runnable(data) for runnable in runnables] 
+        self.runnables: list[Runnable] = [runnable(runnable.__class__.__name__, data) for runnable in runnables] 
 
     """
     Processes the image using the runnables.
@@ -33,7 +34,7 @@ class ParallelModule(Module):
         img: the input image(s)
         data: the job data
     """
-    def run(self, data: Data) -> any:
+    def run(self, data: Data) -> Data:
         # Spawn the executor
         # TODO: don't hardcode max_workers
         with ThreadPoolExecutor(max_workers=4) as executor:
@@ -51,7 +52,7 @@ class ParallelModule(Module):
     """
     Prepares the module to be run.
     """
-    def prepare(self, data: Data):
+    def prepare(self, data: Data) -> None:
         # Initialize the module data
         super().prepare(data)
         data.modules[self.type]["runnables"] = {}

@@ -13,13 +13,13 @@ class Pipeline:
     Build the pipeline according to the configuration.
     """
     def __init__(self, config: Config):
-        self.head: Module = None
+        self.head: Module | None = None
 
         # Build the data object
         self.data_proto: Data = Data()
 
         # Build the modules chain
-        tail: Module = None
+        tail: Module | None = None
         for module, input in config.modules.items():
             if self.head is None:
                 self.head = module(self.data_proto, input)

@@ -11,8 +11,8 @@ Args:
     current: the current pipeline stage; initially none
 """
 class Data:
-    def __init__(self):
-        self.input: list[Mat] | Mat = None
+    def __init__(self) -> None:
+        self.input: list[Mat] | Mat = []
         self.modules: dict([(module_type, {"input": {}}) for module_type in Modules]) = {}
         self.current: None | Modules = None
 
@@ -22,7 +22,7 @@ class Data:
     Args:
         img: the images to process
     """
-    def set(self, img: Mat | list[Mat]):
+    def set(self, img: Mat | list[Mat]) -> None:
         self.input = img
 
     """
