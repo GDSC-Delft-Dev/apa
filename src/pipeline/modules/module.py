@@ -7,35 +7,37 @@ from mat import Mat
 import cv2
 from typing import Any, Type
 
-"""
-Represents an arbitrary image processing pipeline module.
-"""
 class Module(Runnable):
     """
-    Initializes the module metadata and the data object.
-
-    Args:
-        data: the pipeline data object
-        input: module input object
-        name: the name of the module
-        type: the type of the module
-
-    Attributes:
-        next: the next module in the chain
+    Represents an arbitrary image processing pipeline module.
     """
+
     def __init__(self, data: Data, input: Any = {}, name: str = "Unnamed module", type: Modules = Modules.DEFAULT):  
-        self.name: str = name
+        """
+        Initializes the module metadata and the data object.
+
+        Args:
+            data: the pipeline data object
+            input: module input object
+            name: the name of the module
+            type: the type of the module
+
+        Attributes:
+            next: the next module in the chain
+        """
+        super().__init__(data, name)
         self.next: Module | None = None
         self.type: Modules = type
 
-    """
-    Processes the image.
-
-    Args:
-        data: the job data
-        persist: whether to save the images to the field database
-    """
     def run(self, data: Data) -> Any:
+        """
+        Processes the image.
+
+        Args:
+            data: the job data
+            persist: whether to save the images to the field database
+        """
+
         # If there is a next module, then run it
         if self.next is not None:
             print(f"Preparing <{self.name}>")
@@ -46,7 +48,14 @@ class Module(Runnable):
         # Otherwise, return the data
         return data
 
-    def display(self, img: Mat):
+    def display(self, img: Mat) -> None:
+        """
+        Downscales and displays an image to fit your monitor.
+        
+        Args:
+            img: the image to display
+        """
+        
         # Adjust the image size
         monitor = get_monitors()[0]
 
@@ -61,9 +70,10 @@ class Module(Runnable):
         cv2.waitKey()
         cv2.destroyWindow(self.name)
 
-    """
-    Prepares the module to be run.
-    """
     def prepare(self, data: Data):
+        """
+        Prepares the module to be run.
+        """
+
         super().prepare(data)
         data.modules[self.type] = {}

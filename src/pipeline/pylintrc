@@ -330,7 +330,7 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=120
 
 # Maximum number of lines in a module.
 max-module-lines=1000
@@ -425,7 +425,11 @@ disable=raw-checker-failed,
         unused-import,
         ungrouped-imports,
         wrong-import-order,
-        missing-module-docstring
+        missing-module-docstring,
+        trailing-whitespace,
+        no-member,
+        broad-exception-caught,
+        fixme
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

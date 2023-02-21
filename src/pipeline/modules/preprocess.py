@@ -28,7 +28,8 @@ class Preprocess(Module):
         if self.masks is None: # there are no masks available
             data.modules[self.type]["masked"] = data.input
         else: # Apply masks to eliminate invalid areas in images 
-            masked = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels) for (x, mask) in zip(data.input, self.masks)]
+            masked = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels)
+                      for (x, mask) in zip(data.input, self.masks)]
             data.modules[self.type]["masked"] = masked
         return super().run(data)
 

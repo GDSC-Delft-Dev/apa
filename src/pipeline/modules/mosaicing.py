@@ -13,19 +13,20 @@ class Mosaicing(Module):
     def __init__(self, data: Data, input: Any = {}) -> None:
         super().__init__(data, name="Mosaicing", type=Modules.MOSAIC)
 
-    """
-    Sitches the images to create an orthomosaic image of the farm.
-    
-    Args:
-        data: the pipeline data object with the input images
-
-    Raises:
-        Exception: when the sticher fails to stich the images
-
-    Returns:
-        The stiched image.
-    """
     def run(self, data: Data) -> Data:
+        """
+        Stitches the images to create an orthomosaic image of the farm.
+        
+        Args:
+            data: the pipeline data object with the input images
+
+        Raises:
+            Exception: when the sticher fails to stich the images
+
+        Returns:
+            The stiched image.
+        """
+
         self.prepare(data)
         
         # Check if there are multiple input images

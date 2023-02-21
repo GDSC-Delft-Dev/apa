@@ -1,9 +1,7 @@
 from enum import Enum
 
-"""
-Represents module types.
-"""
 class Indicies(Enum):
+    """Represents module types."""
     # Normalized Differential Vegetation Index. Suggests whether the area contains live vegetation
     NDVI = "NDVI"
     # Nutrient Deficiency Index. Suggests whether the plants in the area exhibit some sort of deficiency.

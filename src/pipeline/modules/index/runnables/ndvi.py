@@ -5,29 +5,30 @@ from mat import Channels
 import numpy as np
 import matplotlib.pyplot as plt
 
-"""
-The Normalized Differential Vegetation Index runnable.
-https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index
-"""
 class NDVI(Runnable):
+    """
+    The Normalized Differential Vegetation Index runnable.
+    https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index
+    """
+
     def __init__(self, data: Data):
         super().__init__(data, name="NDVI")
         self.type = Indicies.NDVI
 
-    """
-    Computes the NDVI map on the processed image. The values inare saved
-    in the runnable's index field. 
-
-    range - (-1.0, 1.0); 
-    Use plt.imshow(ndvi, cmap='RdYlGn', vmin=-1.0, vmax=1.0) to preview.
-    
-    Args:
-        data: the pipeline data object with the stitched images
-
-    Returns:
-        Whether the execution was successful.
-    """
     def run(self, data: Data) -> bool:
+        """
+        Computes the NDVI map on the processed image. The values inare saved
+        in the runnable's index field. 
+
+        range - (-1.0, 1.0); 
+        Use plt.imshow(ndvi, cmap='RdYlGn', vmin=-1.0, vmax=1.0) to preview.
+        
+        Args:
+            data: the pipeline data object with the stitched images
+
+        Returns:
+            Whether the execution was successful.
+        """
         try:
             # Get the channels
             nir = data.modules[Modules.MOSAIC]["stitched"][Channels.B].get()
@@ -46,27 +47,27 @@ class NDVI(Runnable):
             print(e)
             return False
 
-    """
-    Calulcates the NDVI index.
-
-    Args:
-        nir: the near-infrared spectrum
-        red: the red band
-
-    Returns:
-        The NDVI index.
-    """
     def calculate(self, nir, red) -> np.ndarray:
+        """
+        Calulcates the NDVI index.
+
+        Args:
+            nir: the near-infrared spectrum
+            red: the red band
+
+        Returns:
+            The NDVI index.
+        """
         a = np.asarray(nir - red, dtype=np.float64)
         b = np.asarray(nir + red, dtype=np.float64)
         return np.divide(a, b, out=np.zeros_like(a), where=b!=0, casting="unsafe")
 
-    """
-    Prepares the NDVI data space.
-
-    Args:
-        data: the pipeline data object
-    """
     def prepare(self, data: Data):
+        """
+        Prepares the NDVI data space.
+
+        Args:
+            data: the pipeline data object
+        """
         super().prepare(data)
         data.modules[Modules.INDEX]["runnables"][self.type] = {}

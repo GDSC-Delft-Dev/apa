@@ -1,9 +1,8 @@
 from enum import Enum
 
-"""
-Represents module types.
-"""
 class Modules(Enum):
+    """Represents module types."""
+    
     DEFAULT = "Default"
     PREPROCESS = "Preprocess"
     MOSAIC = "Mosaic"
