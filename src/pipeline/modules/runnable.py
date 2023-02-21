@@ -13,7 +13,7 @@ class Runnable(ABC):
         str: the name of the runnable
         data: the pipeline data object
     """
-    def __init__(self, name: str, data: Data):
+    def __init__(self, data: Data, name: str = "Unnamed runnable"):
         self.name: str = name
 
     """

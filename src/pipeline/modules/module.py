@@ -15,17 +15,18 @@ class Module(Runnable):
     Initializes the module metadata and the data object.
 
     Args:
+        data: the pipeline data object
+        input: module input object
         name: the name of the module
         type: the type of the module
+
+    Attributes:
+        next: the next module in the chain
     """
-    def __init__(self, name: str, type: Modules, data: Data):  
+    def __init__(self, data: Data, input: Any = {}, name: str = "Unnamed module", type: Modules = Modules.DEFAULT):  
         self.name: str = name
         self.next: Module | None = None
         self.type: Modules = type
-
-    @classmethod
-    def build(cls, config: tuple[Type[Module], Any]) -> Module:
-        pass
 
     """
     Processes the image.

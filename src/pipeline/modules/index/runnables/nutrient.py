@@ -12,7 +12,7 @@ Nutrient deficiency runnable.
 class Nutrient(Runnable):
 
     def __init__(self, data: Data) -> None:
-        super().__init__("NUTRIENT", data)
+        super().__init__(data, name="NUTRIENT")
         self.type = Indicies.NUTRIENT
 
     def run(self, data: Data) -> bool:

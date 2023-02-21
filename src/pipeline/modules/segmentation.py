@@ -10,9 +10,9 @@ Perform semantic segmentation using the DeepLabV3+ model.
 """
 class SemanticSegmentation(Module):
 
-    def __init__(self, data: Data, input: Any):
-        super(SemanticSegmentation, self).__init__("Semantic Segmentation DeepLabv3+", 
-            Modules.SEGMENTATION, data)
+    def __init__(self, data: Data, input: Any) -> None:
+        super(SemanticSegmentation, self).__init__(data, name="Semantic Segmentation DeepLabv3+", 
+            type=Modules.SEGMENTATION)
         self.paths = input # paths to model atrifacts 
 
     """
@@ -25,7 +25,7 @@ class SemanticSegmentation(Module):
     Args:
         data: the pipeline data object with the input images
     """
-    def run(self, data: Data):
+    def run(self, data: Data) -> Data:
         model = keras.models.load_model(self.paths[len(data.input[0].channels)])
         predictions = []
         for image in data.modules[Modules.PREPROCESS]["clipping"]:

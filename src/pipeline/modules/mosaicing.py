@@ -10,8 +10,8 @@ from typing import Any
 Pipeline module for mosaicing (stitching) images
 """
 class Mosaicing(Module):
-    def __init__(self, data: Data, input: Any) -> None:
-        super().__init__("Mosaicing", Modules.MOSAIC, data)
+    def __init__(self, data: Data, input: Any = {}) -> None:
+        super().__init__(data, name="Mosaicing", type=Modules.MOSAIC)
 
     """
     Sitches the images to create an orthomosaic image of the farm.

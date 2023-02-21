@@ -12,7 +12,7 @@ class Preprocess(Module):
     Perform data preprocessing on raw images.
     """
     def __init__(self, data: Data, input: Any):
-        super().__init__("Preprocesisng", Modules.PREPROCESS, data)
+        super().__init__(data, name="Preprocesisng", type=Modules.PREPROCESS)
         self.masks = input
     """
     Preprocesses the image(s) by multiplying by their respective mask, if any.
@@ -42,7 +42,7 @@ class AgricultureVisionPreprocess(Preprocess):
     the corresponding paper.
     """
     def __init__(self, data: Data, input: Any):
-        super().__init__(data, input)
+        super().__init__(data, input=input)
  
     """
     Preprocesses the image(s) by multiplying by their respective mask provided by the dataset.

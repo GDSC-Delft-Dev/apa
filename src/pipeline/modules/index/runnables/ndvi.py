@@ -11,7 +11,7 @@ https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index
 """
 class NDVI(Runnable):
     def __init__(self, data: Data):
-        super().__init__("NDVI", data)
+        super().__init__(data, name="NDVI")
         self.type = Indicies.NDVI
 
     """

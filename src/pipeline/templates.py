@@ -8,6 +8,10 @@ from modules.segmentation import SemanticSegmentation
 import cv2
 import glob
 
+def default_pipeline() -> Pipeline:
+    cfg = Config(modules={Mosaicing: None, Index: None})
+    return Pipeline(cfg)
+
 def full_pipeline() -> Pipeline:
 
     # paths to the saved models
