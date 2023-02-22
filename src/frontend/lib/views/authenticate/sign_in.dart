@@ -41,7 +41,7 @@ class _SignInState extends State<SignIn> {
                 decoration: userTextInput.copyWith(hintText: 'Email'),
                 validator: (val) => val!.isEmpty ? 'Enter an e-mail' : null,
                 onChanged: (val) {
-                  setState(() => email = val);
+                    setState(() => email = val);
                 },
               ),
               SizedBox(height: 20.0),
@@ -50,7 +50,7 @@ class _SignInState extends State<SignIn> {
                 decoration: userTextInput.copyWith(hintText: 'Password'),
                 validator: (val) => val!.length < 6 ? 'Enter a password 6+ chars long' : null,
                 onChanged: (val) {
-                  setState(() => pwd = val);
+                    setState(() => pwd = val);
                 },
               ),
               SizedBox(height: 20.0),
@@ -62,6 +62,9 @@ class _SignInState extends State<SignIn> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     setState(() => loading = true); // Show loading screen
+                    print('-------------------- FORM KEY VALIDATED ---------------------------');
+                    print(email);
+                    print(pwd);
                     dynamic result = await _auth.signInWithEmailAndPwd(email, pwd);
                     if (result == null) {
                       setState(() => error = 'Could not sign in with those credentials!');
