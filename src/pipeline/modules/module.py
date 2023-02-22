@@ -12,13 +12,14 @@ class Module(Runnable):
     Represents an arbitrary image processing pipeline module.
     """
 
-    def __init__(self, data: Data, input: Any = {}, name: str = "Unnamed module", type: Modules = Modules.DEFAULT):  
+    def __init__(self, data: Data, input_data: Any = None,
+                 name: str = "Unnamed module", module_type: Modules = Modules.DEFAULT):  
         """
         Initializes the module metadata and the data object.
 
         Args:
             data: the pipeline data object
-            input: module input object
+            input_data: the module initialization parameters
             name: the name of the module
             type: the type of the module
 
@@ -27,7 +28,7 @@ class Module(Runnable):
         """
         super().__init__(data, name)
         self.next: Module | None = None
-        self.type: Modules = type
+        self.type: Modules = module_type
 
     def run(self, data: Data) -> Any:
         """
@@ -61,9 +62,9 @@ class Module(Runnable):
 
         # Calculate the scaling factor
         shape = img.get().shape
-        f = min(monitor.width / shape[0], monitor.height / shape[1])
-        if f < 1.0:
-            img = img.make(cv2.resize(img.get(), (int(shape[0] * f * 0.8), int(shape[1] * f * 0.8))))
+        scale = min(monitor.width / shape[0], monitor.height / shape[1]) * 0.8
+        if scale < 1.0:
+            img = img.make(cv2.resize(img.get(), (int(shape[0] * scale), int(shape[1] * scale))))
         
         # Display the image
         cv2.imshow(self.name, img.get())
@@ -71,9 +72,6 @@ class Module(Runnable):
         cv2.destroyWindow(self.name)
 
     def prepare(self, data: Data):
-        """
-        Prepares the module to be run.
-        """
+        """Prepares the module to be run."""
 
-        super().prepare(data)
         data.modules[self.type] = {}

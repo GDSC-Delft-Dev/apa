@@ -21,7 +21,7 @@ class Mat():
     Multispectral cv2.Mat with channel naming support.
     """
 
-    def __init__(self, arr: np.ndarray, channels: list[Channels] = default_channels):
+    def __init__(self, arr: np.ndarray, channels: list[Channels] = None):
         """
         Initializes the mat.
 
@@ -31,7 +31,7 @@ class Mat():
         """
 
         self.arr = arr
-        self.channels: list[Channels] = channels
+        self.channels: list[Channels] = default_channels if channels is None else channels
 
     @classmethod
     def read(cls, path: str) -> Mat:
@@ -79,7 +79,7 @@ class Mat():
         arr = np.concatenate([np.asarray(mat[:,:,:]) for mat in mats], axis=2)
 
         # Return the combined data
-        return cls(shape, arr, channels=channels)
+        return cls(arr, channels)
 
     def get(self) -> cv2.Mat:
         """

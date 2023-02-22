@@ -13,19 +13,20 @@ class ParallelModule(Module):
     run multiple runnables at the same time.
     """
 
-    def __init__(self, data: Data, runnables: list[Type[Runnable]],input: Any = {},
-                 name: str = "Unnamed parallel module", type: Modules = Modules.DEFAULT):
+    def __init__(self, data: Data, runnables: list[Type[Runnable]], input_data: Any = None,
+                 name: str = "Unnamed parallel module", module_type: Modules = Modules.DEFAULT):
         """
         Initializes the parallel module.
 
         Args:
+            data: the pipeline data object
+            runnables: list of runnables to run in parallel
+            input_data: the module initialization parameters
             name: the name of the module
             type: the type of the module
-            runnables: list of runnables to run in parallel
-            data: the pipeline data object
         """
  
-        super().__init__(data, input, name=name, type=type)
+        super().__init__(data, input_data, name=name, module_type=module_type)
 
         # Initialize runnables
         self.runnables: list[Runnable] = [runnable(data) for runnable in runnables]

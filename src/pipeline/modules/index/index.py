@@ -4,16 +4,10 @@ from .runnables.ndvi import NDVI
 from ..data import Data, Modules
 from typing import Any
 
-"""
-Pipeline module for calculating indicies
-"""
+
 class Index(ParallelModule):
-    """
-    Initializes the index module and its runnables.
-    """
-    def __init__(self, data: Data, input: Any):
-        super().__init__(data, [NDVI], name="Index", type=Modules.INDEX)
-        
-    def prepare(self, data: Data):
-        # Initialize the module data
-        super().prepare(data)
+    """Pipeline module for calculating indicies."""
+
+    def __init__(self, data: Data, input_data: Any):
+        """Initializes the index module and its runnables."""
+        super().__init__(data, [NDVI], name="Index", module_type=Modules.INDEX)

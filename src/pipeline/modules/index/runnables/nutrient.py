@@ -25,9 +25,9 @@ class Nutrient(Runnable):
             results = self.calculate(masks, patches)
             data.modules[Modules.INDEX]["runnables"][self.type]["index"] = results
             return True
-        except Exception as e:
+        except Exception as exception:
             print("Nutrient calculation failed!")
-            print(e)
+            print(exception)
             return False
 
     def calculate(self, masks, patches) -> list[np.ndarray]:

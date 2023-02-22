@@ -1,6 +1,7 @@
 from __future__ import annotations
 from mat import Mat
 from .modules import Modules
+from typing import Any
 
 class Data:
     """
@@ -13,7 +14,7 @@ class Data:
     """
     def __init__(self) -> None:
         self.input: list[Mat] | Mat = []
-        self.modules: dict([(module_type, {"input": {}}) for module_type in Modules]) = {}
+        self.modules: dict(tuple[Modules, Any]) = {module_type : {"input": {}} for module_type in Modules}
         self.current: None | Modules = None
 
     def set(self, img: Mat | list[Mat]) -> None:

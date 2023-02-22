@@ -1,9 +1,6 @@
 import copy
-import numpy as np
 from typing import Any, Type
 from modules.module import Module
-from modules.mosaicing import Mosaicing
-from modules.segmentation import SemanticSegmentation
 from mat import Mat
 from modules.data import Data
 from config import Config
@@ -21,13 +18,14 @@ class Pipeline:
         self.data_proto: Data = Data()
 
         # Build the head
-        kv = next(iter(config.modules.items()))
-        self.head: Module = kv[0](self.data_proto, input=kv[1])
+        module = next(iter(config.modules.items()))[0]
+        input_data = next(iter(config.modules.items()))[1]
+        self.head: Module = module(self.data_proto, input_data=input_data)
 
         # Build the rest
         tail: Module = self.head
-        for module, input in list(config.modules.items())[1:]: #type: tuple[Type[Module], Any]
-            tail.next = module(self.data_proto, input=input)
+        for module, input_data in list(config.modules.items())[1:]: #type: tuple[Type[Module], Any]
+            tail.next = module(self.data_proto, input_data=input_data)
             tail = tail.next
 
     def run(self, imgs: Mat | list[Mat]) -> Data:

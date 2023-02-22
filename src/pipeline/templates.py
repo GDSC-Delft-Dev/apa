@@ -1,3 +1,4 @@
+# pylint: disable=E1102
 import cv2
 import glob
 from pipeline import Pipeline

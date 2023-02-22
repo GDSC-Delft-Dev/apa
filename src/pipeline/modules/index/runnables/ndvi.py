@@ -31,7 +31,7 @@ class NDVI(Runnable):
         """
         try:
             # Get the channels
-            nir = data.modules[Modules.MOSAIC]["stitched"][Channels.B].get()
+            nir = data.modules[Modules.MOSAIC]["stitched"][Channels.NIR].get()
             red = data.modules[Modules.MOSAIC]["stitched"][Channels.R].get()
 
             # Calculate 
@@ -42,9 +42,9 @@ class NDVI(Runnable):
             return True
 
         # Catch exception
-        except Exception as e:
+        except Exception as exception:
             print("NDVI calculation failed!")
-            print(e)
+            print(exception)
             return False
 
     def calculate(self, nir, red) -> np.ndarray:
@@ -58,9 +58,13 @@ class NDVI(Runnable):
         Returns:
             The NDVI index.
         """
-        a = np.asarray(nir - red, dtype=np.float64)
-        b = np.asarray(nir + red, dtype=np.float64)
-        return np.divide(a, b, out=np.zeros_like(a), where=b!=0, casting="unsafe")
+
+        numerator = np.asarray(nir - red, dtype=np.float64)
+        denominator = np.asarray(nir + red, dtype=np.float64)
+        return np.divide(numerator, denominator,
+                         out=np.zeros_like(numerator),
+                         where=denominator!=0,
+                         casting="unsafe")
 
     def prepare(self, data: Data):
         """

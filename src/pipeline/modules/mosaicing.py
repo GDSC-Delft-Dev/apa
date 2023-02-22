@@ -6,12 +6,13 @@ import cv2
 import numpy as np
 from typing import Any
 
-"""
-Pipeline module for mosaicing (stitching) images
-"""
 class Mosaicing(Module):
-    def __init__(self, data: Data, input: Any = {}) -> None:
-        super().__init__(data, name="Mosaicing", type=Modules.MOSAIC)
+    """
+    Pipeline module for mosaicing (stitching) images
+    """
+
+    def __init__(self, data: Data, input_data: Any = None) -> None:
+        super().__init__(data, name="Mosaicing", module_type=Modules.MOSAIC)
 
     def run(self, data: Data) -> Data:
         """
@@ -19,6 +20,7 @@ class Mosaicing(Module):
         
         Args:
             data: the pipeline data object with the input images
+            input_data: the module initialization data
 
         Raises:
             Exception: when the sticher fails to stich the images

@@ -6,6 +6,8 @@ from modules.mosaicing import Mosaicing
 from mat import Mat, Channels
 
 def main():
+    """Main entry point."""
+
     # Get test data
     imgs = [Mat.read(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
 

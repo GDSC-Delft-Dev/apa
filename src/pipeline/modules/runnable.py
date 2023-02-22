@@ -4,7 +4,7 @@ from .data import Data
 class Runnable(ABC):
     """Represents arbitrary runnable logic for image processing."""
 
-    def __init__(self, data: Data, name: str = "Unnamed runnable"):
+    def __init__(self, _data: Data, name: str = "Unnamed runnable"):
         """
         Initializes the runnable.
 
