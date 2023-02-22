@@ -21,7 +21,7 @@ class Mat():
     Multispectral cv2.Mat with channel naming support.
     """
 
-    def __init__(self, arr: np.ndarray, channels: list[Channels] = None):
+    def __init__(self, arr: np.ndarray, channels: list[Channels] | None = None):
         """
         Initializes the mat.
 

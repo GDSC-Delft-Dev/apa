@@ -14,7 +14,7 @@ class Data:
     """
     def __init__(self) -> None:
         self.input: list[Mat] | Mat = []
-        self.modules: dict(tuple[Modules, Any]) = {module_type : {"input": {}} for module_type in Modules}
+        self.modules: dict[Modules, Any] = {module_type : {"input": {}} for module_type in Modules}
         self.current: None | Modules = None
 
     def set(self, img: Mat | list[Mat]) -> None:
@@ -42,4 +42,7 @@ class Data:
         Returns:
             The data of the currently worked module, or None if there isn't one.
         """
+        if self.current is None:
+            raise Exception("Cannot get current module as the current module isn't set")
+
         return self.modules[self.current]

@@ -18,9 +18,8 @@ class Pipeline:
         self.data_proto: Data = Data()
 
         # Build the head
-        module = next(iter(config.modules.items()))[0]
-        input_data = next(iter(config.modules.items()))[1]
-        self.head: Module = module(self.data_proto, input_data=input_data)
+        head_config = next(iter(config.modules.items()))
+        self.head: Module = head_config[0](self.data_proto, input_data=head_config[1])
 
         # Build the rest
         tail: Module = self.head

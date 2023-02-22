@@ -42,6 +42,7 @@ class Module(Runnable):
         # If there is a next module, then run it
         if self.next is not None:
             print(f"Preparing <{self.name}>")
+            data.current = self.next.type
             self.next.prepare(data)
             print(f"Running <{self.name}>")
             return self.next.run(data)
