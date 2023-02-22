@@ -10,7 +10,7 @@ class SemanticSegmentation(Module):
 
     def __init__(self, data: Data, input_data: Any) -> None:
         super().__init__(data, name="Semantic Segmentation DeepLabv3+", module_type=Modules.SEGMENTATION)
-        self.paths = input # paths to model atrifacts 
+        self.paths = input_data # paths to model atrifacts 
 
     def run(self, data: Data) -> Data:
         """

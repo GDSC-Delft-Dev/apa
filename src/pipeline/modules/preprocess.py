@@ -12,7 +12,7 @@ class Preprocess(Module):
 
     def __init__(self, data: Data, input_data: Any):
         super().__init__(data, name="Preprocesisng", module_type=Modules.PREPROCESS)
-        self.masks = input_data
+        self.masks: list[Mat] = input_data
         
     def run(self, data: Data):
         """
@@ -28,8 +28,8 @@ class Preprocess(Module):
         if self.masks is None: # there are no masks available
             data.modules[self.type]["masked"] = data.input
         else: # Apply masks to eliminate invalid areas in images 
-            masked = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels)
-                      for (x, mask) in zip(data.input, self.masks)]
+            masked: list[Mat] = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels)
+                                 for (x, mask) in zip(data.input, self.masks)] 
             data.modules[self.type]["masked"] = masked
         return super().run(data)
 

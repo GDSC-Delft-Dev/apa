@@ -13,7 +13,7 @@ class Data:
         current: the current pipeline stage; initially none
     """
     def __init__(self) -> None:
-        self.input: list[Mat] | Mat = []
+        self.input: list[Mat] = []
         self.modules: dict[Modules, Any] = {module_type : {"input": {}} for module_type in Modules}
         self.current: None | Modules = None
 
@@ -24,7 +24,7 @@ class Data:
         Args:
             img: the images to process
         """
-        self.input = img
+        self.input = img if isinstance(img, list) else [img]
 
     def get_module(self, module: Modules) -> dict:
         """
