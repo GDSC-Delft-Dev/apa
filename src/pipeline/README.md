@@ -24,8 +24,8 @@ You can then run the default pipeline with
 Our project uses `mypy` and `pylint` to assert the quality of the code. You can run these with:
 
 ```
-py -m mypy . --explicit-package-bases
-py -m pylint ../pipeline
+python -m mypy . --explicit-package-bases
+python -m pylint ../pipeline
 ```
 
 ### Modules
