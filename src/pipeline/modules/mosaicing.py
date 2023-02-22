@@ -32,8 +32,8 @@ class Mosaicing(Module):
         self.prepare(data)
         
         # Check if there are multiple input images
-        if isinstance(data.input, Mat):
-            data.modules[self.type]["stitched"] = data.input
+        if len(data.input) == 1:
+            data.modules[self.type]["stitched"] = data.input[0]
 
         else:
             # Initiate the stitcher
