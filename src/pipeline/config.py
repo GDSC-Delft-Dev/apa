@@ -1,5 +1,7 @@
+# pylint: disable=R0903
 from modules.module import Module
 from mat import Mat
+from typing import Any, Type
 
 class Config:
     """
@@ -8,6 +10,6 @@ class Config:
     Args:
         modules: dictionary of modules to initialize and their initialization data
     """
-    def __init__(self, modules: dict[Module, any]):
-        self.modules: dict[Module, any] = modules
+    def __init__(self, modules: dict[Type[Module], Any]):
+        self.modules: dict[Type[Module], Any] = modules
         

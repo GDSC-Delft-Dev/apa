@@ -11,6 +11,23 @@ The image processing pipeline is the main construct of our project. When provide
 </p>
 <p align="center">Example of image mosaicing</p>
 
+## Running
+To run the default pipeline you'll need Python 3.10. First, install the necessary requirements with
+
+`pip install -r requirements.txt`
+
+You can then run the default pipeline with
+
+`py main.py`
+
+### Static analysis
+Our project uses `mypy` and `pylint` to assert the quality of the code. You can run these with:
+
+```
+python -m mypy . --explicit-package-bases
+python -m pylint ../pipeline
+```
+
 ### Modules
 To make the code extendible, maintainable, and multithreaded, the pipeline is divided into modules. Modules are run sequentially, and each can have multiple implementations that execute different logic, but compute the same type of data. We distinguish the following modules:
 - Mosaicing module - transforms the flyover images into a single farmland bird's eye view image

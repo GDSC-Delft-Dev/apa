@@ -1,38 +1,39 @@
 from .module import Module
 from .data import Data
-from .types import Modules
+from .modules import Modules
 from mat import Mat
 import cv2
+from typing import Any
 import numpy as np
 
 
 class Preprocess(Module):
-    """
-    Perform data preprocessing on raw images.
-    """
-    def __init__(self, data: Data, input: any):
-        super().__init__("Preprocesisng", Modules.PREPROCESS, data)
-        self.masks = input
-    """
-    Preprocesses the image(s) by multiplying by their respective mask, if any.
+    """Perform data preprocessing on raw images."""
 
-    Args:
-        img: the images to preprocess
-        rest: masks for each image in img or None
-    
-    Returns:
-        The preprocessed image(s).
-    """ 
+    def __init__(self, data: Data, input_data: Any):
+        super().__init__(data, name="Preprocesisng", module_type=Modules.PREPROCESS)
+        self.masks: list[Mat] = input_data
+        
     def run(self, data: Data):
+        """
+        Preprocesses the image(s) by multiplying by their respective mask, if any.
+
+        Args:
+            img: the images to preprocess
+            rest: masks for each image in img or None
+        
+        Returns:
+            The preprocessed image(s).
+        """ 
         if self.masks is None: # there are no masks available
             data.modules[self.type]["masked"] = data.input
         else: # Apply masks to eliminate invalid areas in images 
-            masked = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels) for (x, mask) in zip(data.input, self.masks)]
+            masked: list[Mat] = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels)
+                                 for (x, mask) in zip(data.input, self.masks)] 
             data.modules[self.type]["masked"] = masked
         return super().run(data)
 
 class AgricultureVisionPreprocess(Preprocess):
-
     """
     Perform data preprocessing on Agriculture-Vision: A Large Aerial Image Database for
     Agricultural Pattern Analysis dataset. 
@@ -40,21 +41,23 @@ class AgricultureVisionPreprocess(Preprocess):
     The preprocessing applied is inspired from the 'Farmland image preprocessing' section in
     the corresponding paper.
     """
-    def __init__(self, data: Data, input: any):
-        super().__init__(data, input)
- 
-    """
-    Preprocesses the image(s) by multiplying by their respective mask provided by the dataset.
-    Then, clip the values in the image between 5th percentile and 95th percentile.
 
-    Args:
-        img: the images to preprocess
-        rest: masks for each image in img
-
-    Returns:
-        The preprocessed image(s).
-    """    
+    def __init__(self, data: Data, input_data: Any):
+        super().__init__(data, input_data=input_data)
+   
     def run(self, data: Data):  
+        """
+        Preprocesses the image(s) by multiplying by their respective mask provided by the dataset.
+        Then, clip the values in the image between 5th percentile and 95th percentile.
+
+        Args:
+            img: the images to preprocess
+            rest: masks for each image in img
+
+        Returns:
+            The preprocessed image(s).
+        """  
+
         if self.masks is None: # there are no available masks for the input data
             masked = [x.get() for x in data.modules[Modules.MOSAIC]["patches"]]
         else: # apply masks to eliminate invalid areas in images

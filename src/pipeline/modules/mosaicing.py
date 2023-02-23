@@ -1,35 +1,39 @@
 from .module import Module
 from .data import Data
 from mat import Mat
-from .types import Modules
+from .modules import Modules
 import cv2
 import numpy as np
+from typing import Any
 
-"""
-Pipeline module for mosaicing (stitching) images
-"""
 class Mosaicing(Module):
-    def __init__(self, data: Data, input: any):
-        super().__init__("Mosaicing", Modules.MOSAIC, data)
-
     """
-    Sitches the images to create an orthomosaic image of the farm.
-    
-    Args:
-        data: the pipeline data object with the input images
-
-    Raises:
-        Exception: when the sticher fails to stich the images
-
-    Returns:
-        The stiched image.
+    Pipeline module for mosaicing (stitching) images
     """
-    def run(self, data: Data):
+
+    def __init__(self, data: Data, input_data: Any = None) -> None:
+        super().__init__(data, name="Mosaicing", module_type=Modules.MOSAIC)
+
+    def run(self, data: Data) -> Data:
+        """
+        Stitches the images to create an orthomosaic image of the farm.
+        
+        Args:
+            data: the pipeline data object with the input images
+            input_data: the module initialization data
+
+        Raises:
+            Exception: when the sticher fails to stich the images
+
+        Returns:
+            The stiched image.
+        """
+
         self.prepare(data)
         
         # Check if there are multiple input images
-        if isinstance(data.input, Mat):
-            data.stitched = data.input
+        if len(data.input) == 1:
+            data.modules[self.type]["stitched"] = data.input[0]
 
         else:
             # Initiate the stitcher
