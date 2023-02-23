@@ -1,7 +1,7 @@
 from .module import Module
 from .data import Data
 from .types import Modules
-from mat import Mat
+from ..mat import Mat
 import cv2
 import numpy as np
 
@@ -29,6 +29,7 @@ class Preprocess(Module):
         else: # Apply masks to eliminate invalid areas in images 
             masked = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels) for (x, mask) in zip(data.input, self.masks)]
             data.modules[self.type]["masked"] = masked
+
         return super().run(data)
 
 class AgricultureVisionPreprocess(Preprocess):
