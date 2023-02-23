@@ -5,3 +5,4 @@ opencv-python==4.7.0.68
 matplotlib==3.6.2
 screeninfo==0.8.1
 tensorflow==2.9.2
+pytest==7.2.1

@@ -3,3 +3,5 @@ supervised
 .ipynb_checkpoints
 __pycache__
 .DS_Store
+.pytest_cache
+expected_preprocess_masked.npy
