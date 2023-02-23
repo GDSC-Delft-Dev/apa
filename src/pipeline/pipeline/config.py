@@ -1,5 +1,5 @@
-from modules.module import Module
-from mat import Mat
+from .modules.module import Module
+from .mat import Mat
 
 class Config:
     """

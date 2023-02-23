@@ -1,13 +1,13 @@
-from pipeline import Pipeline
+from pipeline.pipeline import Pipeline
 import glob
 import cv2
-from templates import full_pipeline
-from modules.mosaicing import Mosaicing
-from mat import Mat, Channels
+from pipeline.templates import full_pipeline
+from pipeline.modules.mosaicing import Mosaicing
+from pipeline.mat import Mat, Channels
 
 def main():
     # Get test data
-    imgs = [Mat.read(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
+    imgs = [Mat.read(file) for file in glob.glob("./pipeline/test/data/mosaicing/farm/D*.JPG")]
     # Run the pipeline
     pipeline = full_pipeline()
     pipeline.show()

@@ -3,7 +3,7 @@ from screeninfo import get_monitors
 from .runnable import Runnable
 from .data import Data
 from .types import Modules
-from ..mat import Mat
+from pipeline.mat import Mat
 import cv2
 
 """

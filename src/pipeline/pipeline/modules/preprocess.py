@@ -1,7 +1,7 @@
 from .module import Module
 from .data import Data
 from .types import Modules
-from ..mat import Mat
+from pipeline.mat import Mat
 import cv2
 import numpy as np
 

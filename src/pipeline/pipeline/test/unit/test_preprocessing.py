@@ -15,8 +15,8 @@ class TestPreprocessingModule:
         """
         Test the method run.   
         """  
-        masks = [cv2.imread(file) for file in glob.glob("./test/data/mosaicing/farm/mask*.JPG")]
-        imgs = [Mat.read(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
+        masks = [cv2.imread(file) for file in glob.glob("./pipeline/test/data/mosaicing/farm/mask*.JPG")]
+        imgs = [Mat.read(file) for file in glob.glob("./pipeline/test/data/mosaicing/farm/D*.JPG")]
         data: Data = Data()
         data.modules[Modules.PREPROCESS] = {}
         module = Preprocess(data, masks)
@@ -24,5 +24,5 @@ class TestPreprocessingModule:
         module.run(data)
         assert data.modules[Modules.PREPROCESS]["masked"] is not None
         out = np.array([x.get() for x in data.modules[Modules.PREPROCESS]["masked"]])
-        expected = np.load("expected_preprocess_masked.npy", allow_pickle=True) 
+        expected = np.load("./pipeline/expected_preprocess_masked.npy", allow_pickle=True) 
         assert np.array_equal(out, expected)

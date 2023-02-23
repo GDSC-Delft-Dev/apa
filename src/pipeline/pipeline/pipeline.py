@@ -1,10 +1,10 @@
-from modules.module import Module
-from modules.mosaicing import Mosaicing
-from modules.segmentation import SemanticSegmentation
+from .modules.module import Module
+from .modules.mosaicing import Mosaicing
+from .modules.segmentation import SemanticSegmentation
 import cv2
-from mat import Mat
-from modules.data import Data
-from config import Config
+from .mat import Mat
+from .modules.data import Data
+from .config import Config
 import copy
 import numpy as np
 
