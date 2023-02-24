@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Displays insights for this field and allows user to customize visualization mode
 class FieldInsights extends StatefulWidget {
 
   final String fieldId;
@@ -9,6 +10,8 @@ class FieldInsights extends StatefulWidget {
   @override
   State<FieldInsights> createState() => _FieldInsightsState();
 }
+
+// TODO: use StreamBuilder to fetch data corresponding to this field
 
 class _FieldInsightsState extends State<FieldInsights> {
   @override

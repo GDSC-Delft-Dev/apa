@@ -17,19 +17,20 @@ class FieldTile extends StatelessWidget {
           margin: EdgeInsets.fromLTRB(20, 6, 20, 0),
           child: ListTile(
             leading: Icon(Icons.map_outlined),
-            // TODO: display crop
-            // TODO: add crop type icon or map of field
+            // TODO: display crop?
+            // TODO: add crop type icon or map of field?
+            // TODO: indicate whether or not field has insights yet
             title: Text(field.fieldName),
             subtitle: Text('${field.area} ha'),
-            trailing: Icon(Icons.keyboard_arrow_right_sharp),
-            onTap: () async {
+            trailing: field.hasInsights ? Icon(Icons.keyboard_arrow_right_sharp) : Text('No insights yet', style: TextStyle(fontSize: 12, color: Colors.red),),
+            onTap: field.hasInsights ? () async {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => FieldInsights(fieldId: field.fieldId),
                   )
               );
-            },
+            } : null,
           )
         )
     );

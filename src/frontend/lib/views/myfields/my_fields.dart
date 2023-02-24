@@ -37,7 +37,15 @@ class _MyFieldsState extends State<MyFields> {
           ),
           backgroundColor: Colors.grey[200],
           body: Center(
-            child: FieldList(),
+            child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/farm-background.jpg'),
+                    fit: BoxFit.cover
+                  )
+                ),
+                child: FieldList()
+            ),
           ),
           floatingActionButton: FloatingActionButton(
             heroTag: 'myfields_add',
