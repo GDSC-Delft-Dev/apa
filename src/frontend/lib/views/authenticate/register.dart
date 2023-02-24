@@ -1,22 +1,24 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/services/auth_service.dart';
-import 'package:frontend/views/authenticate/register.dart';
-import 'package:frontend/widgets/text_input.dart';
+
+import '../../widgets/text_input.dart';
 import '../loading.dart';
 
-/// This screen allows user sign-in using e-mail and password
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
 
   final toggleView;
 
-  SignIn({ required this.toggleView });
+  // final Function toggleView;
+  // const Register({ required this.toggleView });
+  const Register({ required this.toggleView });
 
   @override
-  _SignInState createState() => _SignInState();
-
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
+
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
@@ -30,11 +32,11 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-        backgroundColor: Colors.grey[200],
-        appBar: AppBar(
-        elevation: 0.0,
-        title: Text('Sign in'),
-        ),
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+      elevation: 0.0,
+      title: Text('Register'),
+      ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
@@ -50,7 +52,7 @@ class _SignInState extends State<SignIn> {
                 decoration: userTextInput.copyWith(hintText: 'Email'),
                 validator: (val) => val!.isEmpty ? 'Enter an e-mail' : null,
                 onChanged: (val) {
-                    setState(() => email = val);
+                  setState(() => email = val);
                 },
               ),
               SizedBox(height: 20.0),
@@ -59,15 +61,15 @@ class _SignInState extends State<SignIn> {
                 decoration: userTextInput.copyWith(hintText: 'Password'),
                 validator: (val) => val!.length < 6 ? 'Enter a password 6+ chars long' : null,
                 onChanged: (val) {
-                    setState(() => pwd = val);
+                  setState(() => pwd = val);
                 },
               ),
               SizedBox(height: 20.0),
               ElevatedButton(
-                  child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                child: Text(
+                  'Sign up',
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     setState(() => loading = true); // Show loading screen
@@ -80,11 +82,11 @@ class _SignInState extends State<SignIn> {
                 },
               ),
               ElevatedButton(
-                  child: Text ('Create new account', style: TextStyle(color: Colors.white)),
-                  style: ElevatedButton.styleFrom(
+                child: Text ('Login using existing account', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
                     primary: Colors.blueGrey
-                  ),
-                  onPressed: () => widget.toggleView(),
+                ),
+                onPressed: () => widget.toggleView(),
               ),
               SizedBox(height: 12.0),
               Text(
@@ -97,5 +99,4 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
-
 }

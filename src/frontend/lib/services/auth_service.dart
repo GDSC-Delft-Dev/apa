@@ -27,12 +27,21 @@ class AuthService {
       print(user?.uid);
     } on FirebaseAuthException catch (e) {
       print("------------- FIREBASE AUTH ERROR ----------------------");
-      print(e);
+      print(e.toString());
       if (e.code == 'user-not-found') {
         print('No user with that e-mail!');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user!');
       }
+    }
+  }
+
+  /// Register with e-mail and password
+  Future registerWithEmailAndPwd(String email, String pwd) async {
+    try {
+      final credential = await _auth.createUserWithEmailAndPassword(email: email, password: pwd);
+    } catch (e) {
+      print(e.toString());
     }
   }
 
