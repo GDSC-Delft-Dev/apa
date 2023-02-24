@@ -26,7 +26,7 @@ class FieldTile extends StatelessWidget {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FieldInsights(),
+                    builder: (context) => FieldInsights(fieldId: field.fieldId),
                   )
               );
             },

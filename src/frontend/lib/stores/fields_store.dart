@@ -16,6 +16,7 @@ class FieldsStore {
   /// Returns field data from Firestore document
   FieldModel _fieldModelFromSnapshot(DocumentSnapshot snapshot) {
     return FieldModel(
+        fieldId: snapshot.id,
         fieldName: snapshot['field_name'],
         area: snapshot['area']);
   }
@@ -31,7 +32,7 @@ class FieldsStore {
     });
   }
 
-  Future addNewField(String name, double area, String userId) async {
+  Future addNewField(String name, double area) async {
     var addFieldData = Map<String, dynamic>();
     addFieldData['field_name'] = name;
     addFieldData['area'] = area;
@@ -42,6 +43,7 @@ class FieldsStore {
   List <FieldModel> _fieldListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
       return FieldModel(
+          fieldId: doc.id,
           fieldName: doc.get('field_name') ?? '',
           area: doc.get('area') ?? 0
       );

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class FieldInsights extends StatefulWidget {
 
-  const FieldInsights({Key? key}) : super(key: key);
+  final String fieldId;
+
+  const FieldInsights({ required this.fieldId });
 
   @override
   State<FieldInsights> createState() => _FieldInsightsState();
@@ -17,7 +19,7 @@ class _FieldInsightsState extends State<FieldInsights> {
         ),
         backgroundColor: Colors.grey[200],
         body: Center(
-          child: Text('Field maps and localized insights', style: TextStyle(fontSize: 20),),
+          child: Text('Field maps and localized insights for field with id ${widget.fieldId}', style: TextStyle(fontSize: 20),),
         )
     );
   }

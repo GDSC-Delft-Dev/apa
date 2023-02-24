@@ -33,7 +33,7 @@ class _AddFieldState extends State<AddField> {
                       // TODO: add new field instead of updating
                       // TODO: fetch current user uid
                       await FieldsStore(userId: user.uid)
-                          .addNewField("New spinach field", 12.3, "NlDfTwwMaYaVB1eTYYIkAdSDkMg1")
+                          .addNewField("New spinach field", 12.3)
                     }
                 )
             ),
