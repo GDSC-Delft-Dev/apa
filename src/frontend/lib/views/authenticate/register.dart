@@ -73,9 +73,9 @@ class _RegisterState extends State<Register> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     setState(() => loading = true); // Show loading screen
-                    dynamic result = await _auth.signInWithEmailAndPwd(email, pwd);
+                    dynamic result = await _auth.registerWithEmailAndPwd(email, pwd);
                     if (result == null) {
-                      setState(() => error = 'Could not sign in with those credentials!');
+                      setState(() => error = 'Please supply a valid e-mail!');
                       loading = false; // Go back to login screen
                     }
                   }

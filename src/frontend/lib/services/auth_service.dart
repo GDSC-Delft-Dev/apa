@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frontend/models/user_model.dart';
+import 'package:frontend/stores/user_store.dart';
 
 /// Handles user authentication by communicating with Firebase Authentication
 class AuthService {
@@ -40,8 +41,13 @@ class AuthService {
   Future registerWithEmailAndPwd(String email, String pwd) async {
     try {
       final credential = await _auth.createUserWithEmailAndPassword(email: email, password: pwd);
+      User? user = credential.user;
+      // Create new User document in Firestore with randomly generated uid
+      await UsersStore().addNewUser(email, pwd);
+      return _userModelFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
+      return null;
     }
   }
 

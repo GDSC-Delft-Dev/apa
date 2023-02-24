@@ -28,7 +28,7 @@ class FieldsStore {
     });
   }
 
-  addNewField(String name, double area, String userId) {
+  Future addNewField(String name, double area, String userId) async {
     var addFieldData = Map<String, dynamic>();
     addFieldData['field_name'] = name;
     addFieldData['area'] = area;
