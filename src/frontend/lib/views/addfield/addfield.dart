@@ -25,8 +25,8 @@ class _AddFieldState extends State<AddField> {
                     onPressed: () async => {
                       // TODO: add new field instead of updating
                       // TODO: fetch current user uid
-                      await FieldsStore(uid: 'NlDfTwwMaYaVB1eTYYIkAdSDkMg1')
-                          .updateFieldData('Potato field 1', 13.40)
+                      await FieldsStore()
+                          .addNewField("New spinach field", 12.3, "NlDfTwwMaYaVB1eTYYIkAdSDkMg1")
                     }
                 )
             ),

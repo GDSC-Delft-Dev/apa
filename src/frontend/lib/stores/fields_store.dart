@@ -4,24 +4,36 @@ import '../models/field_model.dart';
 /// Handles CRUD operations for the 'fields' collection in Firestore
 class FieldsStore {
 
-  // the farmer uid that this fields collection corresponds to
-  // TODO: add field uid?
-  final String uid;
-
-  FieldsStore({required this.uid});
+  FieldsStore();
 
   /// Creates collection in Firestore
   final CollectionReference fieldsCollection = FirebaseFirestore.instance.collection('fields');
 
+
+  /// Returns field data from Firestore document
+  FieldModel _fieldModelFromSnapshot(DocumentSnapshot snapshot) {
+    return FieldModel(
+        fieldName: snapshot['field_name'],
+        area: snapshot['area']);
+  }
+
   /// Updates attribute values for an instance in the 'fields' collection
-  Future updateFieldData(String name, double area) async {
-    return await fieldsCollection.doc(uid).set({
+  Future updateFieldData(String fieldId, String name, double area) async {
+    return await fieldsCollection.doc(fieldId).set({
       'field_name': name,
       'area': area
       // TODO: add boundaries (list[Geopoint])
       // TODO: add crops (list[Crop])
       // TODO: add runs (list[Runs])
     });
+  }
+
+  addNewField(String name, double area, String userId) {
+    var addFieldData = Map<String, dynamic>();
+    addFieldData['field_name'] = name;
+    addFieldData['area'] = area;
+    // TODO: set user reference of field
+    return fieldsCollection.doc().set(addFieldData);
   }
 
   List <FieldModel> _fieldListFromSnapshot(QuerySnapshot snapshot){
