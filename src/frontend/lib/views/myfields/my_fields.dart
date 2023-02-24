@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../models/field_model.dart';
+import '../../models/user_model.dart';
 import '../addfield/addfield.dart';
 import 'fields_list.dart';
 
@@ -23,10 +24,12 @@ class _MyFieldsState extends State<MyFields> {
   @override
   Widget build(BuildContext context) {
 
+    // Curent user that is logged in
+    final user = Provider.of<UserModel>(context);
+
     // StreamProvider listens to changes in Firestore collection 'fields'
     return StreamProvider<List<FieldModel>>.value(
-      // TODO: get current user uid
-      value: FieldsStore().fields,
+      value: FieldsStore(userId: user.uid).fields,
       initialData: [],
       child: Scaffold(
           appBar: AppBar(

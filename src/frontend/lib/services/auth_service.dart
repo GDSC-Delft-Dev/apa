@@ -43,7 +43,7 @@ class AuthService {
       final credential = await _auth.createUserWithEmailAndPassword(email: email, password: pwd);
       User? user = credential.user;
       // Create new User document in Firestore with randomly generated uid
-      await UsersStore().addNewUser(email, pwd);
+      await UsersStore().addNewUser(user!.uid, email, pwd);
       return _userModelFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());

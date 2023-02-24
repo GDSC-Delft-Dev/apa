@@ -19,6 +19,7 @@ class _FieldListState extends State<FieldList> {
   Widget build(BuildContext context) {
 
     // Gets StreamProvider instances (from parent widget my_fields.dart) - Firebase documents of fields
+    // TODO: we only wanna display fields of this user
     final fields = Provider.of<List<FieldModel>>(context);
 
     return ListView.builder(

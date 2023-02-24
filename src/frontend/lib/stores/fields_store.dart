@@ -4,7 +4,10 @@ import '../models/field_model.dart';
 /// Handles CRUD operations for the 'fields' collection in Firestore
 class FieldsStore {
 
-  FieldsStore();
+  /// User that is logged in
+  final String userId;
+
+  FieldsStore({ required this.userId });
 
   /// Creates collection in Firestore
   final CollectionReference fieldsCollection = FirebaseFirestore.instance.collection('fields');
@@ -32,7 +35,7 @@ class FieldsStore {
     var addFieldData = Map<String, dynamic>();
     addFieldData['field_name'] = name;
     addFieldData['area'] = area;
-    // TODO: set user reference of field
+    addFieldData['user_id'] = userId;
     return fieldsCollection.doc().set(addFieldData);
   }
 
@@ -47,7 +50,8 @@ class FieldsStore {
 
   /// Fetches fields stream from Firestore
   Stream<List<FieldModel>> get fields {
-    return fieldsCollection.snapshots()
+    return fieldsCollection
+    .where('user_id', isEqualTo: userId).snapshots()
     .map(_fieldListFromSnapshot);
   }
 
