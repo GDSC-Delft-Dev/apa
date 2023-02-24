@@ -19,7 +19,7 @@ class _MainPageState extends State<MainPage> {
 
   int currIndex = 0;
   final screens = [
-    Home(title: 'APA'),
+    Home(title: 'Terrafarm'),
     MyFields(),
     FlyDrone(droneName: 'DJI Mavic 3'),
     Settings(),

@@ -28,7 +28,7 @@ class _SignInState extends State<SignIn> {
         backgroundColor: Colors.grey[200],
         appBar: AppBar(
         elevation: 0.0,
-        title: Text('Welcome to Terrafarm'),
+        title: Text('Welcome to Terrafarm!'),
         ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -56,15 +56,12 @@ class _SignInState extends State<SignIn> {
               SizedBox(height: 20.0),
               ElevatedButton(
                   child: Text(
-                    'Sign in',
+                    'Login',
                     style: TextStyle(color: Colors.white),
                   ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     setState(() => loading = true); // Show loading screen
-                    print('-------------------- FORM KEY VALIDATED ---------------------------');
-                    print(email);
-                    print(pwd);
                     dynamic result = await _auth.signInWithEmailAndPwd(email, pwd);
                     if (result == null) {
                       setState(() => error = 'Could not sign in with those credentials!');
