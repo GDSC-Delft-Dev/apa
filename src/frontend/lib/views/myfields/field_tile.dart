@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/field_model.dart';
+import 'package:frontend/views/insights/field_insights.dart';
 
 class FieldTile extends StatelessWidget {
 
@@ -21,6 +22,14 @@ class FieldTile extends StatelessWidget {
             title: Text(field.fieldName),
             subtitle: Text('${field.area} ha'),
             trailing: Icon(Icons.keyboard_arrow_right_sharp),
+            onTap: () async {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FieldInsights(),
+                  )
+              );
+            },
           )
         )
     );
