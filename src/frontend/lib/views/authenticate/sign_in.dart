@@ -26,16 +26,20 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
         backgroundColor: Colors.grey[200],
-        appBar: AppBar(
-        elevation: 0.0,
-        title: Text('Welcome to Terrafarm!'),
-        ),
+        // appBar: AppBar(
+        // elevation: 0.0,
+        // title: Text('Welcome to Terrafarm!'),
+        // ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Text('Terrafarm', style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, fontFamily: 'Times New Roman')),
+              ),
               SizedBox(height: 20.0),
               TextFormField(
                 decoration: userTextInput.copyWith(hintText: 'Email'),
