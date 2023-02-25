@@ -21,12 +21,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
 
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      body: MyMap(),
+      body: const MyMap(context: 'Home'),
       floatingActionButton: FloatingActionButton(
         heroTag: 'home_add',
         onPressed: () async {

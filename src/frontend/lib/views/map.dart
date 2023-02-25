@@ -7,33 +7,38 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MyMap extends StatefulWidget {
 
-  const MyMap({Key? key}) : super(key: key);
+  // Depending on whether the map is related to Home, Add, or Insights, the UI is modified accordingly
+  final String context;
+
+  const MyMap({super.key, required this.context});
 
   @override
   State<MyMap> createState() => _MyMapState();
 }
 
+// TODO: change UI according to context field
 class _MyMapState extends State<MyMap> {
 
-  Completer<GoogleMapController> _controller = Completer();
-  TextEditingController _searchController = TextEditingController();
+  final Completer<GoogleMapController> _controller = Completer();
+  final TextEditingController _searchController = TextEditingController();
 
   // Workaround lagging screen due to Google Maps initialization
-  Future _mapFuture = Future.delayed(Duration(milliseconds: 250), () => true);
+  final Future _mapFuture = Future.delayed(const Duration(milliseconds: 250), () => true);
+  static const LatLng _kMapDelft = LatLng(51.984925, 4.322979);
+  MapType _currentMapType = MapType.hybrid;
 
-  static final LatLng _kMapDelft = LatLng(51.984925, 4.322979);
-
-  static final CameraPosition _kInitialPosition =
+  // TODO: turn this initial position into users current location
+  static const CameraPosition _kInitialPosition =
   CameraPosition(target: _kMapDelft, zoom: 15.0, tilt: 0, bearing: 0);
 
   static final Marker _exampleMarker = Marker(
-    markerId: MarkerId('_exampleMarker'),
-    infoWindow: InfoWindow(title: 'Corn Field 3'),
+    markerId: const MarkerId('_exampleMarker'),
+    infoWindow: const InfoWindow(title: 'Corn Field 3'),
     icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
     position: _kMapDelft,
   );
 
-  static final Polygon _exampleField = Polygon(
+  static final Polygon _exampleField = const Polygon(
       polygonId: PolygonId('exampleField'),
       points: [
         LatLng(51.987308, 4.324069),
@@ -79,9 +84,22 @@ class _MyMapState extends State<MyMap> {
     );
   }
 
+  /// Changes map from hybrid into terrain map or vice versa
+  void _changeMapType() {
+    setState(() {
+      _currentMapType = _currentMapType == MapType.hybrid
+          ? MapType.normal
+          : MapType.hybrid;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: FutureBuilder(
         future: _mapFuture,
@@ -93,7 +111,7 @@ class _MyMapState extends State<MyMap> {
           return Column(
             children: [
               Row(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: TextFormField(
                       controller: _searchController,
@@ -111,25 +129,42 @@ class _MyMapState extends State<MyMap> {
                 ],
               ),
               Expanded(
-                child: GoogleMap(
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
-                  rotateGesturesEnabled: true,
-                  scrollGesturesEnabled: true,
-                  mapToolbarEnabled: false,
-                  initialCameraPosition: _kInitialPosition,
-                  mapType: MapType.hybrid,
-                  markers: {_exampleMarker},
-                  polygons: _polygons,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                  onTap: (point) {
-                    setState(() {
-                      polygonLatLngs.add(point);
-                      _setPolygon();
-                    });
-                  },
+                child: Stack(
+                  children: <Widget>[
+                    GoogleMap(
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    rotateGesturesEnabled: true,
+                    scrollGesturesEnabled: true,
+                    mapToolbarEnabled: false,
+                    initialCameraPosition: _kInitialPosition,
+                    mapType: _currentMapType,
+                    markers: {_exampleMarker},
+                    polygons: _polygons,
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                    },
+                    onTap: (point) {
+                      setState(() {
+                        polygonLatLngs.add(point);
+                        _setPolygon();
+                      });
+                    },
+                  ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 24, right: 12),
+                      alignment: Alignment.topRight,
+                      child: Column(
+                        children: <Widget>[
+                          FloatingActionButton(
+                              backgroundColor: Colors.blueAccent[100],
+                              child: const Icon(Icons.map_rounded),
+                              onPressed: _changeMapType
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
             ],
