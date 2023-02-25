@@ -135,7 +135,7 @@ class _SignInState extends State<SignIn> {
                                     dynamic result = await _auth.signInWithEmailAndPwd(email, pwd);
                                     if (result == null) {
                                       setState(() => error = 'Could not sign in with those credentials!');
-                                      loading = false; // Go back to login screen
+                                      loading = false; // Remain in current screen
                                     }
                                   }
                                 },
@@ -173,71 +173,6 @@ class _SignInState extends State<SignIn> {
             ],
           ),
         ),
-
-
-
-      // body: Container(
-      //   padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-      //   child: Form(
-      //     key: _formKey,
-      //     child: Column(
-      //       children: <Widget>[
-      //         Padding(
-      //           padding: const EdgeInsets.all(25.0),
-      //           child: Text('Terrafarm', style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, fontFamily: 'Times New Roman')),
-      //         ),
-      //         SizedBox(height: 20.0),
-      //         TextFormField(
-      //           decoration: userTextInput.copyWith(hintText: 'Email'),
-      //           validator: (val) => val!.isEmpty ? 'Enter an e-mail' : null,
-      //           onChanged: (val) {
-      //               setState(() => email = val);
-      //           },
-      //         ),
-      //         SizedBox(height: 20.0),
-      //         TextFormField(
-      //           obscureText: true, // hide password entered
-      //           decoration: userTextInput.copyWith(hintText: 'Password'),
-      //           validator: (val) => val!.length < 6 ? 'Enter a password 6+ chars long' : null,
-      //           onChanged: (val) {
-      //               setState(() => pwd = val);
-      //           },
-      //         ),
-      //         SizedBox(height: 20.0),
-      //         ElevatedButton(
-      //             child: Text(
-      //               'Login',
-      //               style: TextStyle(color: Colors.white),
-      //             ),
-      //           onPressed: () async {
-      //             if (_formKey.currentState!.validate()) {
-      //               setState(() => loading = true); // Show loading screen
-      //               dynamic result = await _auth.signInWithEmailAndPwd(email, pwd);
-      //               if (result == null) {
-      //                 setState(() => error = 'Could not sign in with those credentials!');
-      //                 loading = false; // Go back to login screen
-      //               }
-      //             }
-      //           },
-      //         ),
-      //         ElevatedButton(
-      //             child: Text ('Create new account', style: TextStyle(color: Colors.white)),
-      //             style: ElevatedButton.styleFrom(
-      //               primary: Colors.blueGrey
-      //             ),
-      //             onPressed: () => widget.toggleView(),
-      //         ),
-      //         SizedBox(height: 12.0),
-      //         Text(
-      //           error,
-      //           style: TextStyle(color: Colors.redAccent, fontSize: 14.0),
-      //         )
-      //       ],
-      //     ),
-      //   ),
-      // ),
-
-
 
     );
   }
