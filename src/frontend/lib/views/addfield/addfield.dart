@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/stores/fields_store.dart';
@@ -23,19 +24,27 @@ class _AddFieldState extends State<AddField> {
     // Curent user that is logged in
     final user = Provider.of<UserModel>(context);
 
+    List<GeoPoint> exampleGeopoints = [
+      GeoPoint(51.987308, 4.324069),
+      GeoPoint(51.987179, 4.321984),
+      GeoPoint(51.982814, 4.318815),
+      GeoPoint(51.980851, 4.319083),
+      GeoPoint(51.981906, 4.325687)
+    ];
+
     // Stream listens for updates to 'Fields' collection
     return Scaffold(
         body: SafeArea(
           child:
             Center(
-              child: MyMap(context: 'Add')
-              // ElevatedButton(
-              //       child: Text('Add dummy field'),
-              //       onPressed: () async => {
-              //         await FieldsStore(userId: user.uid)
-              //             .addNewField("New spinach field", 12.3)
-              //       }
-              //   )
+              // child: MyMap(context: 'Add')
+              child: ElevatedButton(
+                    child: Text('Add dummy field'),
+                    onPressed: () async => {
+                      await FieldsStore(userId: user.uid)
+                          .addNewField("New corn field", 12.3, exampleGeopoints)
+                    }
+                )
             ),
         ),
     );

@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
+import '../models/field_model.dart';
 import 'loading.dart';
 
 class MyMap extends StatefulWidget {
@@ -43,19 +45,19 @@ class _MyMapState extends State<MyMap> {
   );
 
   // TODO: give every Field model a list of boundaries and draw field borders on map
-  static final Polygon _exampleField = const Polygon(
-      polygonId: PolygonId('exampleField'),
-      points: [
-        LatLng(51.987308, 4.324069),
-        LatLng(51.987179, 4.321984),
-        LatLng(51.982814, 4.318815),
-        LatLng(51.980851, 4.319083),
-        LatLng(51.981906, 4.325687)
-      ],
-      strokeColor: Colors.orange,
-      strokeWidth: 5,
-      fillColor: Colors.transparent
-  );
+  // static final Polygon _exampleField = const Polygon(
+  //     polygonId: PolygonId('exampleField'),
+  //     points: [
+  //       LatLng(51.987308, 4.324069),
+  //       LatLng(51.987179, 4.321984),
+  //       LatLng(51.982814, 4.318815),
+  //       LatLng(51.980851, 4.319083),
+  //       LatLng(51.981906, 4.325687)
+  //     ],
+  //     strokeColor: Colors.orange,
+  //     strokeWidth: 5,
+  //     fillColor: Colors.transparent
+  // );
 
   // For creating custom polygons by tappingdelft
   Set<Polygon> _polygons = Set<Polygon>();
@@ -89,6 +91,10 @@ class _MyMapState extends State<MyMap> {
     );
   }
 
+  _convertFieldsToPolygons(List<FieldModel> fields) {
+    for (var field in fields) print(field.boundaries);
+  }
+
   /// Changes map from hybrid into terrain map or vice versa
   void _changeMapType() {
     setState(() {
@@ -101,6 +107,9 @@ class _MyMapState extends State<MyMap> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Refers to the StreamProvider of parent widget Home()
+    final fields = Provider.of<List<FieldModel>>(context);
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;

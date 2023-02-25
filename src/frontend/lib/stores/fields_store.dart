@@ -19,6 +19,8 @@ class FieldsStore {
         fieldId: snapshot.id,
         fieldName: snapshot['field_name'],
         area: snapshot['area'],
+        // Convert Firebase array of GeoPoints into List<GeoPoint>
+        boundaries: List<GeoPoint>.from(snapshot['boundaries']?.map((loc) => GeoPoint(loc.latitude, loc.longitude)) ?? []),
         hasInsights: snapshot['has_insights']);
   }
 
@@ -31,21 +33,34 @@ class FieldsStore {
     });
   }
 
-  Future addNewField(String name, double area) async {
+  Future addNewField(String name, double area, List<GeoPoint> boundaries) async {
     var addFieldData = Map<String, dynamic>();
     addFieldData['field_name'] = name;
     addFieldData['area'] = area;
     addFieldData['user_id'] = userId;
+    addFieldData['boundaries'] =  boundaries;
     addFieldData['has_insights'] = false; // by default, a field has no insights yet
     return fieldsCollection.doc().set(addFieldData);
   }
 
   List <FieldModel> _fieldListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
+
+      List<dynamic> boundariesList = doc.get('boundaries');
+      List<GeoPoint> boundaries = [];
+
+      if (boundariesList != null && boundariesList is List) {
+        boundaries = boundariesList
+            .map((loc) => GeoPoint(loc.latitude, loc.longitude))
+            .toList();
+      }
+
       return FieldModel(
           fieldId: doc.id,
           fieldName: doc.get('field_name') ?? '',
           area: doc.get('area') ?? 0,
+          // Convert Firebase array of GeoPoints into List<GeoPoint>
+          boundaries: boundaries,
           hasInsights: doc.get('has_insights') ?? false
       );
     }).toList();
