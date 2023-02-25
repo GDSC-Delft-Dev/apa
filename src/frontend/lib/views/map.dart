@@ -10,10 +10,12 @@ import 'loading.dart';
 
 class MyMap extends StatefulWidget {
 
-  // Depending on whether the map is related to Home, Add, or Insights, the UI is modified accordingly
-  final String context;
+  // Depending on whether the map is related to 'HOME', 'ADD', or 'INSIGHTS', the UI is modified accordingly
+  final String parent;
+  // In the context of 'INSIGHTS', this stores the id of current field - else ''
+  final String currFieldId;
 
-  const MyMap({super.key, required this.context});
+  const MyMap({super.key, required this.parent, this.currFieldId = ''});
 
   @override
   State<MyMap> createState() => _MyMapState();
@@ -84,16 +86,19 @@ class _MyMapState extends State<MyMap> {
     for (var field in fields) {
       print('------------------- Drawing field ${field.fieldName}\n\n');
       // Convert from List<GeoPoint> to List<LatLng>
-      List<LatLng> fieldBoundaries = field.boundaries.map((f) => LatLng(f.latitude, f.longitude)).toList();
-      _polygons.add(
-        Polygon(
-            polygonId: PolygonId(field.fieldId),
-            points: fieldBoundaries,
-            strokeColor: Colors.orange,
-            strokeWidth: 5,
-            fillColor: Colors.transparent
-        )
-      );
+      // In the context of INSIGHTS, only draw current field
+      if (widget.parent != 'INSIGHTS' || field.fieldId == widget.currFieldId) {
+        List<LatLng> fieldBoundaries = field.boundaries.map((f) => LatLng(f.latitude, f.longitude)).toList();
+        _polygons.add(
+            Polygon(
+                polygonId: PolygonId(field.fieldId),
+                points: fieldBoundaries,
+                strokeColor: Colors.orange,
+                strokeWidth: 5,
+                fillColor: widget.parent != 'INSIGHTS' ? Colors.transparent : Colors.orange
+            )
+        );
+      }
     }
   }
 
@@ -134,7 +139,18 @@ class _MyMapState extends State<MyMap> {
           }
           return Column(
             children: [
+              widget.parent == 'ADD' ?
               Row(
+                children: <Widget>[
+                  Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(hintText: 'Tap on borders for field to add'), textAlign: TextAlign.center,
+                      )
+                  ),
+                  Icon(Icons.draw_sharp),
+                ],
+              )
+              : widget.parent == 'HOME' ? Row(
                 children: <Widget>[
                   Expanded(
                     child: TextFormField(
@@ -151,7 +167,7 @@ class _MyMapState extends State<MyMap> {
                     _goToPlace(place);
                   }, icon: Icon(Icons.search),),
                 ],
-              ),
+              ) : Row(),
               Expanded(
                 child: Stack(
                   children: <Widget>[
@@ -194,11 +210,16 @@ class _MyMapState extends State<MyMap> {
                       alignment: Alignment.topRight,
                       child: Column(
                         children: <Widget>[
-                          FloatingActionButton(
+                          widget.parent == 'ADD' ? FloatingActionButton(
                               backgroundColor: Colors.blueAccent[100],
-                              child: const Icon(Icons.undo),
-                              onPressed: _clearPoints
-                          )
+                              onPressed: _clearPoints,
+                              child: const Icon(Icons.undo)
+                          ) : widget.parent == 'INSIGHTS' ? const FloatingActionButton(
+                              backgroundColor: Colors.lightGreenAccent,
+                              // TODO: Allow user to pick insight maps
+                              onPressed: null,
+                              child: Icon(Icons.stacked_line_chart_rounded))
+                              : Container()
                         ],
                       ),
                     )

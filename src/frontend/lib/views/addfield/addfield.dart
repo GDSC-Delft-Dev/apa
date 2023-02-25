@@ -25,23 +25,23 @@ class _AddFieldState extends State<AddField> {
     // Curent user that is logged in
     final user = Provider.of<UserModel>(context);
 
-    List<GeoPoint> exampleGeopoints = [
-      GeoPoint(51.987308, 4.324069),
-      GeoPoint(51.987179, 4.321984),
-      GeoPoint(51.982814, 4.318815),
-      GeoPoint(51.980851, 4.319083),
-      GeoPoint(51.981906, 4.325687)
-    ];
+    // List<GeoPoint> exampleGeopoints = [
+    //   GeoPoint(51.987308, 4.324069),
+    //   GeoPoint(51.987179, 4.321984),
+    //   GeoPoint(51.982814, 4.318815),
+    //   GeoPoint(51.980851, 4.319083),
+    //   GeoPoint(51.981906, 4.325687)
+    // ];
 
     // Stream listens for updates to 'Fields' collection
     return StreamProvider<List<FieldModel>>.value(
       value: FieldsStore(userId: user.uid).fields,
       initialData: [],
-      child: Scaffold(
+      child: const Scaffold(
           body: SafeArea(
             child:
               Center(
-                child: MyMap(context: 'Add')
+                child: MyMap(parent: 'ADD')
                 // child: ElevatedButton(
                 //       child: Text('Add dummy field'),
                 //       onPressed: () async => {

@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
       initialData: [],
       child: Scaffold(
         backgroundColor: Colors.grey[200],
-        body: const MyMap(context: 'Home'),
+        body: const MyMap(parent: 'HOME'),
         floatingActionButton: FloatingActionButton(
           heroTag: 'home_add',
           onPressed: () async {
