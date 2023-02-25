@@ -90,9 +90,9 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      // ),
       body: FutureBuilder(
         future: _mapFuture,
         builder: (context, snapshot) {
