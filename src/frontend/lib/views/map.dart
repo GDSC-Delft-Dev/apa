@@ -44,24 +44,10 @@ class _MyMapState extends State<MyMap> {
     position: _kMapDelft,
   );
 
-  // TODO: give every Field model a list of boundaries and draw field borders on map
-  // static final Polygon _exampleField = const Polygon(
-  //     polygonId: PolygonId('exampleField'),
-  //     points: [
-  //       LatLng(51.987308, 4.324069),
-  //       LatLng(51.987179, 4.321984),
-  //       LatLng(51.982814, 4.318815),
-  //       LatLng(51.980851, 4.319083),
-  //       LatLng(51.981906, 4.325687)
-  //     ],
-  //     strokeColor: Colors.orange,
-  //     strokeWidth: 5,
-  //     fillColor: Colors.transparent
-  // );
-
   // For creating custom polygons by tappingdelft
   Set<Polygon> _polygons = Set<Polygon>();
-  List<LatLng> polygonLatLngs = <LatLng>[];
+  // Keeps track of points tapped by user (for adding fields)
+  List<LatLng> _pointsTapped = [];
   int _polygonIdCounter = 1;
 
   // Reads JSON to locate to location that was searched for
@@ -75,15 +61,14 @@ class _MyMapState extends State<MyMap> {
     ));
   }
 
-  void _setPolygon() {
+  void _createPolygon(List<LatLng> polygonPoints) {
     final String polygonIdVal = 'polygon_$_polygonIdCounter';
     // Give each polygon a different id
     _polygonIdCounter++;
-
     _polygons.add(
         Polygon(
           polygonId: PolygonId(polygonIdVal),
-          points: polygonLatLngs,
+          points: polygonPoints,
           strokeWidth: 3,
           strokeColor: Colors.orange,
           fillColor: Colors.transparent,
@@ -92,7 +77,19 @@ class _MyMapState extends State<MyMap> {
   }
 
   _convertFieldsToPolygons(List<FieldModel> fields) {
-    for (var field in fields) print(field.boundaries);
+
+    for (var field in fields) {
+      List<LatLng> fieldBoundaries = field.boundaries.map((f) => LatLng(f.latitude, f.longitude)).toList();
+      _polygons.add(
+        Polygon(
+            polygonId: PolygonId(field.fieldId),
+            points: fieldBoundaries,
+            strokeColor: Colors.orange,
+            strokeWidth: 5,
+            fillColor: Colors.transparent
+        )
+      );
+    }
   }
 
   /// Changes map from hybrid into terrain map or vice versa
@@ -110,9 +107,8 @@ class _MyMapState extends State<MyMap> {
 
     // Refers to the StreamProvider of parent widget Home()
     final fields = Provider.of<List<FieldModel>>(context);
-
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    // Turns all fields fetched from Firestore into polygons to show on map
+    _convertFieldsToPolygons(fields);
 
     return Scaffold(
       body: FutureBuilder(
@@ -160,8 +156,8 @@ class _MyMapState extends State<MyMap> {
                     },
                     onTap: (point) {
                       setState(() {
-                        polygonLatLngs.add(point);
-                        _setPolygon();
+                        _pointsTapped.add(point);
+                        _createPolygon(_pointsTapped);
                       });
                     },
                   ),
