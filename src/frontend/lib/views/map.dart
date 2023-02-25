@@ -19,6 +19,7 @@ class MyMap extends StatefulWidget {
   State<MyMap> createState() => _MyMapState();
 }
 
+// TODO: open field details when clicking within corresponding polygon
 // TODO: change UI according to context field
 // HOME: Display all fields + markers for localized insights + search
 // ADD FIELD: Display all fields + markers for localized insights + search + allow for drawing boundaries
@@ -44,7 +45,7 @@ class _MyMapState extends State<MyMap> {
     position: _kMapDelft,
   );
 
-  // For creating custom polygons by tappingdelft
+  // For creating custom polygons by tapping
   Set<Polygon> _polygons = Set<Polygon>();
   // Keeps track of points tapped by user (for adding fields)
   List<LatLng> _pointsTapped = [];
@@ -81,6 +82,7 @@ class _MyMapState extends State<MyMap> {
   _convertFieldsToPolygons(List<FieldModel> fields) {
 
     for (var field in fields) {
+      print('------------------- Drawing field ${field.fieldName}\n\n');
       // Convert from List<GeoPoint> to List<LatLng>
       List<LatLng> fieldBoundaries = field.boundaries.map((f) => LatLng(f.latitude, f.longitude)).toList();
       _polygons.add(
@@ -108,6 +110,7 @@ class _MyMapState extends State<MyMap> {
   void _clearPoints() {
     setState(() {
       _pointsTapped = [];
+      // All polygons added by user have PolygonId starting with 'user_'
       _polygons.removeWhere((p) => p.polygonId.value.startsWith('user'));
     });
   }

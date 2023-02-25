@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 /// Represents a field (set of geopoints) owned by some user
 class FieldModel {
 
+  // TODO: add cropId
   final String fieldId;
   final String fieldName;
   final double area;

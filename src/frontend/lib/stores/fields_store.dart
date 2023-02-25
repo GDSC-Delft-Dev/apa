@@ -14,6 +14,7 @@ class FieldsStore {
 
 
   /// Returns field data from Firestore document
+  /// TODO: add crop_id
   FieldModel _fieldModelFromSnapshot(DocumentSnapshot snapshot) {
     return FieldModel(
         fieldId: snapshot.id,
@@ -40,6 +41,7 @@ class FieldsStore {
     addFieldData['user_id'] = userId;
     addFieldData['boundaries'] =  boundaries;
     addFieldData['has_insights'] = false; // by default, a field has no insights yet
+    // TODO: add crop_id
     return fieldsCollection.doc().set(addFieldData);
   }
 

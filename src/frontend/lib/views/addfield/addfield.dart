@@ -5,6 +5,7 @@ import 'package:frontend/stores/fields_store.dart';
 import 'package:frontend/views/map.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/field_model.dart';
 import '../../models/user_model.dart';
 
 /// This screen allows users to add fields (by drawing borders e.g.)
@@ -33,20 +34,24 @@ class _AddFieldState extends State<AddField> {
     ];
 
     // Stream listens for updates to 'Fields' collection
-    return Scaffold(
-        body: SafeArea(
-          child:
-            Center(
-              // child: MyMap(context: 'Add')
-              child: ElevatedButton(
-                    child: Text('Add dummy field'),
-                    onPressed: () async => {
-                      await FieldsStore(userId: user.uid)
-                          .addNewField("New corn field", 12.3, exampleGeopoints)
-                    }
-                )
-            ),
-        ),
+    return StreamProvider<List<FieldModel>>.value(
+      value: FieldsStore(userId: user.uid).fields,
+      initialData: [],
+      child: Scaffold(
+          body: SafeArea(
+            child:
+              Center(
+                child: MyMap(context: 'Add')
+                // child: ElevatedButton(
+                //       child: Text('Add dummy field'),
+                //       onPressed: () async => {
+                //         await FieldsStore(userId: user.uid)
+                //             .addNewField("New corn field", 12.3, exampleGeopoints)
+                //       }
+                //   )
+              ),
+          ),
+      ),
     );
   }
 
