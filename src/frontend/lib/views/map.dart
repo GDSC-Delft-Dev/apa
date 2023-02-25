@@ -83,6 +83,8 @@ class _MyMapState extends State<MyMap> {
   /// Takes a list of field models and created polygons to draw on the map
   _convertFieldsToPolygons(List<FieldModel> fields) {
 
+    // TODO: add custom marker (pin) that has field name as label
+    // TODO: add custom markers for localized insights
     for (var field in fields) {
       print('------------------- Drawing field ${field.fieldName}\n\n');
       // Convert from List<GeoPoint> to List<LatLng>
@@ -143,6 +145,7 @@ class _MyMapState extends State<MyMap> {
               Row(
                 children: <Widget>[
                   Expanded(
+                    // TODO: change this from textfield to some floating text label
                       child: TextField(
                         decoration: InputDecoration(hintText: 'Tap on borders for field to add'), textAlign: TextAlign.center,
                       )
@@ -177,6 +180,7 @@ class _MyMapState extends State<MyMap> {
                     rotateGesturesEnabled: true,
                     scrollGesturesEnabled: true,
                     mapToolbarEnabled: false,
+                    // TODO: if field insight, keep static/zoomed view of current field
                     initialCameraPosition: _kInitialPosition,
                     mapType: _currentMapType,
                     markers: {_exampleMarker},
