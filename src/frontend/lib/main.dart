@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         title: 'Autonomous Precision Agriculture using UAVs',
         theme: ThemeData(
           primarySwatch: Colors.lightGreen,
+          fontFamily: 'Oswald'
         ),
         initialRoute: '/',
         routes: {

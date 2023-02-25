@@ -75,7 +75,8 @@ flutter:
   assets:
     - lib/.env # Path to .env
     - assets/images/farm-background.jpg
-  #   - images/a_dot_ham.jpeg
+    - assets/images/drone.png
+    - assets/fonts/Oswald-Regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
