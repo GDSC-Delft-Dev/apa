@@ -193,7 +193,7 @@ class _MyMapState extends State<MyMap> {
                     },
                   ),
                     Container(
-                      padding: const EdgeInsets.only(top: 24, right: 12),
+                      padding: const EdgeInsets.only(top: 25, right: 12),
                       alignment: Alignment.topRight,
                       child: Column(
                         children: <Widget>[
@@ -220,6 +220,19 @@ class _MyMapState extends State<MyMap> {
                               onPressed: null,
                               child: Icon(Icons.stacked_line_chart_rounded))
                               : Container()
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 165, right: 12),
+                      alignment: Alignment.topRight,
+                      child: Column(
+                        children: <Widget>[
+                          widget.parent == 'INSIGHTS' ? FloatingActionButton(
+                              backgroundColor: Colors.orange,
+                              onPressed: null,
+                              child: const Icon(Icons.warning_amber_rounded)
+                          ) : Container()
                         ],
                       ),
                     )
