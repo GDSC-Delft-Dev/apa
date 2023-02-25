@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/views/map.dart';
 
 /// Displays insights for this field and allows user to customize visualization mode
 class FieldInsights extends StatefulWidget {
@@ -22,7 +23,8 @@ class _FieldInsightsState extends State<FieldInsights> {
         ),
         backgroundColor: Colors.grey[200],
         body: Center(
-          child: Text('Field maps and localized insights for field with id ${widget.fieldId}', style: TextStyle(fontSize: 20),),
+          child: MyMap(context: 'Insights',),
+          // child: Text('Field maps and localized insights for field with id ${widget.fieldId}', style: TextStyle(fontSize: 20),),
         )
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/stores/fields_store.dart';
+import 'package:frontend/views/map.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/user_model.dart';
@@ -27,15 +28,14 @@ class _AddFieldState extends State<AddField> {
         body: SafeArea(
           child:
             Center(
-              child: ElevatedButton(
-                    child: Text('Add dummy field'),
-                    onPressed: () async => {
-                      // TODO: add new field instead of updating
-                      // TODO: fetch current user uid
-                      await FieldsStore(userId: user.uid)
-                          .addNewField("New spinach field", 12.3)
-                    }
-                )
+              child: MyMap(context: 'Add')
+              // ElevatedButton(
+              //       child: Text('Add dummy field'),
+              //       onPressed: () async => {
+              //         await FieldsStore(userId: user.uid)
+              //             .addNewField("New spinach field", 12.3)
+              //       }
+              //   )
             ),
         ),
     );

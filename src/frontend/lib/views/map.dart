@@ -1,9 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'loading.dart';
 
 class MyMap extends StatefulWidget {
 
@@ -17,6 +18,9 @@ class MyMap extends StatefulWidget {
 }
 
 // TODO: change UI according to context field
+// HOME: Display all fields + markers for localized insights + search
+// ADD FIELD: Display all fields + markers for localized insights + search + allow for drawing boundaries
+// INSIGHTS: Display static map for current field + colors according to index values
 class _MyMapState extends State<MyMap> {
 
   final Completer<GoogleMapController> _controller = Completer();
@@ -38,6 +42,7 @@ class _MyMapState extends State<MyMap> {
     position: _kMapDelft,
   );
 
+  // TODO: give every Field model a list of boundaries and draw field borders on map
   static final Polygon _exampleField = const Polygon(
       polygonId: PolygonId('exampleField'),
       points: [
@@ -106,7 +111,7 @@ class _MyMapState extends State<MyMap> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             print("Empty");
-            return Container();
+            return Loading();
           }
           return Column(
             children: [

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/addfield/addfield.dart';
-import 'package:frontend/views/loading.dart';
 import 'package:frontend/views/map.dart';
 
 /// This is the first screen within the application that the user encounters
