@@ -61,8 +61,9 @@ class _MyMapState extends State<MyMap> {
     ));
   }
 
+  /// Takes a list of LatLng points to create one Polygon
   void _createPolygon(List<LatLng> polygonPoints) {
-    final String polygonIdVal = 'polygon_$_polygonIdCounter';
+    final String polygonIdVal = 'user_$_polygonIdCounter';
     // Give each polygon a different id
     _polygonIdCounter++;
     _polygons.add(
@@ -76,9 +77,11 @@ class _MyMapState extends State<MyMap> {
     );
   }
 
+  /// Takes a list of field models and created polygons to draw on the map
   _convertFieldsToPolygons(List<FieldModel> fields) {
 
     for (var field in fields) {
+      // Convert from List<GeoPoint> to List<LatLng>
       List<LatLng> fieldBoundaries = field.boundaries.map((f) => LatLng(f.latitude, f.longitude)).toList();
       _polygons.add(
         Polygon(
@@ -98,6 +101,14 @@ class _MyMapState extends State<MyMap> {
       _currentMapType = _currentMapType == MapType.hybrid
           ? MapType.normal
           : MapType.hybrid;
+    });
+  }
+
+  /// Clears all points tapped by the user
+  void _clearPoints() {
+    setState(() {
+      _pointsTapped = [];
+      _polygons.removeWhere((p) => p.polygonId.value.startsWith('user'));
     });
   }
 
@@ -156,6 +167,7 @@ class _MyMapState extends State<MyMap> {
                     },
                     onTap: (point) {
                       setState(() {
+                        print('-------- Point tapped: $point');
                         _pointsTapped.add(point);
                         _createPolygon(_pointsTapped);
                       });
@@ -170,6 +182,19 @@ class _MyMapState extends State<MyMap> {
                               backgroundColor: Colors.blueAccent[100],
                               child: const Icon(Icons.map_rounded),
                               onPressed: _changeMapType
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 95, right: 12),
+                      alignment: Alignment.topRight,
+                      child: Column(
+                        children: <Widget>[
+                          FloatingActionButton(
+                              backgroundColor: Colors.blueAccent[100],
+                              child: const Icon(Icons.undo),
+                              onPressed: _clearPoints
                           )
                         ],
                       ),
