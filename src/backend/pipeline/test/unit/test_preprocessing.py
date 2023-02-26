@@ -1,7 +1,7 @@
 from ...modules.preprocess import Preprocess
 from ...modules.data import Data
 from ...mat import Mat
-from ...modules.types import Modules
+from ...modules.modules import Modules
 import glob
 import cv2
 import numpy as np

@@ -40,10 +40,12 @@ class Pipeline:
         """
 
         # Verify input integrity
+
         # Check that the channels of all images are the same
         if not isinstance(imgs, Mat):
             channels = [img.channels for img in imgs]
-            assert channels.count(channels[0]) == len(channels)
+            assert len(imgs) > 0, "No images provided"
+            assert channels.count(channels[0]) == len(channels), "Images have different channels"
 
         # Construct input data
         data = copy.deepcopy(self.data_proto)
