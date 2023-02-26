@@ -1,7 +1,7 @@
 from ...runnable import Runnable
 from ...data import Data, Modules
 from ..indicies import Indicies
-from mat import Channels
+from ....mat import Channels
 import numpy as np
 import matplotlib.pyplot as plt
 

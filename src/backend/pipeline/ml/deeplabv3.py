@@ -1,3 +1,4 @@
+# pylint: disable=C0103
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers

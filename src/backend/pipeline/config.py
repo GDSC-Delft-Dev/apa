@@ -1,6 +1,5 @@
 # pylint: disable=R0903
-from modules.module import Module
-from mat import Mat
+from .modules.module import Module
 from typing import Any, Type
 
 class Config:

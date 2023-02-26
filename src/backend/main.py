@@ -1,9 +1,6 @@
-from pipeline import Pipeline
 import glob
-import cv2
-from templates import full_pipeline, default_pipeline
-from modules.mosaicing import Mosaicing
-from mat import Mat, Channels
+from pipeline.templates import full_pipeline, default_pipeline
+from pipeline.mat import Mat
 
 def main():
     """Main entry point."""

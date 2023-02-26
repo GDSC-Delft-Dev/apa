@@ -3,9 +3,9 @@ from screeninfo import get_monitors
 from .runnable import Runnable
 from .data import Data
 from .modules import Modules
-from mat import Mat
+from ..mat import Mat
 import cv2
-from typing import Any, Type
+from typing import Any
 
 class Module(Runnable):
     """

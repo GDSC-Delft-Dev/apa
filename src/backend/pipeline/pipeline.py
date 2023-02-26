@@ -1,9 +1,9 @@
 import copy
 from typing import Any, Type
-from modules.module import Module
-from mat import Mat
-from modules.data import Data
-from config import Config
+from .modules.module import Module
+from .mat import Mat
+from .modules.data import Data
+from .config import Config
 
 class Pipeline:
     """

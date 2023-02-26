@@ -1,4 +1,4 @@
-from modules.module import Module
+from .module import Module
 from tensorflow import keras
 from .data import Data
 from .modules import Modules

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from mat import Mat
+from ..mat import Mat
 from .modules import Modules
 from typing import Any
 
