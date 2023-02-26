@@ -20,18 +20,16 @@ class AddFieldScreen extends StatefulWidget {
 }
 
 class _AddFieldScreenState extends State<AddFieldScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<NewFieldProvider>(context, listen: false).clearGeoPoints();
+  }
   @override
   Widget build(BuildContext context) {
     // Curent user that is logged in
     final user = Provider.of<UserModel>(context);
-
-    // List<GeoPoint> exampleGeopoints = [
-    //   GeoPoint(51.987308, 4.324069),
-    //   GeoPoint(51.987179, 4.321984),
-    //   GeoPoint(51.982814, 4.318815),
-    //   GeoPoint(51.980851, 4.319083),
-    //   GeoPoint(51.981906, 4.325687)
-    // ];
 
     // Stream listens for updates to 'Fields' collection
     return StreamProvider<List<FieldModel>>.value(
@@ -42,7 +40,8 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
         appBar: TerraFarmAppBar(
           onPressed: () {
             Navigator.pop(context);
-          }, text: 'Add new field',
+          },
+          text: 'Add new field',
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -80,13 +79,13 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
                   ),
                 ),
                 BottomBarAddField(
-                  onPressed: (Provider.of<NewFieldProvider>(context).isPolygonReady() ? ()=>Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const AddFieldDetailsScreen(
-                        polygon: []
-                      ),
-                    ),
-                  ) : null),
+                  onPressed: (Provider.of<NewFieldProvider>(context).isPolygonReady()
+                      ? () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const AddFieldDetailsScreen(polygon: []),
+                            ),
+                          )
+                      : null),
                 )
               ],
             ),

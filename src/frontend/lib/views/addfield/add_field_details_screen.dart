@@ -49,14 +49,17 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                 height: 250,
                 child: VisualizeFieldMap(
                   polygon: Provider.of<NewFieldProvider>(context).getPolygon(),
-                  cameraPosition: Provider.of<NewFieldProvider>(context).getGoodCameraPositionForPolygon(),
+                  cameraPosition:
+                      Provider.of<NewFieldProvider>(context).getGoodCameraPositionForPolygon(),
                 ),
               ),
               SizedBox.fromSize(
                 size: const Size.fromHeight(10),
               ),
               AddFieldInfoCard(
-                  textController: _fieldNameController, hintText: "e.g. Field 1", text: "Field Name"),
+                  textController: _fieldNameController,
+                  hintText: "e.g. Field 1",
+                  text: "Field Name"),
               AddFieldInfoCard(
                   textController: _cropTypeController, hintText: "e.g. Wheat", text: "Crop Type"),
               SizedBox.fromSize(
@@ -71,13 +74,19 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                       width: 275,
                       height: 50,
                       child: TerrafarmRoundedButton(
-                          onPressed: () {}, text: "Save Field", color: Colors.green),
+                          onPressed: () {
+                          },
+                          text: "Save Field",
+                          color: Colors.green),
                     ),
                     SizedBox(
                       width: 275,
                       height: 50,
                       child: TerrafarmRoundedButton(
-                          onPressed: () {}, text: "Save Field and fly drone", color: Colors.blue),
+                          onPressed: () {
+                          },
+                          text: "Save Field and fly drone",
+                          color: Colors.blue),
                     ),
                   ])
             ],
@@ -87,5 +96,3 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
     );
   }
 }
-
-

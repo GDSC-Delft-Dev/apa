@@ -20,7 +20,7 @@ List<GeoPoint> convertToGeoPoints(List<Point> points) {
 }
 
 bool checkIfPolygonIsSelfIntersecting(List<GeoPoint> geoPoints) {
-  if (geoPoints.length <= 4) {
+  if (geoPoints.length <= 3) {
     return false;
   }
 

@@ -79,7 +79,7 @@ class NewFieldProvider extends ChangeNotifier {
 
   CameraPosition getGoodCameraPositionForPolygon() {
     if (_geoPoints.isEmpty) {
-      return CameraPosition(
+      return const CameraPosition(
         target: LatLng(0, 0),
         zoom: 0,
       );

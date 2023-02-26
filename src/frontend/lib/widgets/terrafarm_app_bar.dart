@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Custom app bar for the add field screen
 class TerraFarmAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Function() onPressed;
+  final Function()? onPressed;
   final String text;
   const TerraFarmAppBar({super.key, required this.onPressed, required this.text});
 
