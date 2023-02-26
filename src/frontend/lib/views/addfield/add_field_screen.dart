@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/new_field_provider.dart';
 import 'package:frontend/stores/fields_store.dart';
@@ -6,7 +5,6 @@ import 'package:frontend/views/addfield/add_field_details_screen.dart';
 import 'package:frontend/views/addfield/widgets/add_field_map.dart';
 import 'package:frontend/views/addfield/widgets/bottom_bar_add_field.dart';
 import 'package:frontend/widgets/terrafarm_app_bar.dart';
-import 'package:frontend/views/map.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/field_model.dart';
@@ -50,9 +48,9 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
               direction: Axis.vertical,
               children: [
                 Text(
-                  "Draw borders for your desired field to be added.",
+                  "Define the field boundaries by selecting points around the field.",
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.normal,
                     color: Colors.grey.shade600,
                     fontFamily: 'Roboto',

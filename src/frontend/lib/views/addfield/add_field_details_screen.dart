@@ -76,7 +76,7 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                       child: TerrafarmRoundedButton(
                           onPressed: () {
                           },
-                          text: "Save Field",
+                          text: "Save field",
                           color: Colors.green),
                     ),
                     SizedBox(
@@ -85,7 +85,7 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                       child: TerrafarmRoundedButton(
                           onPressed: () {
                           },
-                          text: "Save Field and fly drone",
+                          text: "Save field and fly drone",
                           color: Colors.blue),
                     ),
                   ])
