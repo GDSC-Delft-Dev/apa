@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/new_field_provider.dart';
 import 'package:frontend/stores/fields_store.dart';
 import 'package:frontend/views/addfield/add_field_details_screen.dart';
+import 'package:frontend/views/addfield/widgets/add_field_map.dart';
 import 'package:frontend/views/addfield/widgets/bottom_bar_add_field.dart';
-import 'package:frontend/views/addfield/widgets/custom_app_bar.dart';
+import 'package:frontend/widgets/terrafarm_app_bar.dart';
 import 'package:frontend/views/map.dart';
 import 'package:provider/provider.dart';
 
@@ -37,10 +39,10 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
       initialData: const [],
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(
+        appBar: TerraFarmAppBar(
           onPressed: () {
             Navigator.pop(context);
-          },
+          }, text: 'Add new field',
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -74,17 +76,17 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
                       ],
                     ),
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0), child: const MyMap(parent: 'Add')),
+                        borderRadius: BorderRadius.circular(10.0), child: const AddFieldMap()),
                   ),
                 ),
                 BottomBarAddField(
-                  onPressed: () => Navigator.of(context).push(
+                  onPressed: (Provider.of<NewFieldProvider>(context).isPolygonReady() ? ()=>Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => const AddFieldDetailsScreen(
                         polygon: []
                       ),
                     ),
-                  ),
+                  ) : null),
                 )
               ],
             ),

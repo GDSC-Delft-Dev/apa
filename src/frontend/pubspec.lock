@@ -193,6 +193,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  convex_hull:
+    dependency: "direct main"
+    description:
+      name: convex_hull
+      sha256: "67489a600f0ae7b4a4851e896bbea01cf9f599af520ab8ab8390332d59da340d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   crypto:
     dependency: transitive
     description:

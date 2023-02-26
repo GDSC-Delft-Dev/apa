@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/models/field_model.dart';
-import 'package:frontend/models/user_model.dart';
-import 'package:frontend/stores/fields_store.dart';
-import 'package:frontend/views/addfield/widgets/custom_app_bar.dart';
+import 'package:frontend/providers/new_field_provider.dart';
+import 'package:frontend/views/addfield/widgets/add_field_info_card.dart';
+import 'package:frontend/views/addfield/widgets/visualize_field_map.dart';
+import 'package:frontend/widgets/terrafarm_app_bar.dart';
+import 'package:frontend/widgets/terrafarm_rounded_button.dart';
 import 'package:provider/provider.dart';
 
 class AddFieldDetailsScreen extends StatefulWidget {
@@ -29,123 +30,57 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel>(context);
-
-    return StreamProvider<List<FieldModel>>.value(
-      value: FieldsStore(userId: user.uid).fields,
-      initialData: const [],
-      child: Scaffold(
-        backgroundColor: const Color.fromRGBO(241, 244, 248, 1),
-        appBar: CustomAppBar(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  width: 150,
-                  height: 200,
-                  color: Colors.green,
+    return Scaffold(
+      backgroundColor: const Color.fromRGBO(241, 244, 248, 1),
+      appBar: TerraFarmAppBar(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        text: "Add Field Details",
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                width: double.infinity,
+                height: 250,
+                child: VisualizeFieldMap(
+                  polygon: Provider.of<NewFieldProvider>(context).getPolygon(),
+                  cameraPosition: Provider.of<NewFieldProvider>(context).getGoodCameraPositionForPolygon(),
                 ),
-                SizedBox.fromSize(
-                  size: const Size.fromHeight(10),
-                ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Field Name",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey.shade700,
-                              fontFamily: 'Roboto',
-                              letterSpacing: 0.05,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _fieldNameController,
-                            decoration: const InputDecoration(
-                                hintText: 'e.g. Field 1',
-                                focusedBorder: InputBorder.none,
-                                border: InputBorder.none),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Crop type",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey.shade700,
-                              fontFamily: 'Roboto',
-                              letterSpacing: 0.05,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _cropTypeController,
-                            decoration: const InputDecoration(
-                              hintText: 'e.g. Wheat',
-                              focusedBorder: InputBorder.none,
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox.fromSize(
-                  size: const Size.fromHeight(20),
-                ),
-                Wrap(
+              ),
+              SizedBox.fromSize(
+                size: const Size.fromHeight(10),
+              ),
+              AddFieldInfoCard(
+                  textController: _fieldNameController, hintText: "e.g. Field 1", text: "Field Name"),
+              AddFieldInfoCard(
+                  textController: _cropTypeController, hintText: "e.g. Wheat", text: "Crop Type"),
+              SizedBox.fromSize(
+                size: const Size.fromHeight(20),
+              ),
+              Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 20,
                   runSpacing: 20,
                   children: [
-                  SizedBox(
-                    width: 275,
-                    height: 50,
-                    child: RoundedButton(onPressed: () {}, text: "Save Field", color: Colors.green),
-                  ),
-                  SizedBox(
-                    width: 275,
-                    height: 50,
-                    child: RoundedButton(
-                        onPressed: () {}, text: "Save Field and fly drone", color: Colors.blue),
-                  ),
-                ])
-              ],
-            ),
+                    SizedBox(
+                      width: 275,
+                      height: 50,
+                      child: TerrafarmRoundedButton(
+                          onPressed: () {}, text: "Save Field", color: Colors.green),
+                    ),
+                    SizedBox(
+                      width: 275,
+                      height: 50,
+                      child: TerrafarmRoundedButton(
+                          onPressed: () {}, text: "Save Field and fly drone", color: Colors.blue),
+                    ),
+                  ])
+            ],
           ),
         ),
       ),
@@ -153,39 +88,4 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
   }
 }
 
-class RoundedButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final String text;
-  final Color color;
 
-  const RoundedButton({
-    super.key,
-    required this.onPressed,
-    required this.text,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40.0),
-        ),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 16,
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-}
