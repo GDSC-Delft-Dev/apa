@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/home/home.dart';
-import 'package:frontend/views/addfield/addfield.dart';
+import 'package:frontend/views/addfield/add_field_screen.dart';
 import 'package:frontend/views/loading.dart';
 import 'package:frontend/views/myfields/my_fields.dart';
 import 'package:frontend/views/flydrone/flydrone.dart';
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => Wrapper(),
           '/load': (context) => Loading(),
           '/home': (context) => const Home(title: 'Terrafarm'),
-          '/add': (context) => const AddField(),
+          '/add': (context) => const AddFieldScreen(),
           '/fields': (context) => const MyFields(),
           '/fly': (context) => const FlyDrone(droneName: 'DJI Mavic 3',),
           '/settings': (context) => const Settings(),

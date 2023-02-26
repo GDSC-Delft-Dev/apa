@@ -45,6 +45,7 @@ dependencies:
   firebase_core: ^2.7.0
   provider: ^6.0.5
   google_fonts: ^4.0.3
+  poly_collisions: ^1.4.0
 
 dev_dependencies:
   # A build system for Dart code generation and modular compilation.
