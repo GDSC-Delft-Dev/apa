@@ -20,6 +20,13 @@ You can then run the default pipeline with
 
 `py main.py`
 
+### Testing
+To test the code, run `pytest` unit tests:
+
+```
+python -m pytest
+```
+
 ### Static analysis
 Our project uses `mypy` and `pylint` to assert the quality of the code. You can run these with:
 
