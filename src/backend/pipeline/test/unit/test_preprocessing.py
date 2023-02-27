@@ -5,12 +5,14 @@ from ...modules.modules import Modules
 import glob
 import cv2
 import numpy as np
+import pytest
 
 class TestPreprocessingModule:
     """
     Unit testing for the preprocessing module.
     """
 
+    @pytest.mark.skip(reason="Need the .npy file on Cloud Storage")
     def test_preprocessing(self):
         """
         Test the method run.   
