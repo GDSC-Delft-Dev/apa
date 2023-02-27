@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+/// This class is used to store the map settings.
+/// We store this info as to have a seamless transition between the home and the add field screen.
 class MapSettingsProvider extends ChangeNotifier {
   MapType _mapType = MapType.normal;
   MapType get mapType => _mapType;
@@ -17,6 +19,7 @@ class MapSettingsProvider extends ChangeNotifier {
   }
 
 
+  /// The default position is set to 0,0 and zoom level 0.
   CameraPosition _cameraPosition = const CameraPosition(
     target: LatLng(0, 0),
     zoom: 0,

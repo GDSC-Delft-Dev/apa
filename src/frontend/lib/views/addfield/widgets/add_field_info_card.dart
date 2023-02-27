@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// A simple widget that displays a card with a text and a textfield for 
+/// adding field details.
 class AddFieldInfoCard extends StatelessWidget {
   const AddFieldInfoCard(
       {super.key, required this.textController, required this.hintText, required this.text});

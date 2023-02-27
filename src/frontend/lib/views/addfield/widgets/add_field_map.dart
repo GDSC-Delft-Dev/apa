@@ -1,14 +1,13 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/field_model.dart';
 import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/providers/new_field_provider.dart';
-import 'package:frontend/services/location_service.dart';
-import 'package:frontend/views/loading.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
+/// This widget is used to display the map on the add field screen.
+/// And it allows for the user to tap the screen to add a new point to the field.
 class AddFieldMap extends StatefulWidget {
   const AddFieldMap({super.key});
 

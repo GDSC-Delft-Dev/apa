@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/providers/new_field_provider.dart';
 import 'package:provider/provider.dart';
 
+/// This widget is used to display the bottom bar of the add field screen and
+/// and it has the option to remove the last added point and to continue to the
+/// next screen if the current polygon is valid.
 class BottomBarAddField extends StatelessWidget {
   final Function()? onPressed;
   const BottomBarAddField({

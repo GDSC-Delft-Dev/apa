@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:frontend/models/field_model.dart';
 import 'package:frontend/providers/map_settings_provider.dart';
-import 'package:frontend/providers/new_field_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
+/// A general map widget that given a position and a polygon 
+/// will display the map with the polygon on it.
 class VisualizeFieldMap extends StatefulWidget {
   final CameraPosition cameraPosition;
   final Polygon polygon;

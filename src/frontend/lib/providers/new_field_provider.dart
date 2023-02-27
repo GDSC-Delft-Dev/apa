@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/field_model.dart';
 import 'package:frontend/utils/polygon_utils.dart' as utils;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:poly_collisions/poly_collisions.dart';
 
+/// This class is used to share the coordinates of the field to be added.
 class NewFieldProvider extends ChangeNotifier {
   List<GeoPoint> _geoPoints = [];
 
   List<GeoPoint> get geoPoints => _geoPoints;
 
-  // Get polygon
+  // Converts the geopoints to a polygon and returns it.
   Polygon getPolygon() {
     return Polygon(
       polygonId: const PolygonId("newField"),
@@ -23,6 +23,7 @@ class NewFieldProvider extends ChangeNotifier {
     );
   }
 
+  // Adds a geopoint to the list of geopoints.
   bool addGeoPoint(GeoPoint geoPoint) {
     _geoPoints.add(geoPoint);
     if (utils.checkIfPolygonIsSelfIntersecting(_geoPoints)) {
@@ -77,6 +78,7 @@ class NewFieldProvider extends ChangeNotifier {
     return _geoPoints.length >= 3;
   }
 
+  /// Returns a camera position that is good for the current polygon.
   CameraPosition getGoodCameraPositionForPolygon() {
     if (_geoPoints.isEmpty) {
       return const CameraPosition(
@@ -97,6 +99,7 @@ class NewFieldProvider extends ChangeNotifier {
       maxLong = max(maxLong, geoPoint.longitude);
     }
 
+    // The zoom level is calculated using this formula
     var zoom = log(360 / (maxLong - minLong)) / log(2)*0.9;
 
     return CameraPosition(
