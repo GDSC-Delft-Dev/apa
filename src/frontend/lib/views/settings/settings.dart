@@ -26,7 +26,6 @@ class _SettingsState extends State<Settings> {
         body: Center(
           child: Column(
             children: [
-              Text('Profile info and settings here', style: TextStyle(fontSize: 50),),
               ElevatedButton(
                   child: Text(
                     'Log out'
@@ -34,6 +33,7 @@ class _SettingsState extends State<Settings> {
                 onPressed: () async {
                     await _auth.signOut();
                 }),
+              Text('Profile info and settings here', style: TextStyle(fontSize: 20),),
             ],
           ),
         ),

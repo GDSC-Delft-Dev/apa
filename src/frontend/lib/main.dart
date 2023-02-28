@@ -11,12 +11,14 @@ import 'package:frontend/models/user_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/firebase_options.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Future main() async {
   // Allows env vars to be used in source code
   final dotenvFuture = dotenv.load(fileName: "lib/.env");
   WidgetsFlutterBinding.ensureInitialized();
-  final firebaseFuture = Firebase.initializeApp();
+  final firebaseFuture = Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Parallelize loading of env vars and initializing Firebase
   await Future.wait([dotenvFuture, firebaseFuture]);
   runApp(const MyApp());
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         title: 'Autonomous Precision Agriculture using UAVs',
         theme: ThemeData(
           primarySwatch: Colors.lightGreen,
+          textTheme: GoogleFonts.bebasNeueTextTheme()
         ),
         initialRoute: '/',
         routes: {

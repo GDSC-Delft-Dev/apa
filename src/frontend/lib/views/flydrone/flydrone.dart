@@ -21,7 +21,7 @@ class _FlyDroneState extends State<FlyDrone> {
         ),
         backgroundColor: Colors.grey[200],
         body: Center(
-          child: Text('User can select field to fly over here', style: TextStyle(fontSize: 50),),
+          child: Text('User can select field to fly over and see real-time drone status here (optional)', style: TextStyle(fontSize: 20),),
         )
     );
   }
