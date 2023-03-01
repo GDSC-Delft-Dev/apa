@@ -42,7 +42,7 @@ jobs:
 
       - name: Build and Push to GAR
         run: |-
-          cd src/backend ./
+          cd src/backend
           docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY }}:${{ github.sha }}" ./
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPOSITORY }}:${{ github.sha }}"
 
