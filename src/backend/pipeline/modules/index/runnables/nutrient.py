@@ -18,19 +18,20 @@ class Nutrient(Runnable):
     def run(self, data: Data) -> bool:
         try:
             # take the calculated masks from the segmentation module
-            # TODO: see the actual mask order
-            masks = data.modules[Modules.SEGMENTATION]["masks"][:, 0]
-            masks = [np.where(mask.get() == 1, 255, 0) for mask in masks]
-            patches = data.modules[Modules.SEGMENTATION]["patches"]
-            results = self.calculate(masks, patches)
-            data.modules[Modules.INDEX]["runnables"][self.type]["index"] = results
+            masks = data.modules[Modules.SEGMENTATION]["masks"]
+            nutirent_masks = [mask[0][:, :, 0] for mask in masks]
+            masks = [np.where(mask == 1, 255, 0) for mask in nutirent_masks]
+            patches = data.modules[Modules.MOSAIC]["patches"]
+            hsize, _ = data.modules[Modules.MOSAIC]["patches_dims"]
+            result = self.calculate(masks, patches, hsize)
+            data.modules[Modules.INDEX]["runnables"][self.type]["index"] = result
             return True
         except Exception as exception:
             print("Nutrient calculation failed!")
             print(exception)
             return False
 
-    def calculate(self, masks, patches) -> list[np.ndarray]:
+    def calculate(self, masks, patches, hsize: int) -> list[np.ndarray]:
         """
         Applies the masks on the patches and then concats into the mosaic image.
 
@@ -41,9 +42,13 @@ class Nutrient(Runnable):
         Returns:
             Nutrient deficit map
         """
-        results = [cv2.addWeighted(mask, 1, image, 1, 0, image) for mask, image in zip(masks, patches)]
-        # TODO: concat the results
-        return results
+        def gray_to_rgb(x: np.ndarray):
+            return cv2.cvtColor(x.astype(np.uint8),cv2.COLOR_GRAY2RGB) 
+        results = [cv2.addWeighted(gray_to_rgb(mask), 1, image.get(), 1, 0) for mask, image in zip(masks, patches)]
+        # stack patches horizontally
+        row_results = [np.hstack(results[i:i+hsize]) for i in range(0, len(results), hsize)]
+        final_img = np.vstack(row_results)
+        return final_img
 
     def prepare(self, data: Data):
         """

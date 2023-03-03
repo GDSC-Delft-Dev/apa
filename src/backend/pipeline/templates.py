@@ -17,7 +17,7 @@ def full_pipeline() -> Pipeline:
     """Full pipeline with inference."""
 
     # paths to the saved models
-    paths = {3:"./ml/deepv3_seg_3/", 4:"./ml/deepv3_seg_4/"}
+    paths = {3:"./pipeline/ml/deepv3_seg_3/", 4:"./pipeline/ml/deepv3_seg_4/"}
 
     # Run the pipeline
     cfg = Config(modules={Mosaicing: None, AgricultureVisionPreprocess: None,
@@ -31,4 +31,13 @@ def training_pipeline() -> Pipeline:
     masks = [cv2.imread(file) for file in glob.glob("../test/data/mosaicing/farm/mask*.JPG")]
     # Run the pipeline
     cfg = Config(modules={AgricultureVisionPreprocess: masks, Mosaicing: None})
+    return Pipeline(cfg)
+
+
+def nutrient_pipeline() -> Pipeline:
+    """Nutrient deficiency pipeline."""
+    paths = {3:"./pipeline/ml/deepv3_seg_3/", 4:"./pipeline/ml/deepv3_seg_4/"}
+    cfg = Config(modules={Mosaicing: None, AgricultureVisionPreprocess: None,
+                          SemanticSegmentation: paths, Index: None})
+    
     return Pipeline(cfg)

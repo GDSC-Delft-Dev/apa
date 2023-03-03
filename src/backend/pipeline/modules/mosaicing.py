@@ -67,6 +67,7 @@ class Mosaicing(Module):
                     patches.append(Mat(patch, channels))
             # save the calculated patches for further usage
             data.modules[self.type]["patches"] = patches
+            data.modules[self.type]["patches_dims"] = (num_patches_horizontal, num_patches_vertical)
             
         # Run the next module
         return super().run(data)
