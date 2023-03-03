@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/addfield/addfield.dart';
 import 'package:frontend/views/map.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/field_model.dart';
 import '../../models/user_model.dart';
 import '../../stores/fields_store.dart';
+import '../addfield/add_field_screen.dart';
 
 /// This is the first screen within the application that the user encounters
 /// It contains a Google Map to indicate all fields owned by the user
@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const AddField(),
+                builder: (context) => const AddFieldScreen(),
               )
             );
           },

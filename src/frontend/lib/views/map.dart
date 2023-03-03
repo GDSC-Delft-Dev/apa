@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -34,11 +35,6 @@ class _MyMapState extends State<MyMap> {
   // Workaround lagging screen due to Google Maps initialization
   final Future _mapFuture = Future.delayed(const Duration(milliseconds: 250), () => true);
   static const LatLng _kMapDelft = LatLng(51.984925, 4.322979);
-  MapType _currentMapType = MapType.hybrid;
-
-  // TODO: turn this initial position into users current location
-  static const CameraPosition _kInitialPosition =
-  CameraPosition(target: _kMapDelft, zoom: 15.0, tilt: 0, bearing: 0);
 
   static final Marker _exampleMarker = Marker(
     markerId: const MarkerId('_exampleMarker'),
@@ -104,15 +100,6 @@ class _MyMapState extends State<MyMap> {
     }
   }
 
-  /// Changes map from hybrid into terrain map or vice versa
-  void _changeMapType() {
-    setState(() {
-      _currentMapType = _currentMapType == MapType.hybrid
-          ? MapType.normal
-          : MapType.hybrid;
-    });
-  }
-
   /// Clears all points tapped by the user
   void _clearPoints() {
     setState(() {
@@ -171,77 +158,82 @@ class _MyMapState extends State<MyMap> {
                   }, icon: Icon(Icons.search),),
                 ],
               ) : Row(),
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    GoogleMap(
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
-                    rotateGesturesEnabled: true,
-                    scrollGesturesEnabled: true,
-                    mapToolbarEnabled: false,
-                    // TODO: if field insight, keep static/zoomed view of current field
-                    initialCameraPosition: _kInitialPosition,
-                    mapType: _currentMapType,
-                    markers: {_exampleMarker},
-                    polygons: _polygons,
-                    onMapCreated: (GoogleMapController controller) {
-                      _controller.complete(controller);
-                    },
-                    onTap: (point) {
-                      setState(() {
-                        print('-------- Point tapped: $point');
-                        _pointsTapped.add(point);
-                        _createPolygon(_pointsTapped);
-                      });
-                    },
-                  ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 25, right: 12),
-                      alignment: Alignment.topRight,
-                      child: Column(
-                        children: <Widget>[
-                          FloatingActionButton(
-                              backgroundColor: Colors.blueAccent[100],
-                              child: const Icon(Icons.map_rounded),
-                              onPressed: _changeMapType
-                          )
-                        ],
+              Consumer<MapSettingsProvider>(
+                builder: (context, mapSettings, child) {
+                  return Expanded(
+                    child: Stack(
+                      children: <Widget>[
+                        GoogleMap(
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: true,
+                        rotateGesturesEnabled: true,
+                        scrollGesturesEnabled: true,
+                        mapToolbarEnabled: false,
+                        // TODO: if field insight, keep static/zoomed view of current field
+                        initialCameraPosition: mapSettings.cameraPosition,
+                        mapType: mapSettings.mapType,
+                        markers: {_exampleMarker},
+                        polygons: _polygons,
+                        onMapCreated: (GoogleMapController controller) {
+                          _controller.complete(controller);
+                        },
+                        onTap: (point) {
+                          setState(() {
+                            print('-------- Point tapped: $point');
+                            _pointsTapped.add(point);
+                            _createPolygon(_pointsTapped);
+                          });
+                        },
+                        onCameraMove: (camera)=> mapSettings.setCameraPosition(camera),
                       ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 25, right: 12),
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            children: <Widget>[
+                              FloatingActionButton(
+                                  backgroundColor: Colors.blueAccent[100],
+                                  onPressed: mapSettings.toggleMapType,
+                                  child: const Icon(Icons.map_rounded),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 95, right: 12),
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            children: <Widget>[
+                              widget.parent == 'ADD' ? FloatingActionButton(
+                                  backgroundColor: Colors.blueAccent[100],
+                                  onPressed: _clearPoints,
+                                  child: const Icon(Icons.undo)
+                              ) : widget.parent == 'INSIGHTS' ? const FloatingActionButton(
+                                  backgroundColor: Colors.lightGreenAccent,
+                                  // TODO: Allow user to pick insight maps
+                                  onPressed: null,
+                                  child: Icon(Icons.stacked_line_chart_rounded))
+                                  : Container()
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 165, right: 12),
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            children: <Widget>[
+                              widget.parent == 'INSIGHTS' ? FloatingActionButton(
+                                  backgroundColor: Colors.orange,
+                                  onPressed: null,
+                                  child: const Icon(Icons.warning_amber_rounded)
+                              ) : Container()
+                            ],
+                          ),
+                        )
+                      ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 95, right: 12),
-                      alignment: Alignment.topRight,
-                      child: Column(
-                        children: <Widget>[
-                          widget.parent == 'ADD' ? FloatingActionButton(
-                              backgroundColor: Colors.blueAccent[100],
-                              onPressed: _clearPoints,
-                              child: const Icon(Icons.undo)
-                          ) : widget.parent == 'INSIGHTS' ? const FloatingActionButton(
-                              backgroundColor: Colors.lightGreenAccent,
-                              // TODO: Allow user to pick insight maps
-                              onPressed: null,
-                              child: Icon(Icons.stacked_line_chart_rounded))
-                              : Container()
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 165, right: 12),
-                      alignment: Alignment.topRight,
-                      child: Column(
-                        children: <Widget>[
-                          widget.parent == 'INSIGHTS' ? FloatingActionButton(
-                              backgroundColor: Colors.orange,
-                              onPressed: null,
-                              child: const Icon(Icons.warning_amber_rounded)
-                          ) : Container()
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  );
+                }
               ),
             ],
           );

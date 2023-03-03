@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../models/field_model.dart';
 import '../../models/user_model.dart';
-import '../addfield/addfield.dart';
+import '../addfield/add_field_screen.dart';
 import 'fields_list.dart';
 
 /// This screen allows users to inspect and manage all of their fields
@@ -53,7 +53,7 @@ class _MyFieldsState extends State<MyFields> {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AddField(),
+                    builder: (context) => const AddFieldScreen(),
                   )
               );
             },
