@@ -6,13 +6,14 @@ import 'package:frontend/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../../models/field_model.dart';
+import '../../../stores/fields_store.dart';
 import '../../loading.dart';
 
 class VisualizeInsightsMap extends StatefulWidget {
 
-  final String currFieldId;
+  final FieldModel currField;
 
-  const VisualizeInsightsMap({super.key, this.currFieldId = ''});
+  const VisualizeInsightsMap({super.key, required this.currField});
 
   @override
   State<VisualizeInsightsMap> createState() => _VisualizeInsightsMapState();
@@ -27,12 +28,12 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
       const Duration(milliseconds: 250), () => true);
 
 
-
   @override
   Widget build(BuildContext context) {
     // Refers to the StreamProvider of parent widget Home()
+    // final fields = Provider.of<List<FieldModel>>(context);
+
     // TODO: use current field id to get: field name, field insights, field borders
-    final fields = Provider.of<List<FieldModel>>(context);
 
     return Scaffold(
       body: FutureBuilder(
