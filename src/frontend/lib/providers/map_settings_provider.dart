@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-/// This class is used to store the map settings.
+/// This class is used to store the map settings, i.e. keeping track of camera positions and map type through screens
 /// We store this info as to have a seamless transition between the home and the add field screen.
 class MapSettingsProvider extends ChangeNotifier {
   MapType _mapType = MapType.normal;

@@ -9,7 +9,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 /// This class is used to share the coordinates of the field to be added.
 class NewFieldProvider extends ChangeNotifier {
   List<GeoPoint> _geoPoints = [];
-
   List<GeoPoint> get geoPoints => _geoPoints;
 
   // Converts the geopoints to a polygon and returns it.

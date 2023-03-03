@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/map.dart';
+import 'package:frontend/views/insights/widgets/visualize_insights_map.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/field_model.dart';
@@ -34,7 +34,7 @@ class _FieldInsightsState extends State<FieldInsights> {
           ),
           backgroundColor: Colors.grey[200],
           body: Center(
-            child: MyMap(parent: 'INSIGHTS', currFieldId: widget.fieldId),
+            child: VisualizeInsightsMap(),
             // child: Text('Field maps and localized insights for field with id ${widget.fieldId}', style: TextStyle(fontSize: 20),),
           )
       ),

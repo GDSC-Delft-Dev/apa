@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/map.dart';
+import 'package:frontend/views/home/widgets/visualize_home_map.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/field_model.dart';
@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
       initialData: [],
       child: Scaffold(
         backgroundColor: Colors.grey[200],
-        body: const MyMap(parent: 'HOME'),
+        body: const VisualizeHomeMap(),
         floatingActionButton: FloatingActionButton(
           heroTag: 'home_add',
           onPressed: () async {
