@@ -42,77 +42,58 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
             return Loading();
           }
           return Column(
-            children: [
-              // TODO: only display current field (use formula)
-              Consumer<MapSettingsProvider>(
-                  builder: (context, mapSettings, child) {
-                    return Expanded(
-                      child: Stack(
-                        children: <Widget>[
-                          GoogleMap(
-                            myLocationEnabled: true,
-                            myLocationButtonEnabled: true,
-                            rotateGesturesEnabled: true,
-                            scrollGesturesEnabled: true,
-                            mapToolbarEnabled: false,
-                            // TODO: if field insight, keep static/zoomed view of current field
-                            initialCameraPosition: mapSettings.cameraPosition,
-                            mapType: mapSettings.mapType,
-                            // TODO: Show localized insights with markers
-                            // markers: {_exampleMarker},
-                            // polygons: _polygons,
-                            onMapCreated: (GoogleMapController controller) {
-                              _controller.complete(controller);
-                            },
-                            onCameraMove: (camera) =>
-                                mapSettings.setCameraPosition(camera),
+            children: [ 
+              Expanded(
+                    child: Stack(
+                      children: <Widget>[
+                        GoogleMap(
+                          mapToolbarEnabled: false,
+                          // TODO: if field insight, keep static/zoomed view of current field
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(51.984925, 4.322979),
+                            zoom: 12,
                           ),
-                          Container(
-                            padding: const EdgeInsets.only(top: 25, right: 12),
-                            alignment: Alignment.topRight,
-                            child: Column(
-                              children: <Widget>[
-                                FloatingActionButton(
-                                  backgroundColor: Colors.blueAccent[100],
-                                  onPressed: mapSettings.toggleMapType,
-                                  child: const Icon(Icons.map_rounded),
-                                )
-                              ],
-                            ),
+                          mapType: MapType.satellite,
+                          // TODO: Show localized insights with markers
+                          // markers: {_exampleMarker},
+                          // polygons: _polygons,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 45, right: 12),
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            children: const <Widget>[
+                              FloatingActionButton(
+                                  backgroundColor: Colors.lightGreenAccent,
+                                  // TODO: Allow user to pick insight maps
+                                  onPressed: null,
+                                  child: Icon(
+                                      Icons.stacked_line_chart_rounded))
+                            ],
                           ),
-                          Container(
-                            padding: const EdgeInsets.only(top: 95, right: 12),
-                            alignment: Alignment.topRight,
-                            child: Column(
-                              children: <Widget>[
-                                const FloatingActionButton(
-                                    backgroundColor: Colors.lightGreenAccent,
-                                    // TODO: Allow user to pick insight maps
-                                    onPressed: null,
-                                    child: Icon(
-                                        Icons.stacked_line_chart_rounded))
-                              ],
-                            ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 115, right: 12),
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            children: const <Widget>[
+                              FloatingActionButton(
+                                  backgroundColor: Colors.orange,
+                                  onPressed: null,
+                                  child: Icon(
+                                      Icons.warning_amber_rounded)
+                              )
+                            ],
                           ),
-                          Container(
-                            padding: const EdgeInsets.only(top: 165, right: 12),
-                            alignment: Alignment.topRight,
-                            child: Column(
-                              children: <Widget>[
-                                FloatingActionButton(
-                                    backgroundColor: Colors.orange,
-                                    onPressed: null,
-                                    child: const Icon(
-                                        Icons.warning_amber_rounded)
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  }
-              ),
+                        )
+                      ],
+                    ),
+                  )
+              // TODO: Add color scale for insights
+              //TODO: Add option to visualize historical insights    
             ],
           );
         },
