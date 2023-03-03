@@ -19,6 +19,7 @@ class Nutrient(Runnable):
         try:
             # take the calculated masks from the segmentation module
             masks = data.modules[Modules.SEGMENTATION]["masks"]
+            # assume index 0 is for the nutrient deficiency mask
             nutirent_masks = [mask[0][:, :, 0] for mask in masks]
             masks = [np.where(mask == 1, 255, 0) for mask in nutirent_masks]
             patches = data.modules[Modules.MOSAIC]["patches"]
@@ -43,10 +44,17 @@ class Nutrient(Runnable):
             Nutrient deficit map
         """
         def gray_to_rgb(x: np.ndarray):
+            """
+            Grayscale image to RGB.
+            Used to duplicate channels. 
+            """
             return cv2.cvtColor(x.astype(np.uint8),cv2.COLOR_GRAY2RGB) 
+        # overlay the masks over the patches
         results = [cv2.addWeighted(gray_to_rgb(mask), 1, image.get(), 1, 0) for mask, image in zip(masks, patches)]
         # stack patches horizontally
         row_results = [np.hstack(results[i:i+hsize]) for i in range(0, len(results), hsize)]
+        # final image after overlaying the calculated masks on the respective patches
+        # reconstructed image
         final_img = np.vstack(row_results)
         return final_img
 
