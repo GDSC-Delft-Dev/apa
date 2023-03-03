@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/new_field_provider.dart';
+import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/stores/fields_store.dart';
 import 'package:frontend/views/addfield/widgets/add_field_info_card.dart';
 import 'package:frontend/views/addfield/widgets/visualize_field_map.dart';
 import 'package:frontend/widgets/terrafarm_app_bar.dart';
@@ -8,9 +11,7 @@ import 'package:frontend/widgets/terrafarm_rounded_button.dart';
 import 'package:provider/provider.dart';
 
 class AddFieldDetailsScreen extends StatefulWidget {
-  final List<GeoPoint> polygon;
-
-  const AddFieldDetailsScreen({super.key, required this.polygon});
+  const AddFieldDetailsScreen({super.key});
 
   @override
   State<AddFieldDetailsScreen> createState() => _AddFieldDetailsScreenState();
@@ -52,7 +53,10 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                       height: 250,
                       child: VisualizeFieldMap(
                         // Gets the polygon to visualize from the provider.
-                        polygon: Provider.of<NewFieldProvider>(context).getPolygon(),
+                        polygon: Provider.of<NewFieldProvider>(context).getPolygon(
+                          fillColor: Colors.green.withOpacity(0.5),
+                          strokeColor: Colors.green,
+                        ),
                         // Gets a good camera position.
                         cameraPosition: Provider.of<NewFieldProvider>(context)
                             .getGoodCameraPositionForPolygon(),
@@ -89,7 +93,34 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                     width: 275,
                     height: 50,
                     child: TerrafarmRoundedButton(
-                        onPressed: () {}, text: "Save field", color: Colors.green),
+                        onPressed: () {
+                          var userId = Provider.of<UserModel>(context, listen: false).uid;
+                          FieldsStore(userId: userId)
+                              .addNewField(_fieldNameController.text, 32,
+                                  Provider.of<NewFieldProvider>(context, listen: false).geoPoints)
+                              .onError((error, stackTrace) {
+                            // Snackbars are used to display messages to the user.
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(error.toString()),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }).then((value) {
+                            // Snackbars are used to display messages to the user.
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Field added successfully"),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            // Navigate to the home screen.
+                            // Navigator.of(context).replace(context, "/home");
+                            Navigator.popUntil(context, (route) => route.isFirst);
+                          });
+                        },
+                        text: "Save field",
+                        color: Colors.green),
                   ),
                   SizedBox(
                     width: 275,
