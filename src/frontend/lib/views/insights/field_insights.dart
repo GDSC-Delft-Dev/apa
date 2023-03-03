@@ -34,7 +34,7 @@ class _FieldInsightsState extends State<FieldInsights> {
           ),
           backgroundColor: Colors.grey[200],
           body: Center(
-            child: VisualizeInsightsMap(),
+            child: VisualizeInsightsMap(currFieldId: widget.fieldId),
             // child: Text('Field maps and localized insights for field with id ${widget.fieldId}', style: TextStyle(fontSize: 20),),
           )
       ),

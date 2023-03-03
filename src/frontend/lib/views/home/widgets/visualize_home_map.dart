@@ -87,7 +87,6 @@ class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
         future: _mapFuture,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            print("Empty");
             return Loading();
           }
           return Column(

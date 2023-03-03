@@ -31,19 +31,19 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   @override
   Widget build(BuildContext context) {
     // Refers to the StreamProvider of parent widget Home()
+    // TODO: use current field id to get: field name, field insights, field borders
     final fields = Provider.of<List<FieldModel>>(context);
-    // TODO: use current field id to draw field borders
 
     return Scaffold(
       body: FutureBuilder(
         future: _mapFuture,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            print("Empty");
             return Loading();
           }
           return Column(
             children: [
+              // TODO: only display current field (use formula)
               Consumer<MapSettingsProvider>(
                   builder: (context, mapSettings, child) {
                     return Expanded(

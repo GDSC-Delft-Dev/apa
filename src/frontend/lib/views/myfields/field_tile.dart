@@ -19,7 +19,6 @@ class FieldTile extends StatelessWidget {
             leading: Icon(Icons.map_outlined),
             // TODO: display crop?
             // TODO: add crop type icon or map of field?
-            // TODO: indicate whether or not field has insights yet
             title: Text(field.fieldName),
             subtitle: Text('${field.area} ha'),
             trailing: field.hasInsights ? Icon(Icons.keyboard_arrow_right_sharp) : Text('No insights yet', style: TextStyle(fontSize: 12, color: Colors.red),),
