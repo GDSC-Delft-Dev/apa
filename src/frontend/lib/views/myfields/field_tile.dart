@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/field_model.dart';
 import 'package:frontend/views/insights/field_insights.dart';
 
+import '../insights/insights_wrapper.dart';
+
 class FieldTile extends StatelessWidget {
 
   final FieldModel field;
@@ -26,7 +28,7 @@ class FieldTile extends StatelessWidget {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FieldInsights(fieldId: field.fieldId),
+                    builder: (context) => InsightsWrapper(fieldId: field.fieldId),
                   )
               );
             } : null,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/menu_drawer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../models/field_model.dart';
 import 'package:frontend/utils/polygon_utils.dart' as utils;
@@ -81,22 +82,16 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                           },
                         ),
                         Container(
-                          padding: const EdgeInsets.only(top: 20, right: 15),
-                          alignment: Alignment.topRight,
+                          padding: const EdgeInsets.only(top: 20, left: 20),
+                          alignment: Alignment.topLeft,
                           child: Column(
                             children: const <Widget>[
-                              FloatingActionButton(
-                                  backgroundColor: Colors.lightGreenAccent,
-                                  // TODO: Allow user to pick insight maps
-                                  // TODO: Display name of insight map somewhere
-                                  onPressed: null,
-                                  child: Icon(
-                                      Icons.lightbulb_outline))
+                              MenuDrawer()
                             ],
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.only(top: 20, right: 100, left: 35),
+                          padding: const EdgeInsets.only(top: 30, right: 60, left: 170),
                           alignment: Alignment.topRight,
                           // TODO: Move to separate widget
                           child: DropdownButtonFormField(

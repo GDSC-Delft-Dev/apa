@@ -36,7 +36,7 @@ class _FieldInsightsState extends State<FieldInsights> {
           final FieldModel currField = snapshot.data!; // Assert that snapshot.data is not null
           return Scaffold(
             appBar: AppBar(
-              title: Text('Field insights: ${currField.fieldName}'),
+              title: Text('Field insights: ${currField.fieldName}')
             ),
             backgroundColor: Colors.grey[200],
             body: Center(
