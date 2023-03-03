@@ -27,13 +27,29 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   final Future _mapFuture = Future.delayed(
       const Duration(milliseconds: 250), () => true);
 
+    // For keeping track of polygons to  draw
+  Set<Polygon> _polygons = Set<Polygon>();
+
+  /// Takes a list of field models and created polygons to draw on the map
+  _convertCurrFieldToPolygon() {    
+    // Convert from List<GeoPoint> to List<LatLng>
+    List<LatLng> fieldBoundaries = widget.currField.boundaries.map((f) =>
+          LatLng(f.latitude, f.longitude)).toList();
+      _polygons.add(
+          Polygon(
+              polygonId: PolygonId(widget.currField.fieldId),
+              points: fieldBoundaries,
+              strokeColor: Colors.orange,
+              strokeWidth: 5,
+              fillColor: Colors.orange
+          )
+      );
+    }
 
   @override
-  Widget build(BuildContext context) {
-    // Refers to the StreamProvider of parent widget Home()
-    // final fields = Provider.of<List<FieldModel>>(context);
+  Widget build(BuildContext context) {  
 
-    // TODO: use current field id to get: field name, field insights, field borders
+    _convertCurrFieldToPolygon();
 
     return Scaffold(
       body: FutureBuilder(
@@ -57,7 +73,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                           mapType: MapType.satellite,
                           // TODO: Show localized insights with markers
                           // markers: {_exampleMarker},
-                          // polygons: _polygons,
+                          polygons: _polygons,
                           onMapCreated: (GoogleMapController controller) {
                             _controller.complete(controller);
                           },

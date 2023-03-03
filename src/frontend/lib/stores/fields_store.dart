@@ -51,7 +51,7 @@ class FieldsStore {
     return fieldsCollection.doc().set(addFieldData);
   }
 
-  List <FieldModel> _fieldListFromSnapshot(QuerySnapshot snapshot){
+  List<FieldModel> _fieldListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
 
       List<dynamic> boundariesList = doc.get('boundaries');

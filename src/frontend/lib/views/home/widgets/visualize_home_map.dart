@@ -40,7 +40,7 @@ class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
     position: _kMapDelft,
   );
 
-  // For creating custom polygons by tapping
+  // For keeping track of polygons to  draw
   Set<Polygon> _polygons = Set<Polygon>();
 
   // Reads JSON to locate to location that was searched for
