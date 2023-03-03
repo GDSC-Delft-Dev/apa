@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'menu_item.dart';
 
 
 class InsightMenuItems {
 
   static List<InsightMenuItem> choices = [
-    InsightMenuItem('Pests', Icons.bug_report, true),
-    InsightMenuItem('Diseases', Icons.sick, true),
-    InsightMenuItem('Nutrient Deficiencies', Icons.water_drop, true),
+    const InsightMenuItem('Pests', Icons.bug_report),
+    const InsightMenuItem('Diseases', Icons.sick),
+    const InsightMenuItem('Nutrient Deficiencies', Icons.water_drop),
   ];
 
 }
@@ -25,6 +24,18 @@ class HiddenDrawer extends StatefulWidget {
 }
 
 class _HiddenDrawerState extends State<HiddenDrawer> {
+
+  final List<InsightMenuItem> _choices = InsightMenuItems.choices;
+
+  void _itemChange(InsightMenuItem item, bool isSelected) {
+    setState(() {
+      if (isSelected) {
+        _choices.add(item);
+      } else {
+        _choices.remove(item);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +73,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
       item.title,
       style: TextStyle(color: Colors.white, fontSize: 13, letterSpacing: 0.5),
     ),
-    value: item.isChecked,
-    onChanged: (bool? value) {
-      setState(() {
-        item.isChecked = value!;
-      });
-    },
+    value: _choices.contains(item),
+    onChanged: (bool? isChecked) => _itemChange(item, isChecked!)
   );
   }

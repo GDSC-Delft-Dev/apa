@@ -4,8 +4,7 @@ class InsightMenuItem {
 
   final String title;
   final IconData icon;
-  bool isChecked;
 
-  InsightMenuItem(this.title, this.icon, this.isChecked);
+  const InsightMenuItem(this.title, this.icon);
 
 }

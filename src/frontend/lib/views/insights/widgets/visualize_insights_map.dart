@@ -72,6 +72,9 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                       children: <Widget>[
                         GoogleMap(
                           mapToolbarEnabled: false,
+                          zoomGesturesEnabled: true,	
+                          scrollGesturesEnabled: true,
+                          rotateGesturesEnabled: true,
                           initialCameraPosition: utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                           mapType: MapType.satellite,
                           // TODO: Show localized insights with markers
@@ -125,7 +128,6 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                     ),
                   )
               // TODO: Add color scale for insights
-              //TODO: Add option to visualize historical insights    
             ],
           );
         },
