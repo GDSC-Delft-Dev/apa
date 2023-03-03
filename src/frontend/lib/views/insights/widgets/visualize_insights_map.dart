@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../../models/field_model.dart';
 import '../../../stores/fields_store.dart';
+import 'package:frontend/utils/polygon_utils.dart' as utils;
 import '../../loading.dart';
 
 class VisualizeInsightsMap extends StatefulWidget {
@@ -66,10 +67,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         GoogleMap(
                           mapToolbarEnabled: false,
                           // TODO: if field insight, keep static/zoomed view of current field
-                          initialCameraPosition: CameraPosition(
-                            target: LatLng(51.984925, 4.322979),
-                            zoom: 12,
-                          ),
+                          initialCameraPosition: utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                           mapType: MapType.satellite,
                           // TODO: Show localized insights with markers
                           // markers: {_exampleMarker},
