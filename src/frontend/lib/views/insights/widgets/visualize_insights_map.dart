@@ -1,20 +1,21 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/providers/map_settings_provider.dart';
-import 'package:frontend/services/location_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 import '../../../models/field_model.dart';
-import '../../../stores/fields_store.dart';
 import 'package:frontend/utils/polygon_utils.dart' as utils;
 import '../../loading.dart';
 
+
+enum InsightMapTypes { 
+  ndvi, 
+  soilMoisture 
+}
+/// This class builds the insight map chosen by user
 class VisualizeInsightsMap extends StatefulWidget {
 
   final FieldModel currField;
 
-  const VisualizeInsightsMap({super.key, required this.currField});
+  const VisualizeInsightsMap({super.key, required this.currField });
 
   @override
   State<VisualizeInsightsMap> createState() => _VisualizeInsightsMapState();
@@ -30,27 +31,31 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
 
     // For keeping track of polygons to  draw
   Set<Polygon> _polygons = Set<Polygon>();
+  InsightMapTypes currInsightMapType = InsightMapTypes.ndvi;
 
   /// Takes a list of field models and created polygons to draw on the map
-  _convertCurrFieldToPolygon() {    
+  _drawInsightMap(InsightMapTypes mapType) {    
     // Convert from List<GeoPoint> to List<LatLng>
     List<LatLng> fieldBoundaries = widget.currField.boundaries.map((f) =>
           LatLng(f.latitude, f.longitude)).toList();
+      _polygons.clear();
       _polygons.add(
           Polygon(
               polygonId: PolygonId(widget.currField.fieldId),
               points: fieldBoundaries,
-              strokeColor: Colors.orange,
+              strokeColor: mapType == InsightMapTypes.ndvi ? Colors.orange : Colors.blue,
               strokeWidth: 5,
-              fillColor: Colors.orange
+              fillColor: mapType == InsightMapTypes.ndvi ? Colors.orange : Colors.blue,
           )
       );
     }
 
+
+
   @override
   Widget build(BuildContext context) {  
 
-    _convertCurrFieldToPolygon();
+    _drawInsightMap(currInsightMapType);
 
     return Scaffold(
       body: FutureBuilder(
@@ -66,7 +71,6 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                       children: <Widget>[
                         GoogleMap(
                           mapToolbarEnabled: false,
-                          // TODO: if field insight, keep static/zoomed view of current field
                           initialCameraPosition: utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                           mapType: MapType.satellite,
                           // TODO: Show localized insights with markers
@@ -77,33 +81,51 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                           },
                         ),
                         Container(
-                          padding: const EdgeInsets.only(top: 45, right: 12),
+                          padding: const EdgeInsets.only(top: 20, right: 15),
                           alignment: Alignment.topRight,
                           child: Column(
                             children: const <Widget>[
                               FloatingActionButton(
                                   backgroundColor: Colors.lightGreenAccent,
                                   // TODO: Allow user to pick insight maps
+                                  // TODO: Display name of insight map somewhere
                                   onPressed: null,
                                   child: Icon(
-                                      Icons.stacked_line_chart_rounded))
+                                      Icons.lightbulb_outline))
                             ],
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.only(top: 115, right: 12),
+                          padding: const EdgeInsets.only(top: 20, right: 100, left: 35),
                           alignment: Alignment.topRight,
-                          child: Column(
-                            children: const <Widget>[
-                              FloatingActionButton(
-                                  backgroundColor: Colors.orange,
-                                  onPressed: null,
-                                  child: Icon(
-                                      Icons.warning_amber_rounded)
-                              )
-                            ],
-                          ),
-                        )
+                          // TODO: Move to separate widget
+                          child: DropdownButtonFormField(
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20.0)
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      hintText: currInsightMapType.toString().split('.').last,
+                                    ),
+                                    value: currInsightMapType,
+                                    icon: const Icon(Icons.arrow_downward),
+                                    items: InsightMapTypes.values.map((InsightMapTypes type) {
+                                      return DropdownMenuItem<InsightMapTypes>(
+                                        value: type,
+                                        child: Text(type.toString().split('.').last, style: TextStyle(fontSize: 16)),
+                                      );
+                                    }).toList(),
+                                    onChanged: (InsightMapTypes? value) {
+                                      setState(() {
+                                        currInsightMapType = value!;
+                                        print('Changed to $currInsightMapType');
+                                      });
+                                      _drawInsightMap(value!);
+                                    },
+                          )
+                        ),
                       ],
                     ),
                   )
