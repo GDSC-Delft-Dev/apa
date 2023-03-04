@@ -17,8 +17,6 @@ class InsightsWrapper extends StatefulWidget {
 }
 
 class _InsightsWrapperState extends State<InsightsWrapper> {
-
-  // TODO: Keep track of current selected insights
   
   @override
   Widget build(BuildContext context) => ZoomDrawer(

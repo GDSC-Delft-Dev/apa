@@ -3,6 +3,8 @@ import '../models/insight_model.dart';
 
 class InsightsStore {
 
+  InsightsStore();
+
   final CollectionReference insightsCollection = FirebaseFirestore.instance.collection('insights');
 
   InsightModel _insightModelFromSnapshot(DocumentSnapshot snapshot) {
@@ -33,10 +35,17 @@ class InsightsStore {
   }
 
   List<InsightModel> _insightListFromSnapshot(QuerySnapshot snapshot){
+    T enumFromString<T>(String value, List<T> values) {
+      return values.firstWhere(
+        (type) => type.toString().split('.').last == value,
+        orElse: () => throw Exception('Unknown enum value: $value'),
+      );
+    }
+
     return snapshot.docs.map((doc){
       return InsightModel(
           insightId: doc.id,
-          type: InsightType.values[doc.get('type')],
+          type: enumFromString(doc.get('type'), InsightType.values),
           details: doc.get('details'),
           center: doc.get('center'),
           fieldId: doc.get('field_id'),
@@ -49,7 +58,9 @@ class InsightsStore {
   }
 
   Stream<List<InsightModel>> getInsightsByFieldId(String fieldId) {
-    return insightsCollection.where('field_id', isEqualTo: fieldId).snapshots().map(_insightListFromSnapshot);
+    return insightsCollection.where('field_id', isEqualTo: fieldId)
+      .snapshots()
+      .map(_insightListFromSnapshot);
   }
 
   Future deleteInsight(String insightId) async {

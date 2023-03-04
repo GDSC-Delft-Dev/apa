@@ -4,8 +4,10 @@ import 'package:frontend/views/loading.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/field_model.dart';
+import '../../models/insight_model.dart';
 import '../../models/user_model.dart';
 import '../../stores/fields_store.dart';
+import '../../stores/insights_store.dart';
 
 /// Displays insights for this field and allows user to customize visualization mode
 class FieldInsights extends StatefulWidget {
@@ -34,7 +36,10 @@ class _FieldInsightsState extends State<FieldInsights> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final FieldModel currField = snapshot.data!; // Assert that snapshot.data is not null
-          return Scaffold(
+          return StreamProvider<List<InsightModel>>.value(
+            value: InsightsStore().insights, 
+            initialData: [],
+            child: Scaffold(
             appBar: AppBar(
               title: Text('Field insights: ${currField.fieldName}')
             ),
@@ -42,6 +47,7 @@ class _FieldInsightsState extends State<FieldInsights> {
             body: Center(
               child: VisualizeInsightsMap(currField: currField),
             ),
+          )
           );
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");

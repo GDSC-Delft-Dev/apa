@@ -2,9 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/views/insights/widgets/menu_drawer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import '../../../models/field_model.dart';
 import 'package:frontend/utils/polygon_utils.dart' as utils;
+import '../../../models/insight_model.dart';
 import '../../loading.dart';
+import '../../../stores/insights_store.dart';
 
 
 enum InsightMapTypes { 
@@ -37,7 +40,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   // For keeping track of insights to show
   Set<Marker> _insightMarkers = Set<Marker>();
 
-  // TODO: fetch insights from database
+  // TODO: fetch insights from database (filter by fieldId)
   // TODO: convert insights to markers
   // TODO: display markers based on insight choices (provider)
 
@@ -69,6 +72,9 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
 
   @override
   Widget build(BuildContext context) {  
+
+    final List<InsightModel> insights = Provider.of<List<InsightModel>>(context)
+                                          .where((insight) => insight.fieldId == widget.currField.fieldId).toList();
 
     _drawInsightMap(currInsightMapType);
 
@@ -147,6 +153,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
         },
       ),
     );
+    
   }
 }
 
