@@ -13,12 +13,12 @@ class FieldsStore {
   final CollectionReference fieldsCollection = FirebaseFirestore.instance.collection('fields');
 
   /// Returns field data from Firestore document
-  /// TODO: add crop_id
   FieldModel _fieldModelFromSnapshot(DocumentSnapshot snapshot) {
     return FieldModel(
         fieldId: snapshot.id,
         fieldName: snapshot['field_name'],
         area: snapshot['area'],
+        cropId: snapshot['crop_id'],
         // Convert Firebase array of GeoPoints into List<GeoPoint>
         boundaries: List<GeoPoint>.from(
             snapshot['boundaries']?.map((loc) => GeoPoint(loc.latitude, loc.longitude)) ?? []),
@@ -52,10 +52,10 @@ class FieldsStore {
   List<FieldModel> _fieldListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
 
-      List<dynamic> boundariesList = doc.get('boundaries');
+      List<dynamic>? boundariesList = doc.get('boundaries');
       List<GeoPoint> boundaries = [];
 
-      if (boundariesList != null && boundariesList is List) {
+      if (boundariesList != null) {
         boundaries = boundariesList.map((loc) => GeoPoint(loc.latitude, loc.longitude)).toList();
       }
 
@@ -63,6 +63,7 @@ class FieldsStore {
           fieldId: doc.id,
           fieldName: doc.get('field_name') ?? '',
           area: doc.get('area') ?? 0,
+          cropId: doc.get('crop_id') ?? '',
           // Convert Firebase array of GeoPoints into List<GeoPoint>
           boundaries: boundaries,
           hasInsights: doc.get('has_insights') ?? false);

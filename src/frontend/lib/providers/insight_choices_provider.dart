@@ -34,7 +34,4 @@ class InsightChoicesProvider extends ChangeNotifier {
     _currInsightMapType = type;
     notifyListeners();
   }
-
-
-
 }

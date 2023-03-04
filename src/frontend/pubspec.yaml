@@ -48,7 +48,9 @@ dependencies:
   poly_collisions: ^1.4.0
   geojson_vi: ^2.0.7
   flutter_zoom_drawer: ^3.0.3
-
+  firebase_storage: ^11.0.14
+  cached_network_image: ^3.2.3
+  
 dev_dependencies:
   # A build system for Dart code generation and modular compilation.
   build_runner: ^2.1.5
