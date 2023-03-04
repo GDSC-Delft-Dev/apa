@@ -29,7 +29,6 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<InsightChoicesProvider>(context, listen: false).clearChoices();
   }
 
     Widget buildMenuItems(InsightMenuItem item) => CheckboxListTile(

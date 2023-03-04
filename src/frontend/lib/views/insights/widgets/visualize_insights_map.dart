@@ -34,6 +34,20 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   Set<Polygon> _polygons = Set<Polygon>();
   InsightMapTypes currInsightMapType = InsightMapTypes.ndvi;
 
+  // For keeping track of insights to show
+  Set<Marker> _insightMarkers = Set<Marker>();
+
+  // TODO: fetch insights from database
+  // TODO: convert insights to markers
+  // TODO: display markers based on insight choices (provider)
+
+  //   static final Marker _exampleMarker = Marker(
+  //   markerId: const MarkerId('_exampleMarker'),
+  //   infoWindow: const InfoWindow(title: 'Corn Field 3'),
+  //   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+  //   position: _kMapDelft,
+  // );
+
   /// Takes a list of field models and created polygons to draw on the map
   _drawInsightMap(InsightMapTypes mapType) {    
     // Convert from List<GeoPoint> to List<LatLng>

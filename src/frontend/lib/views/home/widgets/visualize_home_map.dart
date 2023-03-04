@@ -20,8 +20,6 @@ class VisualizeHomeMap extends StatefulWidget {
   @override
   State<VisualizeHomeMap> createState() => _VisualizeHomeMapState();
 }
-
-// TODO: open field details when clicking within corresponding polygon
 class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
 
   final Completer<GoogleMapController> _controller = Completer();
@@ -131,6 +129,7 @@ class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
                             },
                             onCameraMove: (camera) =>
                                 mapSettings.setCameraPosition(camera),
+                            onTap: (point) => print('------- TAPPED ------ $point'),
                           ),
                           Container(
                             padding: const EdgeInsets.only(top: 25, right: 12),
