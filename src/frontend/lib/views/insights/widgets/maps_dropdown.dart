@@ -1,36 +1,47 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:frontend/providers/insight_choices_provider.dart';
+import 'package:provider/provider.dart';
 
-// class MapsDropdown extends StatefulWidget {
+class MapsDropdown extends StatefulWidget {
 
-//   const MapsDropdown({super.key });
+  const MapsDropdown({super.key });
 
-//   @override
-//   State<MapsDropdown> createState() => _MapsDropdownState();
-// }
+  @override
+  State<MapsDropdown> createState() => _MapsDropdownState();
+}
 
 
-// class _MapsDropdownState extends State<MapsDropdown> {
+class _MapsDropdownState extends State<MapsDropdown> {
 
-//  @override
-//   Widget build(BuildContext context) { 
-//     return DropdownButton(
-//         value: currInsightMapType,
-//         icon: const Icon(Icons.arrow_downward),
-//         underline: Container(
-//           height: 2,
-//           color: Colors.deepPurpleAccent),
-//         items: InsightMapTypes.values.map((InsightMapTypes type) {
-//           return DropdownMenuItem<InsightMapTypes>(
-//             value: type,
-//             child: Text(type.toString()),
-//           );
-//         }).toList(),
-//         onChanged: (InsightMapTypes? value) {
-//           setState(() {
-//             currInsightMapType = value;
-//           });
-//         },
-//        )
-//  }
+ @override
+  Widget build(BuildContext context) { 
 
-// }
+    InsightMapType currMap = Provider.of<InsightChoicesProvider>(context).currInsightMapType;
+
+    return DropdownButtonFormField(
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0)
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                hintText: currMap.name.toString().split('.').last.replaceAll('_', ' '),
+              ),
+              value: currMap,
+              icon: const Icon(Icons.arrow_downward),
+              items: InsightMapType.values.map((InsightMapType type) {
+                return DropdownMenuItem<InsightMapType>(
+                  value: type,
+                  child: Text(type.toString().split('.').last.replaceAll('_', ' '), style: TextStyle(fontSize: 16)),
+                );
+              }).toList(),
+              onChanged: (InsightMapType? value) {
+                setState(() {
+                  Provider.of<InsightChoicesProvider>(context, listen: false).setInsightMapType(value!);
+                });
+              },
+    );
+ }
+
+}

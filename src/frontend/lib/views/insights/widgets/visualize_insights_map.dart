@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/views/insights/widgets/menu_drawer.dart';
-import 'package:frontend/views/insights/widgets/menu_item.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../../models/field_model.dart';
@@ -9,13 +8,8 @@ import 'package:frontend/utils/polygon_utils.dart' as utils;
 import '../../../models/insight_model.dart';
 import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
-import '../../../utils/insights_utils.dart' as utils;
+import 'maps_dropdown.dart';
 
-
-enum InsightMapTypes { 
-  ndvi, 
-  soil_moisture 
-}
 /// This class builds the insight map chosen by user
 class VisualizeInsightsMap extends StatefulWidget {
 
@@ -37,7 +31,6 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
 
     // For keeping track of polygons to  draw
   Set<Polygon> _polygons = Set<Polygon>();
-  InsightMapTypes _currInsightMapType = InsightMapTypes.ndvi;
 
   // For keeping track of insights to show
   Set<Marker> _insightMarkers = Set<Marker>();
@@ -47,7 +40,8 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
 
 
   /// Takes a list of field models and created polygons to draw on the map
-  void _drawInsightMap(InsightMapTypes mapType) {    
+  void _drawInsightMap(InsightMapType mapType) {    
+
     // Convert from List<GeoPoint> to List<LatLng>
     List<LatLng> fieldBoundaries = widget.currField.boundaries.map((f) =>
           LatLng(f.latitude, f.longitude)).toList();
@@ -56,18 +50,15 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
           Polygon(
               polygonId: PolygonId(widget.currField.fieldId),
               points: fieldBoundaries,
-              strokeColor: mapType == InsightMapTypes.ndvi ? Colors.orange : Colors.blue,
+              strokeColor: mapType == InsightMapType.ndvi ? Colors.orange : Colors.blue,
               strokeWidth: 5,
-              fillColor: mapType == InsightMapTypes.ndvi ? Colors.orange : Colors.blue,
+              fillColor: mapType == InsightMapType.ndvi ? Colors.orange : Colors.blue,
           )
       );
     }
 
     /// Takes a list of insights and creates markers to draw on the map
-    void _drawMarkersForInsights(List<InsightModel> insights) {
-
-      // Every time choices change, redraw markers
-      List<InsightType> choices = Provider.of<InsightChoicesProvider>(context, listen: true).selectedInsights;
+    void _drawMarkersForInsights(List<InsightModel> insights, List<InsightType> choices) {
 
       _insightMarkers.clear();
       insights.forEach((insight) {
@@ -112,9 +103,12 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     _addCustomIcons();
     final List<InsightModel> insights = Provider.of<List<InsightModel>>(context)
                                           .where((insight) => insight.fieldId == widget.currField.fieldId).toList();
+    InsightMapType mapType = Provider.of<InsightChoicesProvider>(context, listen: false).currInsightMapType;
+    List<InsightType> choices = Provider.of<InsightChoicesProvider>(context, listen: false).selectedInsights;
 
-    _drawInsightMap(_currInsightMapType);
-    _drawMarkersForInsights(insights);
+
+    _drawInsightMap(mapType);
+    _drawMarkersForInsights(insights, choices);
 
     return Scaffold(
       body: FutureBuilder(
@@ -153,31 +147,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         Container(
                           padding: const EdgeInsets.only(top: 30, right: 60, left: 170),
                           alignment: Alignment.topRight,
-                          child: DropdownButtonFormField(
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20.0)
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      hintText: _currInsightMapType.name.toString().split('.').last.replaceAll('_', ' '),
-                                    ),
-                                    value: _currInsightMapType,
-                                    icon: const Icon(Icons.arrow_downward),
-                                    items: InsightMapTypes.values.map((InsightMapTypes type) {
-                                      return DropdownMenuItem<InsightMapTypes>(
-                                        value: type,
-                                        child: Text(type.toString().split('.').last.replaceAll('_', ' '), style: TextStyle(fontSize: 16)),
-                                      );
-                                    }).toList(),
-                                    onChanged: (InsightMapTypes? value) {
-                                      setState(() {
-                                        _currInsightMapType = value!;
-                                      });
-                                      _drawInsightMap(value!);
-                                    },
-                          )
+                          child: const MapsDropdown()
                         ),
                       ],
                     ),
