@@ -15,6 +15,7 @@ class InsightMenuItems {
 }
 
 
+/// A widget that displays a hidden drawer that can be opened by swiping from the left edge of the screen
 class HiddenDrawer extends StatefulWidget {
   
   const HiddenDrawer({super.key});

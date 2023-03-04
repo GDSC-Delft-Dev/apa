@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum InsightType {disease, pest, nutrient}
 
-
+/// Represents an insight that has been detected by the image processing pipeline
 class InsightModel {
 
   final String insightId;

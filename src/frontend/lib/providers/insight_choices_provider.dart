@@ -7,6 +7,8 @@ enum InsightMapType {
   ndvi, 
   soil_moisture 
 }
+
+/// A provider that stores the user's choices for insights
 class InsightChoicesProvider extends ChangeNotifier { 
 
   List<InsightType> _selectedInsights = [InsightType.disease, InsightType.pest, InsightType.nutrient];  // All choices are selected by default

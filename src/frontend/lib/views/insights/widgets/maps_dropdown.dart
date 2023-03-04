@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/providers/insight_choices_provider.dart';
 import 'package:provider/provider.dart';
 
+/// A dropdown menu that allows the user to select the type of map to display 
 class MapsDropdown extends StatefulWidget {
 
   const MapsDropdown({super.key });
