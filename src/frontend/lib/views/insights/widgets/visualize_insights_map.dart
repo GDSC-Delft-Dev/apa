@@ -78,7 +78,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                   insight.getType == InsightType.pest ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed) : 
                   insight.getType == InsightType.nutrient ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen) : 
                   BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-            infoWindow: InfoWindow(title: '$insight.getDetails'),
+            infoWindow: InfoWindow(title: insight.getDetails),
           )
         );
         }
