@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/insight_model.dart';
 import 'package:frontend/providers/insight_choices_provider.dart';
 import 'menu_item.dart';
 import 'package:provider/provider.dart';
@@ -6,9 +7,9 @@ import 'package:provider/provider.dart';
 class InsightMenuItems {
 
   static List<InsightMenuItem> choices = [
-    const InsightMenuItem('Pests', Icons.bug_report),
-    const InsightMenuItem('Diseases', Icons.sick),
-    const InsightMenuItem('Nutrient Deficiencies', Icons.water_drop),
+    const InsightMenuItem('Pests', Icons.bug_report, InsightType.pest),
+    const InsightMenuItem('Diseases', Icons.sick, InsightType.disease),
+    const InsightMenuItem('Nutrient Deficiencies', Icons.water_drop, InsightType.nutrient),
   ];
 
 }
@@ -39,7 +40,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
       item.title,
       style: TextStyle(color: Colors.white, fontSize: 13, letterSpacing: 0.5),
     ),
-    value: Provider.of<InsightChoicesProvider>(context).selectedInsights.contains(item),
+    value: Provider.of<InsightChoicesProvider>(context).selectedInsights.contains(item.type),
     onChanged: (bool? isChecked) => Provider.of<InsightChoicesProvider>(context, listen: false).itemChange(item, isChecked!),
     );
 

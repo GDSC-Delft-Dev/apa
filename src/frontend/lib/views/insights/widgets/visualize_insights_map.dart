@@ -60,23 +60,28 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
       );
     }
 
-  // TODO: display markers based on insight choices (provider)
-
+    /// Takes a list of insights and creates markers to draw on the map
     _drawMarkersForInsights(List<InsightModel> insights) {
 
-      List<InsightMenuItem> choices = Provider.of<InsightChoicesProvider>(context, listen: true).selectedInsights;
+      // Every time choices change, redraw markers
+      List<InsightType> choices = Provider.of<InsightChoicesProvider>(context, listen: true).selectedInsights;
 
       _insightMarkers.clear();
       insights.forEach((insight) {
-        // if ()
-        _insightMarkers.add(
+        // Only show markers for insights that are selected by user 
+        if (choices.contains(insight.getType)) {
+          _insightMarkers.add(
           Marker(
             markerId: MarkerId(insight.insightId),
             position: LatLng(insight.getCenter.latitude, insight.getCenter.longitude),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            icon: insight.getType == InsightType.disease ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow) : 
+                  insight.getType == InsightType.pest ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed) : 
+                  insight.getType == InsightType.nutrient ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen) : 
+                  BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             infoWindow: InfoWindow(title: '$insight.getDetails'),
           )
         );
+        }
       });
     }
 

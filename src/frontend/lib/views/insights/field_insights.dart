@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/views/insights/widgets/visualize_insights_map.dart';
 import 'package:frontend/views/loading.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/field_model.dart';
 import '../../models/insight_model.dart';
 import '../../models/user_model.dart';
