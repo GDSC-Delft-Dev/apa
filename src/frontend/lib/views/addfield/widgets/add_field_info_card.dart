@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 /// adding field details.
 class AddFieldInfoCard extends StatelessWidget {
   const AddFieldInfoCard(
-      {super.key, required this.textController, required this.hintText, required this.text});
+      {super.key, required this.textController, required this.hintText, required this.text, required this.onChange});
 
   final TextEditingController textController;
   final String hintText;
   final String text;
+  final Function() onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class AddFieldInfoCard extends StatelessWidget {
             Expanded(
               child: TextFormField(
                 controller: textController,
+                onChanged: (value) => onChange(),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.normal,

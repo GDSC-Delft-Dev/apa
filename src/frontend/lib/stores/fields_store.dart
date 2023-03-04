@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:frontend/models/crop.dart';
 import '../models/field_model.dart';
 
 /// Handles CRUD operations for the 'fields' collection in Firestore
@@ -25,19 +26,19 @@ class FieldsStore {
   }
 
   /// Updates attribute values for an instance in the 'fields' collection
-  Future updateFieldData(String fieldId, String name, double area, bool hasInsights) async {
+  Future updateFieldData(String fieldId, String name, CropType crop, double area, bool hasInsights) async {
     return await fieldsCollection
         .doc(fieldId)
         .set({'field_name': name, 'area': area, 'has_insights': hasInsights});
   }
 
-  Future addNewField(String name, double area, List<GeoPoint> boundaries) async {
+  Future addNewField(String name, CropType crop, double area, List<GeoPoint> boundaries) async {
     var addFieldData = <String, dynamic>{};
     addFieldData['field_name'] = name;
     addFieldData['area'] = area;
+    addFieldData['crop'] = crop.name;
     addFieldData['user_id'] = userId;
     addFieldData['boundaries'] = boundaries;
-    print('boundaries: $boundaries');
     addFieldData['has_insights'] = false; // by default, a field has no insights yet
     // TODO: add crop_id
     return fieldsCollection.doc().set(addFieldData);

@@ -34,6 +34,7 @@ class _AddFieldMapState extends State<AddFieldMap> {
               return Stack(
                 children: <Widget>[
                   GoogleMap(
+
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
                     rotateGesturesEnabled: true,
@@ -45,7 +46,9 @@ class _AddFieldMapState extends State<AddFieldMap> {
                     polygons: Provider.of<NewFieldProvider>(context).geoPoints.isNotEmpty
                         ? {
                             Provider.of<NewFieldProvider>(context).getPolygon(
-                                fillColor: Colors.green.withOpacity(0.5), strokeColor: Colors.green)
+                              fillColor: Colors.green.withOpacity(0.5),
+                              strokeColor: Colors.green,
+                            )
                           }
                         : {},
                     circles: Provider.of<NewFieldProvider>(context)
@@ -63,6 +66,8 @@ class _AddFieldMapState extends State<AddFieldMap> {
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
                     },
+                    
+
                     onTap: (point) {
                       Provider.of<NewFieldProvider>(context, listen: false)
                           .addGeoPointWithLatLong(point);
