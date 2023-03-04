@@ -46,6 +46,7 @@ dependencies:
   provider: ^6.0.5
   google_fonts: ^4.0.3
   poly_collisions: ^1.4.0
+  flutter_zoom_drawer: ^3.0.3
 
 dev_dependencies:
   # A build system for Dart code generation and modular compilation.
@@ -78,6 +79,9 @@ flutter:
     - lib/.env # Path to .env
     - assets/images/farm-background.jpg
     - assets/images/drone.png
+    - assets/images/disease_marker.png
+    - assets/images/nutrient_marker.png
+    - assets/images/pest_marker.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
