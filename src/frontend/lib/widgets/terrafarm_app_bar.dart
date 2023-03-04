@@ -34,7 +34,6 @@ class TerraFarmAppBar extends StatelessWidget implements PreferredSizeWidget {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
-                fontFamily: 'Roboto',
               ),
             ),
           ],

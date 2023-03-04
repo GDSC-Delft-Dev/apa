@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/insight_choices_provider.dart';
 import 'menu_item.dart';
-
+import 'package:provider/provider.dart';
 
 class InsightMenuItems {
 
@@ -23,23 +24,15 @@ class HiddenDrawer extends StatefulWidget {
 
 }
 
-class _HiddenDrawerState extends State<HiddenDrawer> {
-
-  // TODO: share these choices with the insights map widget
-  final List<InsightMenuItem> _selectedInsights = [...InsightMenuItems.choices];  // All choices are selected by default
-
-  void _itemChange(InsightMenuItem item, bool isSelected) {
-    setState(() {
-      if (isSelected) {
-        _selectedInsights.add(item);
-      } else {
-        _selectedInsights.remove(item);
-      }
-    });
-    print('Selected: ${_selectedInsights.length} items and choices has ${InsightMenuItems.choices.length}');
+class _HiddenDrawerState extends State<HiddenDrawer> { 
+  
+  @override
+  void initState() {
+    super.initState();
+    // Provider.of<InsightChoicesProvider>(context, listen: false).clearChoices();
   }
 
-  Widget buildMenuItems(InsightMenuItem item) => CheckboxListTile(
+    Widget buildMenuItems(InsightMenuItem item) => CheckboxListTile(
     activeColor: Colors.orange,
     dense: true,
     secondary: Icon(item.icon, color: Colors.white),
@@ -47,12 +40,13 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
       item.title,
       style: TextStyle(color: Colors.white, fontSize: 13, letterSpacing: 0.5),
     ),
-    value: _selectedInsights.contains(item),
-    onChanged: (bool? isChecked) => _itemChange(item, isChecked!)
-  );
+    value: Provider.of<InsightChoicesProvider>(context).selectedInsights.contains(item),
+    onChanged: (bool? isChecked) => Provider.of<InsightChoicesProvider>(context, listen: false).itemChange(item, isChecked!),
+    );
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.blueAccent,
       body: SafeArea(

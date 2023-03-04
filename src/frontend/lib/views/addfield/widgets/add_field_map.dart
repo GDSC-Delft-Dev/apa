@@ -57,6 +57,7 @@ class _AddFieldMapState extends State<AddFieldMap> {
                     initialCameraPosition: mapSettings.cameraPosition,
                     mapType: mapSettings.mapType,
                     onCameraMove: (camera)=> mapSettings.setCameraPosition(camera),
+                    // Show both existing fields (_polygons) and the borders for new field to be added
                     polygons: Provider.of<NewFieldProvider>(context).geoPoints.isNotEmpty ? {..._polygons,  Provider.of<NewFieldProvider>(context).getPolygon()}: _polygons,
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
