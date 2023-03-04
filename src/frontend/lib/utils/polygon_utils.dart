@@ -66,7 +66,7 @@ CameraPosition getGoodCameraPositionForPolygon(List<GeoPoint> geoPoints) {
   }
 
   // The zoom level is calculated using this formula
-  var zoom = log(360 / (maxLong - minLong)) / log(2)*0.9;
+  var zoom = log(360 / (maxLong - minLong)) / log(2)*0.95;
 
   return CameraPosition(
     target: LatLng((minLat + maxLat) / 2, (minLong + maxLong) / 2),

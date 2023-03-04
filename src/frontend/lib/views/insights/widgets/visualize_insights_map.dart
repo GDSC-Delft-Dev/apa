@@ -37,14 +37,17 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
 
     // For keeping track of polygons to  draw
   Set<Polygon> _polygons = Set<Polygon>();
-  InsightMapTypes currInsightMapType = InsightMapTypes.ndvi;
+  InsightMapTypes _currInsightMapType = InsightMapTypes.ndvi;
 
   // For keeping track of insights to show
   Set<Marker> _insightMarkers = Set<Marker>();
+  BitmapDescriptor _pestMarkerIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor _diseaseMarkerIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor _nutrientMarkerIcon = BitmapDescriptor.defaultMarker;
 
 
   /// Takes a list of field models and created polygons to draw on the map
-  _drawInsightMap(InsightMapTypes mapType) {    
+  void _drawInsightMap(InsightMapTypes mapType) {    
     // Convert from List<GeoPoint> to List<LatLng>
     List<LatLng> fieldBoundaries = widget.currField.boundaries.map((f) =>
           LatLng(f.latitude, f.longitude)).toList();
@@ -61,7 +64,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     }
 
     /// Takes a list of insights and creates markers to draw on the map
-    _drawMarkersForInsights(List<InsightModel> insights) {
+    void _drawMarkersForInsights(List<InsightModel> insights) {
 
       // Every time choices change, redraw markers
       List<InsightType> choices = Provider.of<InsightChoicesProvider>(context, listen: true).selectedInsights;
@@ -74,26 +77,43 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
           Marker(
             markerId: MarkerId(insight.insightId),
             position: LatLng(insight.getCenter.latitude, insight.getCenter.longitude),
-            icon: insight.getType == InsightType.disease ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow) : 
-                  insight.getType == InsightType.pest ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed) : 
-                  insight.getType == InsightType.nutrient ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen) : 
-                  BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            icon: insight.getType == InsightType.disease ? _diseaseMarkerIcon : 
+                  insight.getType == InsightType.pest ? _pestMarkerIcon : 
+                  insight.getType == InsightType.nutrient ? _nutrientMarkerIcon : 
+                  BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
             infoWindow: InfoWindow(title: insight.getDetails),
+            anchor: const Offset(0.5, 0.5)
           )
         );
         }
       });
     }
 
-
+    /// Adds custom icons to be used for markers
+    void _addCustomIcons() {
+      BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), "assets/images/pest_marker.png")
+             .then((icon) {setState(() => _pestMarkerIcon = icon);},
+        );
+        BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), "assets/images/disease_marker.png")
+             .then((icon) {setState(() =>
+              _diseaseMarkerIcon = icon);},
+        );
+          BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), "assets/images/nutrient_marker.png").then(
+          (icon) {setState(() => _nutrientMarkerIcon = icon);},
+        );
+    }
 
   @override
   Widget build(BuildContext context) {  
 
+    _addCustomIcons();
     final List<InsightModel> insights = Provider.of<List<InsightModel>>(context)
                                           .where((insight) => insight.fieldId == widget.currField.fieldId).toList();
 
-    _drawInsightMap(currInsightMapType);
+    _drawInsightMap(_currInsightMapType);
     _drawMarkersForInsights(insights);
 
     return Scaffold(
@@ -133,7 +153,6 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         Container(
                           padding: const EdgeInsets.only(top: 30, right: 60, left: 170),
                           alignment: Alignment.topRight,
-                          // TODO: Move to separate widget
                           child: DropdownButtonFormField(
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -142,9 +161,9 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                                       ),
                                       filled: true,
                                       fillColor: Colors.white,
-                                      hintText: currInsightMapType.name.toString().split('.').last.replaceAll('_', ' '),
+                                      hintText: _currInsightMapType.name.toString().split('.').last.replaceAll('_', ' '),
                                     ),
-                                    value: currInsightMapType,
+                                    value: _currInsightMapType,
                                     icon: const Icon(Icons.arrow_downward),
                                     items: InsightMapTypes.values.map((InsightMapTypes type) {
                                       return DropdownMenuItem<InsightMapTypes>(
@@ -154,8 +173,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                                     }).toList(),
                                     onChanged: (InsightMapTypes? value) {
                                       setState(() {
-                                        currInsightMapType = value!;
-                                        print('Changed to $currInsightMapType');
+                                        _currInsightMapType = value!;
                                       });
                                       _drawInsightMap(value!);
                                     },
