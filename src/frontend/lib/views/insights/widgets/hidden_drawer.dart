@@ -25,17 +25,31 @@ class HiddenDrawer extends StatefulWidget {
 
 class _HiddenDrawerState extends State<HiddenDrawer> {
 
-  final List<InsightMenuItem> _choices = InsightMenuItems.choices;
+  // TODO: share these choices with the insights map widget
+  final List<InsightMenuItem> _selectedInsights = [...InsightMenuItems.choices];  // All choices are selected by default
 
   void _itemChange(InsightMenuItem item, bool isSelected) {
     setState(() {
       if (isSelected) {
-        _choices.add(item);
+        _selectedInsights.add(item);
       } else {
-        _choices.remove(item);
+        _selectedInsights.remove(item);
       }
     });
+    print('Selected: ${_selectedInsights.length} items and choices has ${InsightMenuItems.choices.length}');
   }
+
+  Widget buildMenuItems(InsightMenuItem item) => CheckboxListTile(
+    activeColor: Colors.orange,
+    dense: true,
+    secondary: Icon(item.icon, color: Colors.white),
+    title: Text(
+      item.title,
+      style: TextStyle(color: Colors.white, fontSize: 13, letterSpacing: 0.5),
+    ),
+    value: _selectedInsights.contains(item),
+    onChanged: (bool? isChecked) => _itemChange(item, isChecked!)
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -64,16 +78,4 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
     );
   }
 
-  // TODO: Change into CheckboxListTile
-  Widget buildMenuItems(InsightMenuItem item) => CheckboxListTile(
-    activeColor: Colors.orange,
-    dense: true,
-    secondary: Icon(item.icon, color: Colors.white),
-    title: Text(
-      item.title,
-      style: TextStyle(color: Colors.white, fontSize: 13, letterSpacing: 0.5),
-    ),
-    value: _choices.contains(item),
-    onChanged: (bool? isChecked) => _itemChange(item, isChecked!)
-  );
   }
