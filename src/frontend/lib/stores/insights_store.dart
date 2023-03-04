@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/insight_model.dart';
+import '../utils/insights_utils.dart' as utils;
 
 class InsightsStore {
 
@@ -35,17 +36,11 @@ class InsightsStore {
   }
 
   List<InsightModel> _insightListFromSnapshot(QuerySnapshot snapshot){
-    T enumFromString<T>(String value, List<T> values) {
-      return values.firstWhere(
-        (type) => type.toString().split('.').last == value,
-        orElse: () => throw Exception('Unknown enum value: $value'),
-      );
-    }
 
     return snapshot.docs.map((doc){
       return InsightModel(
           insightId: doc.id,
-          type: enumFromString(doc.get('type'), InsightType.values),
+          type: utils.enumFromString(doc.get('type'), InsightType.values),
           details: doc.get('details'),
           center: doc.get('center'),
           fieldId: doc.get('field_id'),

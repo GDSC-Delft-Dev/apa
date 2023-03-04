@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/views/insights/widgets/menu_drawer.dart';
+import 'package:frontend/views/insights/widgets/menu_item.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../../models/field_model.dart';
 import 'package:frontend/utils/polygon_utils.dart' as utils;
 import '../../../models/insight_model.dart';
+import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
-import '../../../stores/insights_store.dart';
+import '../../../utils/insights_utils.dart' as utils;
 
 
 enum InsightMapTypes { 
   ndvi, 
-  soilMoisture 
+  soil_moisture 
 }
 /// This class builds the insight map chosen by user
 class VisualizeInsightsMap extends StatefulWidget {
@@ -40,16 +42,6 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   // For keeping track of insights to show
   Set<Marker> _insightMarkers = Set<Marker>();
 
-  // TODO: fetch insights from database (filter by fieldId)
-  // TODO: convert insights to markers
-  // TODO: display markers based on insight choices (provider)
-
-  //   static final Marker _exampleMarker = Marker(
-  //   markerId: const MarkerId('_exampleMarker'),
-  //   infoWindow: const InfoWindow(title: 'Corn Field 3'),
-  //   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-  //   position: _kMapDelft,
-  // );
 
   /// Takes a list of field models and created polygons to draw on the map
   _drawInsightMap(InsightMapTypes mapType) {    
@@ -68,6 +60,26 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
       );
     }
 
+  // TODO: display markers based on insight choices (provider)
+
+    _drawMarkersForInsights(List<InsightModel> insights) {
+
+      List<InsightMenuItem> choices = Provider.of<InsightChoicesProvider>(context, listen: true).selectedInsights;
+
+      _insightMarkers.clear();
+      insights.forEach((insight) {
+        // if ()
+        _insightMarkers.add(
+          Marker(
+            markerId: MarkerId(insight.insightId),
+            position: LatLng(insight.getCenter.latitude, insight.getCenter.longitude),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            infoWindow: InfoWindow(title: '$insight.getDetails'),
+          )
+        );
+      });
+    }
+
 
 
   @override
@@ -77,6 +89,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                                           .where((insight) => insight.fieldId == widget.currField.fieldId).toList();
 
     _drawInsightMap(currInsightMapType);
+    _drawMarkersForInsights(insights);
 
     return Scaffold(
       body: FutureBuilder(
@@ -97,8 +110,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                           rotateGesturesEnabled: true,
                           initialCameraPosition: utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                           mapType: MapType.satellite,
-                          // TODO: Show localized insights with markers
-                          // markers: {_exampleMarker},
+                          markers: _insightMarkers,
                           polygons: _polygons,
                           onMapCreated: (GoogleMapController controller) {
                             _controller.complete(controller);
@@ -125,14 +137,14 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                                       ),
                                       filled: true,
                                       fillColor: Colors.white,
-                                      hintText: currInsightMapType.toString().split('.').last,
+                                      hintText: currInsightMapType.name.toString().split('.').last.replaceAll('_', ' '),
                                     ),
                                     value: currInsightMapType,
                                     icon: const Icon(Icons.arrow_downward),
                                     items: InsightMapTypes.values.map((InsightMapTypes type) {
                                       return DropdownMenuItem<InsightMapTypes>(
                                         value: type,
-                                        child: Text(type.toString().split('.').last, style: TextStyle(fontSize: 16)),
+                                        child: Text(type.toString().split('.').last.replaceAll('_', ' '), style: TextStyle(fontSize: 16)),
                                       );
                                     }).toList(),
                                     onChanged: (InsightMapTypes? value) {

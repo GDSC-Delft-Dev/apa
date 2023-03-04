@@ -22,5 +22,16 @@ class InsightModel {
     required this.date
   });
 
+  String get getInsightId => insightId;
+
+  InsightType get getType => type;
+
+  String get getDetails => details;
+
+  GeoPoint get getCenter => center;
+
+  String get getFieldId => fieldId;
+
+  Timestamp get getDate => date;
 
 }
