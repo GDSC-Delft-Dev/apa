@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geojson_vi/geojson_vi.dart';
 import 'package:poly_collisions/poly_collisions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -44,6 +45,15 @@ bool checkIfPolygonIsSelfIntersecting(List<GeoPoint> geoPoints) {
   return false;
 }
 
+// Get the area of a geo polygon
+double getGeoArea(List<GeoPoint> geoPoints) {
+  var world = {
+    'type': 'Polygon',
+    'coordinates': [geoPoints.map((e) => [e.latitude, e.longitude]).toList()]
+  };
+  final geoJSONPolygon = GeoJSONPolygon.fromMap(world);
+  return geoJSONPolygon.area;
+}
   /// Returns a camera position that is good for the current polygon.
 CameraPosition getGoodCameraPositionForPolygon(List<GeoPoint> geoPoints) {
   if (geoPoints.isEmpty) {

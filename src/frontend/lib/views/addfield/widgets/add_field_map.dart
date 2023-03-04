@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/field_model.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/providers/new_field_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,30 +18,14 @@ class AddFieldMap extends StatefulWidget {
 
 class _AddFieldMapState extends State<AddFieldMap> {
   final Completer<GoogleMapController> _controller = Completer();
-  Set<Polygon> _polygons = Set<Polygon>();
-  
-  _convertFieldsToPolygons(List<FieldModel> fields) {
-    for (var field in fields) {
-      List<LatLng> fieldBoundaries =
-          field.boundaries.map((f) => LatLng(f.latitude, f.longitude)).toList();
-      _polygons.add(
-        Polygon(
-          polygonId: PolygonId(field.fieldId),
-          points: fieldBoundaries,
-          strokeColor: Colors.orange,
-          strokeWidth: 5,
-          fillColor: Colors.orange,
-        ),
-      );
-    }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final fields = Provider.of<List<FieldModel>>(context);
-
-    _convertFieldsToPolygons(fields);
-
     return Scaffold(
       body: Column(
         children: [
@@ -49,6 +34,7 @@ class _AddFieldMapState extends State<AddFieldMap> {
               return Stack(
                 children: <Widget>[
                   GoogleMap(
+
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
                     rotateGesturesEnabled: true,
@@ -56,21 +42,35 @@ class _AddFieldMapState extends State<AddFieldMap> {
                     mapToolbarEnabled: false,
                     initialCameraPosition: mapSettings.cameraPosition,
                     mapType: mapSettings.mapType,
-                    onCameraMove: (camera)=> mapSettings.setCameraPosition(camera),
-                    // Show both existing fields (_polygons) and the borders for new field to be added
-                    polygons: Provider.of<NewFieldProvider>(context).geoPoints.isNotEmpty ? {..._polygons,  Provider.of<NewFieldProvider>(context).getPolygon()}: _polygons,
+                    onCameraMove: (camera) => mapSettings.setCameraPosition(camera),
+                    polygons: Provider.of<NewFieldProvider>(context).geoPoints.isNotEmpty
+                        ? {
+                            Provider.of<NewFieldProvider>(context).getPolygon(
+                              fillColor: Colors.green.withOpacity(0.5),
+                              strokeColor: Colors.green,
+                            )
+                          }
+                        : {},
+                    circles: Provider.of<NewFieldProvider>(context)
+                        .geoPoints
+                        .map((e) => Circle(
+                              circleId: CircleId(e.latitude.toString() + e.longitude.toString()),
+                              center: LatLng(e.latitude, e.longitude),
+                              radius: 5,
+                              fillColor: e == Provider.of<NewFieldProvider>(context).geoPoints.last
+                                  ? Colors.lightGreenAccent
+                                  : Colors.green,
+                              strokeWidth: 0,
+                            ))
+                        .toSet(),
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
                     },
+                    
+
                     onTap: (point) {
-                      if(!Provider.of<NewFieldProvider>(context, listen: false).addGeoPointWithLatLong(point)) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Polygon cannot self intersect"),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                      }
+                      Provider.of<NewFieldProvider>(context, listen: false)
+                          .addGeoPointWithLatLong(point);
                     },
                   ),
                   Container(
@@ -82,7 +82,7 @@ class _AddFieldMapState extends State<AddFieldMap> {
                             backgroundColor: Colors.blueAccent[100],
                             child: const Icon(Icons.map_rounded),
                             onPressed: () {
-                                mapSettings.toggleMapType();
+                              mapSettings.toggleMapType();
                             }),
                       ],
                     ),
