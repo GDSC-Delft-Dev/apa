@@ -13,6 +13,7 @@ class Channels(IntEnum):
     NIR = 3
     FIR = 4
     T = 5
+    A = 6
 
 default_channels = [Channels.R, Channels.G, Channels.B]
 

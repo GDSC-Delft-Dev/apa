@@ -2,6 +2,7 @@ from .module import Module
 from .data import Data
 from ..mat import Mat
 from .modules import Modules
+from ..mat import Channels
 import cv2
 import numpy as np
 from typing import Any
@@ -95,7 +96,8 @@ class Mosaicing(Module):
         # expand the number of dimensions for concatenation
         mask = np.expand_dims(mask, 2)
         alpha_image = np.concatenate((img.get(), mask), axis=2)
-        return np.bitwise_not(mask), alpha_image
+        return np.bitwise_not(mask), Mat(alpha_image, channels=[Channels.R, 
+                            Channels.G, Channels.B, Channels.A])
 
 
 
