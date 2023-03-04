@@ -7,6 +7,7 @@ from .modules.index.index import Index
 from .modules.mosaicing import Mosaicing
 from .modules.preprocess import AgricultureVisionPreprocess
 from .modules.segmentation import SemanticSegmentation
+from .modules.index.runnables.nutrient import Nutrient
 
 def default_pipeline() -> Pipeline:
     """Default pipeline."""
@@ -37,7 +38,8 @@ def training_pipeline() -> Pipeline:
 def nutrient_pipeline() -> Pipeline:
     """Nutrient deficiency pipeline."""
     paths = {3:"./pipeline/ml/deepv3_seg_3/", 4:"./pipeline/ml/deepv3_seg_4/"}
+    parallel_modules = {Index: ([Nutrient], None)}
     cfg = Config(modules={Mosaicing: None, AgricultureVisionPreprocess: None,
-                          SemanticSegmentation: paths, Index: None})
-    
+                          SemanticSegmentation: paths}, 
+                parallel_modules=parallel_modules)
     return Pipeline(cfg)

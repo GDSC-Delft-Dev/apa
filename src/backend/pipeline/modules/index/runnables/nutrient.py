@@ -20,8 +20,9 @@ class Nutrient(Runnable):
             # take the calculated masks from the segmentation module
             masks = data.modules[Modules.SEGMENTATION]["masks"]
             # assume index 0 is for the nutrient deficiency mask
-            nutirent_masks = [mask[0][:, :, 0] for mask in masks]
-            masks = [np.where(mask == 1, 255, 0) for mask in nutirent_masks]
+            nutrient_masks = [mask[0][:, :, 0] for mask in masks]
+            data.modules[Modules.INDEX]["runnables"][self.type]["masks"] = nutrient_masks
+            masks = [np.where(mask == 1, 255, 0) for mask in nutrient_masks]
             patches = data.modules[Modules.MOSAIC]["patches"]
             hsize, _ = data.modules[Modules.MOSAIC]["patches_dims"]
             result = self.calculate(masks, patches, hsize)
@@ -39,6 +40,7 @@ class Nutrient(Runnable):
         Args:
             masks: masks for each of the pathes
             patches: cropped parts of fixed size from the mosaic image
+            hsize: horizontal number of patches that reconstruct the original image
 
         Returns:
             Nutrient deficit map

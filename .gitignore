@@ -6,3 +6,4 @@ __pycache__
 .mypy_cache
 .pytest_cache
 expected_preprocess_masked.npy
+nutrient_masks.npy

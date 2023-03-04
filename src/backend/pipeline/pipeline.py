@@ -1,8 +1,10 @@
 import copy
 from typing import Any, Type
 from .modules.module import Module
+from .modules.parallel_module import ParallelModule
 from .mat import Mat
 from .modules.data import Data
+from .modules.index.index import Index
 from .config import Config
 
 class Pipeline:
@@ -13,18 +15,28 @@ class Pipeline:
 
     def __init__(self, config: Config):
         """Build the pipeline according to the configuration."""
-
         # Build the data object
         self.data_proto: Data = Data()
 
+        # merge the simple module dict with the parallel dict
+        config.modules.update(config.parallel_modules)
         # Build the head
         head_config = next(iter(config.modules.items()))
-        self.head: Module = head_config[0](self.data_proto, input_data=head_config[1])
-
+        if issubclass(head_config, ParallelModule):
+            self.head: ParallelModule = head_config[0](self.data_proto, 
+                                    runnables=head_config[1][0], 
+                                    input_data=head_config[1][1])
+        else:
+            self.head: Module = head_config[0](self.data_proto, input_data=head_config[1])
         # Build the rest
         tail: Module = self.head
         for module, input_data in list(config.modules.items())[1:]: #type: tuple[Type[Module], Any]
-            tail.next = module(self.data_proto, input_data=input_data)
+            if issubclass(module, ParallelModule):
+                tail.next = module(self.data_proto, runnables=input_data[0], 
+                                   input_data=input_data[1])
+            else:
+                print(type(module))
+                tail.next = module(self.data_proto, input_data=input_data)
             tail = tail.next
 
     def run(self, imgs: Mat | list[Mat]) -> Data:
