@@ -50,6 +50,12 @@ class Mosaicing(Module):
             stitched = Mat(stitched, data.input[0].channels) 
             data.modules[self.type]["stitched"] = stitched
 
+            # calculate the masks that are used to ignore certain
+            # parts of the image and the a new Mat that contains an
+            # alpha channel 
+            masks, alpha_stitched = self.process(stitched)
+            data.modules[self.type]["masks"] = masks
+            data.modules[self.type]["alpha_img"] = alpha_stitched
             # split the image into equal patches for the segmentation module
             # height and width of the patches
             height = width = 512
@@ -70,3 +76,27 @@ class Mosaicing(Module):
             
         # Run the next module
         return super().run(data)
+    
+    def process(self, img: Mat) -> (np.ndarray, Mat):
+        """
+        Extract and process information from the orthomosaic image.
+
+        Args:
+            img: a Mat object containing the stitched image
+        
+        Returns:
+            tuple consisting of a np.ndarray and a new Mat 
+            representation
+        """
+        # collapse channels to ensure all are 0
+        collapsed = np.sum(img.get(), axis=2)
+        # create the mask
+        mask = np.where(collapsed == 0.0, 1, 0)
+        # expand the number of dimensions for concatenation
+        mask = np.expand_dims(mask, 2)
+        alpha_image = np.concatenate((img.get(), mask), axis=2)
+        return np.bitwise_not(mask), alpha_image
+
+
+
+
