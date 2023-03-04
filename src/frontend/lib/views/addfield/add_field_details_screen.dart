@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/models/crop.dart';
+import 'package:frontend/models/crop_model.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/new_field_provider.dart';
 import 'package:frontend/services/auth_service.dart';
@@ -11,6 +11,7 @@ import 'package:frontend/views/addfield/widgets/visualize_field_map.dart';
 import 'package:frontend/widgets/terrafarm_app_bar.dart';
 import 'package:frontend/widgets/terrafarm_rounded_button.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/utils/polygon_utils.dart';
 
 class AddFieldDetailsScreen extends StatefulWidget {
   const AddFieldDetailsScreen({super.key});
@@ -22,7 +23,7 @@ class AddFieldDetailsScreen extends StatefulWidget {
 class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
   // adding the text editing controller
   late TextEditingController _fieldNameController;
-  CropType? _cropType;
+  String? _cropId = null;
 
   @override
   void initState() {
@@ -78,7 +79,7 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                       text: "Crop Type",
                       onChange: (crop) {
                         setState(() {
-                          _cropType = crop;
+                          _cropId = crop;
                         });
                       },
                     ),
@@ -97,17 +98,17 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                 Text(
                   _fieldNameController.text.isEmpty
                       ? "Please enter a field name"
-                      : _cropType == null
+                      : _cropId == null
                           ? "Please select a crop type"
                           : "Ready to save",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: _fieldNameController.text.isEmpty
-                      ? Colors.red
-                      : _cropType == null
-                          ? Colors.red
-                          : Colors.green,
+                        ? Colors.red
+                        : _cropId == null
+                            ? Colors.red
+                            : Colors.green,
                     fontFamily: 'Roboto',
                     letterSpacing: 0.05,
                   ),
@@ -118,33 +119,43 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                 SizedBox(
                   height: 50,
                   child: TerrafarmRoundedButton(
-                      onPressed: () {
-                        var userId = Provider.of<UserModel>(context, listen: false).uid;
-                        FieldsStore(userId: userId)
-                            .addNewField(_fieldNameController.text, _cropType!, 32,
-                                Provider.of<NewFieldProvider>(context, listen: false).geoPoints)
-                            .onError((error, stackTrace) {
-                          // Snackbars are used to display messages to the user.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(error.toString()),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }).then((value) {
-                          // Snackbars are used to display messages to the user.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Field added successfully"),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                          // Navigate to the home screen.
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                        });
-                      },
+                      onPressed: _fieldNameController.text.isEmpty || _cropId == null
+                          ? () {}
+                          : () {
+                              var userId = Provider.of<UserModel>(context, listen: false).uid;
+                              FieldsStore(userId: userId)
+                                  .addNewField(
+                                      _fieldNameController.text,
+                                      _cropId!,
+                                      getGeoArea(
+                                          Provider.of<NewFieldProvider>(context, listen: false)
+                                              .geoPoints),
+                                      Provider.of<NewFieldProvider>(context, listen: false)
+                                          .geoPoints)
+                                  .onError((error, stackTrace) {
+                                // Snackbars are used to display messages to the user.
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(error.toString()),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }).then((value) {
+                                // Snackbars are used to display messages to the user.
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Field added successfully"),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                                // Navigate to the home screen.
+                                Navigator.popUntil(context, (route) => route.isFirst);
+                              });
+                            },
                       text: "Save field",
-                      color: Colors.green),
+                      color: _fieldNameController.text.isEmpty || _cropId == null
+                          ? Colors.grey
+                          : Colors.green),
                 ),
               ],
             ),

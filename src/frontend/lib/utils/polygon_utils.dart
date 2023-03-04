@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geojson_vi/geojson_vi.dart';
 import 'package:poly_collisions/poly_collisions.dart';
 
 List<Point> convertToPoints(List<GeoPoint> geoPoints) {
@@ -41,4 +42,14 @@ bool checkIfPolygonIsSelfIntersecting(List<GeoPoint> geoPoints) {
     }
   }
   return false;
+}
+
+// Get the area of a geo polygon
+double getGeoArea(List<GeoPoint> geoPoints) {
+  var world = {
+    'type': 'Polygon',
+    'coordinates': [geoPoints.map((e) => [e.latitude, e.longitude]).toList()]
+  };
+  final geoJSONPolygon = GeoJSONPolygon.fromMap(world);
+  return geoJSONPolygon.area;
 }
