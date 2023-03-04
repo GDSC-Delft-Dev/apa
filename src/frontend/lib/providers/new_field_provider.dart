@@ -74,34 +74,4 @@ class NewFieldProvider extends ChangeNotifier {
     
     return _geoPoints.length >= 3 && !utils.checkIfPolygonIsSelfIntersecting(_geoPoints);
   }
-
-  /// Returns a camera position that is good for the current polygon.
-  CameraPosition getGoodCameraPositionForPolygon() {
-    if (_geoPoints.isEmpty) {
-      return const CameraPosition(
-        target: LatLng(0, 0),
-        zoom: 0,
-      );
-    }
-
-    double minLat = _geoPoints[0].latitude;
-    double maxLat = _geoPoints[0].latitude;
-    double minLong = _geoPoints[0].longitude;
-    double maxLong = _geoPoints[0].longitude;
-
-    for (var geoPoint in _geoPoints) {
-      minLat = min(minLat, geoPoint.latitude);
-      maxLat = max(maxLat, geoPoint.latitude);
-      minLong = min(minLong, geoPoint.longitude);
-      maxLong = max(maxLong, geoPoint.longitude);
-    }
-
-    // The zoom level is calculated using this formula
-    var zoom = log(360 / (maxLong - minLong)) / log(2) * 0.9;
-
-    return CameraPosition(
-      target: LatLng((minLat + maxLat) / 2, (minLong + maxLong) / 2),
-      zoom: zoom,
-    );
-  }
 }

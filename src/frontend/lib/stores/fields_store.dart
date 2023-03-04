@@ -25,6 +25,12 @@ class FieldsStore {
         hasInsights: snapshot['has_insights']);
   }
 
+  Future<FieldModel> getFieldById(String fieldId) async {
+    return await fieldsCollection
+    .doc(fieldId)
+    .get().then(_fieldModelFromSnapshot);
+  }
+
   /// Updates attribute values for an instance in the 'fields' collection
   Future updateFieldData(String fieldId, String name, CropModel crop, double area, bool hasInsights) async {
     return await fieldsCollection
@@ -43,8 +49,9 @@ class FieldsStore {
     return fieldsCollection.doc().set(addFieldData);
   }
 
-  List<FieldModel> _fieldListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
+  List<FieldModel> _fieldListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+
       List<dynamic> boundariesList = doc.get('boundaries');
       List<GeoPoint> boundaries = [];
 

@@ -10,6 +10,7 @@ import 'package:frontend/views/addfield/widgets/add_field_info_card.dart';
 import 'package:frontend/views/addfield/widgets/visualize_field_map.dart';
 import 'package:frontend/widgets/terrafarm_app_bar.dart';
 import 'package:frontend/widgets/terrafarm_rounded_button.dart';
+import 'package:frontend/utils/polygon_utils.dart' as utils;
 import 'package:provider/provider.dart';
 import 'package:frontend/utils/polygon_utils.dart';
 
@@ -60,8 +61,7 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                           strokeColor: Colors.green,
                         ),
                         // Gets a good camera position.
-                        cameraPosition: Provider.of<NewFieldProvider>(context)
-                            .getGoodCameraPositionForPolygon(),
+                        cameraPosition: utils.getGoodCameraPositionForPolygon(Provider.of<NewFieldProvider>(context).geoPoints),
                       ),
                     ),
                     SizedBox.fromSize(

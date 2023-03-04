@@ -20,8 +20,6 @@ class VisualizeHomeMap extends StatefulWidget {
   @override
   State<VisualizeHomeMap> createState() => _VisualizeHomeMapState();
 }
-
-// TODO: open field details when clicking within corresponding polygon
 class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
 
   final Completer<GoogleMapController> _controller = Completer();
@@ -40,7 +38,7 @@ class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
     position: _kMapDelft,
   );
 
-  // For creating custom polygons by tapping
+  // For keeping track of polygons to  draw
   Set<Polygon> _polygons = Set<Polygon>();
 
   // Reads JSON to locate to location that was searched for
@@ -87,7 +85,6 @@ class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
         future: _mapFuture,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            print("Empty");
             return Loading();
           }
           return Column(
@@ -132,6 +129,7 @@ class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
                             },
                             onCameraMove: (camera) =>
                                 mapSettings.setCameraPosition(camera),
+                            onTap: (point) => print('------- TAPPED ------ $point'),
                           ),
                           Container(
                             padding: const EdgeInsets.only(top: 25, right: 12),

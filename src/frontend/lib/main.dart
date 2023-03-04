@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/insight_choices_provider.dart';
 import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/home/home.dart';
@@ -46,6 +47,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<MapSettingsProvider>(
           create: (_) => MapSettingsProvider(),
         ),
+        ChangeNotifierProvider<InsightChoicesProvider>(
+          create: (_) => InsightChoicesProvider(),
+        )
       ],
       child: MaterialApp(
         title: 'Autonomous Precision Agriculture using UAVs',

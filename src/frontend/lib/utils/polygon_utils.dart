@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geojson_vi/geojson_vi.dart';
 import 'package:poly_collisions/poly_collisions.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 List<Point> convertToPoints(List<GeoPoint> geoPoints) {
   List<Point> points = [];
@@ -52,4 +53,33 @@ double getGeoArea(List<GeoPoint> geoPoints) {
   };
   final geoJSONPolygon = GeoJSONPolygon.fromMap(world);
   return geoJSONPolygon.area;
+}
+  /// Returns a camera position that is good for the current polygon.
+CameraPosition getGoodCameraPositionForPolygon(List<GeoPoint> geoPoints) {
+  if (geoPoints.isEmpty) {
+    return const CameraPosition(
+      target: LatLng(0, 0),
+      zoom: 0,
+    );
+  }
+
+  double minLat = geoPoints[0].latitude;
+  double maxLat = geoPoints[0].latitude;
+  double minLong = geoPoints[0].longitude;
+  double maxLong = geoPoints[0].longitude;
+
+  for (var geoPoint in geoPoints) {
+    minLat = min(minLat, geoPoint.latitude);
+    maxLat = max(maxLat, geoPoint.latitude);
+    minLong = min(minLong, geoPoint.longitude);
+    maxLong = max(maxLong, geoPoint.longitude);
+  }
+
+  // The zoom level is calculated using this formula
+  var zoom = log(360 / (maxLong - minLong)) / log(2)*0.95;
+
+  return CameraPosition(
+    target: LatLng((minLat + maxLat) / 2, (minLong + maxLong) / 2),
+    zoom: zoom,
+  );
 }
