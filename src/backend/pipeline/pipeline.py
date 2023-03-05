@@ -4,6 +4,7 @@ from .modules.module import Module
 from .mat import Mat
 from .modules.data import Data
 from .config import Config
+import uuid
 
 class Pipeline:
     """
@@ -16,6 +17,8 @@ class Pipeline:
 
         # Build the data object
         self.data_proto: Data = Data()
+        # Give the pipeline object a unique id
+        self.uuid = uuid.uuid4()
 
         # Build the head
         head_config = next(iter(config.modules.items()))
@@ -58,7 +61,7 @@ class Pipeline:
     def show(self):
         """Prints out the current state of the pipeline."""
 
-        print("-- Pipeline --")
+        print(f"-- Pipeline ({self.uuid})--")
         tail = self.head
         while tail:
             print(f"<{tail.name}>")
