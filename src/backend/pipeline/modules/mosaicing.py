@@ -54,8 +54,8 @@ class Mosaicing(Module):
             # calculate the masks that are used to ignore certain
             # parts of the image and the a new Mat that contains an
             # alpha channel 
-            masks, alpha_stitched = self.process(stitched)
-            data.modules[self.type]["masks"] = masks
+            mask, alpha_stitched = self.process(stitched)
+            data.modules[self.type]["mask"] = mask
             data.modules[self.type]["alpha_img"] = alpha_stitched
             # split the image into equal patches for the segmentation module
             # height and width of the patches
@@ -96,7 +96,7 @@ class Mosaicing(Module):
         # expand the number of dimensions for concatenation
         mask = np.expand_dims(mask, 2)
         alpha_image = np.concatenate((img.get(), mask), axis=2)
-        return np.bitwise_not(mask), Mat(alpha_image, channels=[Channels.R, 
+        return np.where(mask == 1, 0, 1), Mat(alpha_image, channels=[Channels.R, 
                             Channels.G, Channels.B, Channels.A])
 
 
