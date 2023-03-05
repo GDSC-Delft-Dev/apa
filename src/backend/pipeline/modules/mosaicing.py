@@ -30,11 +30,11 @@ class Mosaicing(Module):
         """
 
         self.prepare(data)
-        
         # Check if there are multiple input images
         if len(data.input) == 1:
             data.modules[self.type]["stitched"] = data.input[0]
-
+            patches = self.create_patches(stitched, data.input[0].channels) 
+            data.modules[self.type]["patches"] = patches
         else:
             # Initiate the stitcher
             stitcher = cv2.Stitcher_create() 
@@ -51,22 +51,33 @@ class Mosaicing(Module):
             data.modules[self.type]["stitched"] = stitched
 
             # split the image into equal patches for the segmentation module
-            # height and width of the patches
-            height = width = 512
-            channels = data.input[0].channels
-
-            # Calculate the number of patches to create
-            num_patches_horizontal = stitched.get().shape[1] // width
-            num_patches_vertical = stitched.get().shape[0] // height
-
-            patches: list[Mat] = []
-            # Loop through the image and extract each patch
-            for i in range(num_patches_vertical):
-                for j in range(num_patches_horizontal):
-                    patch = stitched.get()[i*height:(i+1)*height, j*width:(j+1)*width, :]
-                    patches.append(Mat(patch, channels))
-            # save the calculated patches for further usage
+            patches = self.create_patches(stitched, data.input[0].channels) 
             data.modules[self.type]["patches"] = patches
             
         # Run the next module
         return super().run(data)
+    
+    def create_patches(self, stitched: Mat, channels) -> list[Mat]:
+        """
+        Divide the stitched image into equal patches.
+
+        Args:
+            stitched: the stitched image
+            channels: a list of Channels
+
+        Returns:
+            A list of equal sized patches
+        """
+        height = width = 512
+        # Calculate the number of patches to create
+        num_patches_horizontal = stitched.get().shape[1] // width
+        num_patches_vertical = stitched.get().shape[0] // height
+
+        patches: list[Mat] = []
+        # Loop through the image and extract each patch
+        for i in range(num_patches_vertical):
+            for j in range(num_patches_horizontal):
+                patch = stitched.get()[i*height:(i+1)*height, j*width:(j+1)*width, :]
+                patches.append(Mat(patch, channels))
+
+        return patches
