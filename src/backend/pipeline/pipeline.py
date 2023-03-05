@@ -5,6 +5,8 @@ from .mat import Mat
 from .modules.data import Data
 from .config import Config
 import uuid
+from firebase_admin import firestore
+import time
 
 class Pipeline:
     """
@@ -15,10 +17,11 @@ class Pipeline:
     def __init__(self, config: Config):
         """Build the pipeline according to the configuration."""
 
-        # Build the data object
-        self.data_proto: Data = Data()
+        
         # Give the pipeline object a unique id
         self.uuid = uuid.uuid4()
+        # Build the data object
+        self.data_proto: Data = Data(self.uuid)
 
         # Build the head
         head_config = next(iter(config.modules.items()))
@@ -41,9 +44,18 @@ class Pipeline:
         Returns:
             The processed data.
         """
+        # start time of the pipeline
+        start = time.time()
+        # connect to Firestore
+        db = firestore.client()
+        # get 'pipelines' collection
+        collection = db.collection('pipelines')
+        document = collection.document(str(self.uuid)).set({
+            'id': str(self.uuid),
+            'start': start
+        })
 
         # Verify input integrity
-
         # Check that the channels of all images are the same
         if not isinstance(imgs, Mat):
             channels = [img.channels for img in imgs]

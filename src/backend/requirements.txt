@@ -11,3 +11,4 @@ pylint==2.16.2
 pytest==7.2.1
 google-cloud-storage==2.7.0
 google-cloud-firestore==2.10.0
+firebase-admin==6.1.0

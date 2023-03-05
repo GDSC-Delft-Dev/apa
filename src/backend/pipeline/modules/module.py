@@ -8,6 +8,7 @@ import cv2
 from typing import Any
 import pickle
 from google.cloud import storage
+from firebase_admin import firestore
 
 class Module(Runnable):
     """
@@ -81,15 +82,27 @@ class Module(Runnable):
 
     def upload(self, bucket_name: str, data: Data):
         """Upload data to Google Storage."""
+        
+        base_url: str = "https://storage.cloud.google.com/" + bucket_name + "/"
         try:
+            # connect to firestore
+            db = firestore.client()
+            # get 'pipelines' collection
+            collection = db.collection('pipelines')
             storage_client = storage.Client() 
             bucket = storage_client.bucket(bucket_name)
+            uris = []
             for k, v in data.persistable[self.type].items():
-                blob = bucket.blob(k)
+                blob = bucket.blob(str(data.uuid) + "/" + k)
+                uris.append(base_url + str(data.uuid) + "/" + k)
                 blob.upload_from_string(pickle.dumps(v))
+
+            collection.document(str(data.uuid)).update({
+                str(self.type): uris
+            })
             print(f"Persistable data from module {self.type} uploaded.")
             return True
         except Exception as exception:
             print(exception)
-            print("Data could not be uploaded!") 
+            print(f"Data could not be uploaded for {self.type}!") 
             return False

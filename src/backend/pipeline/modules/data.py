@@ -2,17 +2,20 @@ from __future__ import annotations
 from ..mat import Mat
 from .modules import Modules
 from typing import Any
+import uuid
 
 class Data:
     """
     Represents the pipeline data object.
 
     Args:
+        uuid: unique identifier for the pipeline object
         input: the pipeline input
         stages: the list pipeline stages ready for configuration
         current: the current pipeline stage; initially none
     """
-    def __init__(self) -> None:
+    def __init__(self, uuid: uuid) -> None:
+        self.uuid = uuid
         self.input: list[Mat] = []
         self.modules: dict[Modules, Any] = {module_type : {"input": {}} for module_type in Modules}
         self.persistable: dict[Modules, Any] = {module_type: {} for module_type in Modules}
