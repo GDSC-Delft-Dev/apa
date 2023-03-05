@@ -31,7 +31,6 @@ class Preprocess(Module):
             masked: list[Mat] = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels)
                                  for (x, mask) in zip(data.input, self.masks)] 
             data.modules[self.type]["masked"] = masked
-
         return super().run(data)
 
 class AgricultureVisionPreprocess(Preprocess):
