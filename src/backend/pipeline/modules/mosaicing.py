@@ -3,7 +3,6 @@ from .data import Data
 from ..mat import Mat
 from .modules import Modules
 import cv2
-import numpy as np
 from typing import Any
 
 class Mosaicing(Module):
@@ -33,8 +32,10 @@ class Mosaicing(Module):
         # Check if there are multiple input images
         if len(data.input) == 1:
             data.modules[self.type]["stitched"] = data.input[0]
-            patches = self.create_patches(stitched, data.input[0].channels) 
+            patches = self.create_patches(data.input[0], data.input[0].channels) 
             data.modules[self.type]["patches"] = patches
+            data.persistable[self.type]["stitched"] = data.input[0]
+
         else:
             # Initiate the stitcher
             stitcher = cv2.Stitcher_create() 
@@ -49,11 +50,14 @@ class Mosaicing(Module):
             # Make a mat
             stitched = Mat(stitched, data.input[0].channels) 
             data.modules[self.type]["stitched"] = stitched
+            data.persistable[self.type]["stitched"] = stitched.get()
 
             # split the image into equal patches for the segmentation module
             patches = self.create_patches(stitched, data.input[0].channels) 
             data.modules[self.type]["patches"] = patches
-            
+
+        # Upload persistable data to Google Cloud Storage
+        self.upload("terrafarm-example", data)
         # Run the next module
         return super().run(data)
     

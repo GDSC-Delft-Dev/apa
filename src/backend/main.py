@@ -7,6 +7,7 @@ def main():
 
     # Get test data
     imgs = [Mat.read(file) for file in glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG")]
+    imgs = imgs[:1]
 
     # Run the pipeline
     pipeline = default_pipeline()

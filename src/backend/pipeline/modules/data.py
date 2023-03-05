@@ -15,6 +15,7 @@ class Data:
     def __init__(self) -> None:
         self.input: list[Mat] = []
         self.modules: dict[Modules, Any] = {module_type : {"input": {}} for module_type in Modules}
+        self.persistable: dict[Modules, Any] = {module_type: {} for module_type in Modules}
         self.current: None | Modules = None
 
     def set(self, img: Mat | list[Mat]) -> None:
@@ -46,3 +47,15 @@ class Data:
             raise Exception("Cannot get current module as the current module isn't set")
 
         return self.modules[self.current]
+    
+    def get_persistable(self, module: Modules):
+        """
+        Provide the persistable entities that need to be saved to the cloud.
+
+        Args:
+            module: specific module
+
+        Returns:
+            The data that should be saved to Storage after the module was executed.
+        """
+        return self.persistable[module]

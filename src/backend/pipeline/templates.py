@@ -10,7 +10,7 @@ from .modules.segmentation import SemanticSegmentation
 
 def default_pipeline() -> Pipeline:
     """Default pipeline."""
-    cfg = Config(modules={Mosaicing: None, Index: None})
+    cfg = Config(modules={Mosaicing: None})
     return Pipeline(cfg)
 
 def full_pipeline() -> Pipeline:

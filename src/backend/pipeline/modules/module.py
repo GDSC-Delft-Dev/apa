@@ -6,6 +6,8 @@ from .modules import Modules
 from ..mat import Mat
 import cv2
 from typing import Any
+import pickle
+from google.cloud import storage
 
 class Module(Runnable):
     """
@@ -76,3 +78,18 @@ class Module(Runnable):
         """Prepares the module to be run."""
 
         data.modules[self.type] = {}
+
+    def upload(self, bucket_name: str, data: Data):
+        """Upload data to Google Storage."""
+        try:
+            storage_client = storage.Client() 
+            bucket = storage_client.bucket(bucket_name)
+            for k, v in data.persistable[self.type].items():
+                blob = bucket.blob(k)
+                blob.upload_from_string(pickle.dumps(v))
+            print(f"Persistable data from module {self.type} uploaded.")
+            return True
+        except Exception as exception:
+            print(exception)
+            print("Data could not be uploaded!") 
+            return False

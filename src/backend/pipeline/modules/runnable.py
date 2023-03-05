@@ -33,3 +33,13 @@ class Runnable(ABC):
         Args:
             data: the pipeline data object
         """
+
+    @abstractmethod
+    def upload(self, bucket_name: str, data: Data):
+        """
+        Upload data to Google Cloud Storage.
+
+        Args:
+            bucket_name: unique bucket name from Storage
+            data: the pipeline data object
+        """
