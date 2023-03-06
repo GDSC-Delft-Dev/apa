@@ -7,3 +7,4 @@ __pycache__
 .pytest_cache
 expected_preprocess_masked.npy
 .vscode
+*json
