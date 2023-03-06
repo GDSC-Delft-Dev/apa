@@ -49,7 +49,6 @@ class Module(Runnable):
             data.current = self.next.type
             self.next.prepare(data)
             print(f"Running <{self.name}>")
-            return self.next.run(data)
 
         # Otherwise, return the data
         return data
@@ -81,17 +80,9 @@ class Module(Runnable):
 
         data.modules[self.type] = {}
 
-    async def upload(self, bucket_name: str, data: Data):
+    async def upload(self, data: Data, collection, bucket, base_url: str):
         """Upload data to Google Storage."""
-        
-        base_url: str = "https://storage.cloud.google.com/" + bucket_name + "/"
         try:
-            # connect to firestore
-            db = firestore.client()
-            # get 'pipelines' collection
-            collection = db.collection('pipelines')
-            storage_client = storage.Client() 
-            bucket = storage_client.bucket(bucket_name)
             uris = []
             for k, v in data.persistable[self.type].items():
                 blob = bucket.blob(str(data.uuid) + "/" + k)

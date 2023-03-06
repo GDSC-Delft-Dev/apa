@@ -35,7 +35,7 @@ class Mosaicing(Module):
             data.modules[self.type]["stitched"] = data.input[0]
             patches = self.create_patches(data.input[0], data.input[0].channels) 
             data.modules[self.type]["patches"] = patches
-            data.persistable[self.type]["stitched"] = data.input[0]
+            data.persistable[self.type].add("stitched")
 
         else:
             # Initiate the stitcher
@@ -57,11 +57,6 @@ class Mosaicing(Module):
             patches = self.create_patches(stitched, data.input[0].channels) 
             data.modules[self.type]["patches"] = patches
 
-        # Upload persistable data to Google Cloud Storage
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(self.upload("terrafarm-example", data))
-        # Run the next module
         return super().run(data)
     
     def create_patches(self, stitched: Mat, channels) -> list[Mat]:

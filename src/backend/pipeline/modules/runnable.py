@@ -35,11 +35,13 @@ class Runnable(ABC):
         """
 
     @abstractmethod
-    def upload(self, bucket_name: str, data: Data):
+    def upload(self, data: Data, collection, storage_client, base_url: str):
         """
         Upload data to Google Cloud Storage.
 
         Args:
-            bucket_name: unique bucket name from Storage
             data: the pipeline data object
+            collection: Firestore collection 
+            storage_client: Cloud Storage client
+            base_url: base url where data is persisted
         """

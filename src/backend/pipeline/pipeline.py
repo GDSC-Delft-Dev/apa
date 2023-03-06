@@ -5,7 +5,9 @@ from .mat import Mat
 from .modules.data import Data
 from .config import Config
 import uuid
+import asyncio
 from firebase_admin import firestore
+from google.cloud import storage
 import time
 
 class Pipeline:
@@ -20,8 +22,20 @@ class Pipeline:
         
         # Give the pipeline object a unique id
         self.uuid = uuid.uuid4()
+
         # Build the data object
         self.data_proto: Data = Data(self.uuid)
+
+        # Connect to Cloud Storage
+        self.storage_client = storage.Client()
+        self.bucket = self.storage_client.bucket(config.bucket_name)
+
+        # Set base URL
+        self.base_url = "https://storage.cloud.google.com/" + config.bucket_name + "/"
+
+        # Connect to Firestore client
+        self.db = firestore.client()
+        self.collection = self.db.collection('pipelines')
 
         # Build the head
         head_config = next(iter(config.modules.items()))
@@ -46,11 +60,7 @@ class Pipeline:
         """
         # start time of the pipeline
         start = time.time()
-        # connect to Firestore
-        db = firestore.client()
-        # get 'pipelines' collection
-        collection = db.collection('pipelines')
-        document = collection.document(str(self.uuid)).set({
+        self.collection.document(str(self.uuid)).set({
             'id': str(self.uuid),
             'start': start
         })
@@ -67,7 +77,17 @@ class Pipeline:
         data.set(imgs)
 
         # Run the chain
-        self.head.run(data)
+        iterator = self.head
+        while iterator is not None:
+            # Run the module
+            data = iterator.run(data)
+            # Upload data to the cloud async
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(
+                iterator.upload(data, self.collection, self.bucket, self.base_url))
+            # Go to the next module
+            iterator = iterator.next
         return data
 
     def show(self):

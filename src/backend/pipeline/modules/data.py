@@ -18,7 +18,7 @@ class Data:
         self.uuid = uuid
         self.input: list[Mat] = []
         self.modules: dict[Modules, Any] = {module_type : {"input": {}} for module_type in Modules}
-        self.persistable: dict[Modules, Any] = {module_type: {} for module_type in Modules}
+        self.persistable: dict[Modules, list] = {module_type: {frozenset()} for module_type in Modules}
         self.current: None | Modules = None
 
     def set(self, img: Mat | list[Mat]) -> None:
@@ -51,7 +51,7 @@ class Data:
 
         return self.modules[self.current]
     
-    def get_persistable(self, module: Modules):
+    def get_persistable(self, module: Modules) -> list:
         """
         Provide the persistable entities that need to be saved to the cloud.
 

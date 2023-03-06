@@ -17,11 +17,11 @@ def full_pipeline() -> Pipeline:
     """Full pipeline with inference."""
 
     # paths to the saved models
-    paths = {3:"./ml/deepv3_seg_3/", 4:"./ml/deepv3_seg_4/"}
+    paths = {3:"./pipeline/ml/deepv3_seg_3/", 4:"./pipeline/ml/deepv3_seg_4/"}
 
     # Run the pipeline
     cfg = Config(modules={Mosaicing: None, AgricultureVisionPreprocess: None,
-                          SemanticSegmentation: paths})
+                          SemanticSegmentation: paths}, bucket_name="terrafarm-example")
     return Pipeline(cfg)
 
 def training_pipeline() -> Pipeline:
