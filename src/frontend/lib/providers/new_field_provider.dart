@@ -12,34 +12,31 @@ class NewFieldProvider extends ChangeNotifier {
   List<GeoPoint> get geoPoints => _geoPoints;
 
   // Converts the geopoints to a polygon and returns it.
-  Polygon getPolygon() {
+  Polygon getPolygon(
+      {Color strokeColor = Colors.orange,
+      Color fillColor = Colors.transparent,
+      int strokeWidth = 3}) {
     return Polygon(
       polygonId: const PolygonId("newField"),
       points: _geoPoints.map((f) => LatLng(f.latitude, f.longitude)).toList(),
-      strokeWidth: 3,
-      strokeColor: Colors.orange,
-      fillColor: Colors.transparent,
+      strokeWidth: strokeWidth,
+      strokeColor: strokeColor,
+      fillColor: fillColor,
     );
   }
 
   // Adds a geopoint to the list of geopoints.
-  bool addGeoPoint(GeoPoint geoPoint) {
+  void addGeoPoint(GeoPoint geoPoint) {
     _geoPoints.add(geoPoint);
-    if (utils.checkIfPolygonIsSelfIntersecting(_geoPoints)) {
-      _geoPoints.removeLast();
-      return false;
-    }
-
     notifyListeners();
-    return true;
   }
 
-  bool addGeoPointWithPoint(Point point) {
-    return addGeoPoint(GeoPoint(point.x.toDouble(), point.y.toDouble()));
+  void addGeoPointWithPoint(Point point) {
+    addGeoPoint(GeoPoint(point.x.toDouble(), point.y.toDouble()));
   }
 
-  bool addGeoPointWithLatLong(LatLng latLng) {
-    return addGeoPoint(GeoPoint(latLng.latitude, latLng.longitude));
+  void addGeoPointWithLatLong(LatLng latLng) {
+    addGeoPoint(GeoPoint(latLng.latitude, latLng.longitude));
   }
 
   void removeLastGeoPoint() {
@@ -74,36 +71,7 @@ class NewFieldProvider extends ChangeNotifier {
   }
 
   bool isPolygonReady() {
-    return _geoPoints.length >= 3;
-  }
-
-  /// Returns a camera position that is good for the current polygon.
-  CameraPosition getGoodCameraPositionForPolygon() {
-    if (_geoPoints.isEmpty) {
-      return const CameraPosition(
-        target: LatLng(0, 0),
-        zoom: 0,
-      );
-    }
-
-    double minLat = _geoPoints[0].latitude;
-    double maxLat = _geoPoints[0].latitude;
-    double minLong = _geoPoints[0].longitude;
-    double maxLong = _geoPoints[0].longitude;
-
-    for (var geoPoint in _geoPoints) {
-      minLat = min(minLat, geoPoint.latitude);
-      maxLat = max(maxLat, geoPoint.latitude);
-      minLong = min(minLong, geoPoint.longitude);
-      maxLong = max(maxLong, geoPoint.longitude);
-    }
-
-    // The zoom level is calculated using this formula
-    var zoom = log(360 / (maxLong - minLong)) / log(2)*0.9;
-
-    return CameraPosition(
-      target: LatLng((minLat + maxLat) / 2, (minLong + maxLong) / 2),
-      zoom: zoom,
-    );
+    
+    return _geoPoints.length >= 3 && !utils.checkIfPolygonIsSelfIntersecting(_geoPoints);
   }
 }
