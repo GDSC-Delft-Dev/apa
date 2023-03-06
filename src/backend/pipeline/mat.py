@@ -49,7 +49,7 @@ class Mat():
         return cls(mat, channels = default_channels)
 
     @classmethod
-    def fread(cls, paths: dict[str, list[Channels]]) -> Mat:
+    def fread(cls, paths: list[tuple[str, list[Channels]]]) -> Mat:
         """
         UNTESTED. Full reads an image with an arbitrary number of
         channels from multiple source paths.
@@ -63,20 +63,30 @@ class Mat():
         """
 
         # Load the images
-        mats = [cv2.imread(path) for path in paths.keys()]
+        mats = [cv2.imread(path[0], cv2.IMREAD_GRAYSCALE) if len(path[1]) == 1 
+                else cv2.imread(path[0])
+                for path in paths]
+        channels = sum([path[1] for path in paths], [])
 
-        # Verify that the number of channels match and the
-        # dimensions match
+        # Verify input data integrity
         shape = mats[0].shape[:2]
-        for mat, channels in zip(mats, paths.values()): #type: tuple[cv2.Mat, list[Channels]]
-            assert mat.ndim == len(channels)
+        for mat, channels in zip(mats, [path[1] for path in paths]): #type: tuple[cv2.Mat, list[Channels]]
+            # Check number of channels
+            if len(channels) == 1:
+                assert mat.ndim == 2
+            else:
+                assert len(channels) == mat.shape[2]
+
+            # Check image dimensions
             assert shape == mat.shape[:2]
 
-        # Flatten channels
-        channels = sum(paths.values(), [])
-
         # Combine arrays
-        arr = np.concatenate([np.asarray(mat[:,:,:]) for mat in mats], axis=2)
+        # Split multichannel mats
+        mats = np.array([mat if mat.ndim == 2 else np.split(mat) for mat in mats])
+
+        # Concatenate grayscales
+        arr = np.transpose(mats, (1, 2, 0))
+        print(arr.shape)
 
         # Return the combined data
         return cls(arr, channels)
