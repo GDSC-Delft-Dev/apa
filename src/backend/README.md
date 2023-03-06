@@ -35,6 +35,9 @@ python -m mypy . --explicit-package-bases
 python -m pylint ../pipeline
 ```
 
+### CI/CD
+The CI/CD pushes the build from the latest commit to the `pipelines-dev` repository in the Google Artifact Registry.
+
 ### Modules
 To make the code extendible, maintainable, and multithreaded, the pipeline is divided into modules. Modules are run sequentially, and each can have multiple implementations that execute different logic, but compute the same type of data. We distinguish the following modules:
 - Mosaicing module - transforms the flyover images into a single farmland bird's eye view image

@@ -368,6 +368,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_zoom_drawer:
+    dependency: "direct main"
+    description:
+      name: flutter_zoom_drawer
+      sha256: "93c4f2cfe1edfe2f9e48b94a7f9538520d2f2593e202b8e89c394b7d27137a8e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.3"
   frontend_server_client:
     dependency: transitive
     description:
@@ -376,6 +384,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
+  geojson_vi:
+    dependency: "direct main"
+    description:
+      name: geojson_vi
+      sha256: c7f888a7240b0f2d5ca89b80b682c5ab843d1dee411948f57b2902a761c616ce
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.7"
   glob:
     dependency: transitive
     description:
@@ -624,6 +640,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
+  poly_collisions:
+    dependency: "direct main"
+    description:
+      name: poly_collisions
+      sha256: "070c61d1f96acac37cd3a7c5013c2088697d99c2035d800c2cf33b7b0db4d949"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   pool:
     dependency: transitive
     description:

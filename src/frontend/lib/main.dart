@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/insight_choices_provider.dart';
+import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/home/home.dart';
-import 'package:frontend/views/addfield/addfield.dart';
+import 'package:frontend/views/addfield/add_field_screen.dart';
 import 'package:frontend/views/loading.dart';
 import 'package:frontend/views/myfields/my_fields.dart';
 import 'package:frontend/views/flydrone/flydrone.dart';
@@ -14,6 +16,8 @@ import 'package:provider/provider.dart';
 import 'package:frontend/firebase_options.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'providers/new_field_provider.dart';
+
 Future main() async {
   // Allows env vars to be used in source code
   final dotenvFuture = dotenv.load(fileName: "lib/.env");
@@ -25,30 +29,42 @@ Future main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<UserModel?>.value(
-      value: AuthService().user, // listens to auth state changes
-      // All widgets within MaterialApp have access to user info
-      initialData: UserModel(uid: ''),
+    return MultiProvider(
+      providers: [
+        StreamProvider<UserModel?>.value(
+          value: AuthService().user, // listens to auth state changes
+          // All widgets within MaterialApp have access to user info
+          initialData: UserModel(uid: ''),
+        ),
+        ChangeNotifierProvider<NewFieldProvider>(
+          create: (_) => NewFieldProvider(),
+        ),
+        ChangeNotifierProvider<MapSettingsProvider>(
+          create: (_) => MapSettingsProvider(),
+        ),
+        ChangeNotifierProvider<InsightChoicesProvider>(
+          create: (_) => InsightChoicesProvider(),
+        )
+      ],
       child: MaterialApp(
         title: 'Autonomous Precision Agriculture using UAVs',
         theme: ThemeData(
-          primarySwatch: Colors.lightGreen,
-          textTheme: GoogleFonts.bebasNeueTextTheme()
-        ),
+            primarySwatch: Colors.lightGreen, textTheme: GoogleFonts.bebasNeueTextTheme()),
         initialRoute: '/',
         routes: {
           '/': (context) => Wrapper(),
           '/load': (context) => Loading(),
           '/home': (context) => const Home(title: 'Terrafarm'),
-          '/add': (context) => const AddField(),
+          '/add': (context) => const AddFieldScreen(),
           '/fields': (context) => const MyFields(),
-          '/fly': (context) => const FlyDrone(droneName: 'DJI Mavic 3',),
+          '/fly': (context) => const FlyDrone(
+                droneName: 'DJI Mavic 3',
+              ),
           '/settings': (context) => const Settings(),
         },
       ),
