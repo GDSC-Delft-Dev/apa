@@ -7,6 +7,7 @@ from ..mat import Mat
 import cv2
 from typing import Any
 import pickle
+import asyncio
 from google.cloud import storage
 from firebase_admin import firestore
 
@@ -80,7 +81,7 @@ class Module(Runnable):
 
         data.modules[self.type] = {}
 
-    def upload(self, bucket_name: str, data: Data):
+    async def upload(self, bucket_name: str, data: Data):
         """Upload data to Google Storage."""
         
         base_url: str = "https://storage.cloud.google.com/" + bucket_name + "/"

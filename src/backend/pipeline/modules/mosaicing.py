@@ -3,6 +3,7 @@ from .data import Data
 from ..mat import Mat
 from .modules import Modules
 import cv2
+import asyncio
 from typing import Any
 
 class Mosaicing(Module):
@@ -57,7 +58,9 @@ class Mosaicing(Module):
             data.modules[self.type]["patches"] = patches
 
         # Upload persistable data to Google Cloud Storage
-        self.upload("terrafarm-example", data)
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(self.upload("terrafarm-example", data))
         # Run the next module
         return super().run(data)
     

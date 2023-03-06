@@ -8,7 +8,7 @@ def main():
     """Main entry point."""
 
     # authenticate to firebase
-    cred = credentials.Certificate("terrafarm-378218-firebase-adminsdk-58xzn-50ab6489a8.json")
+    cred = credentials.Certificate("credentials.json")
     firebase_admin.initialize_app(cred)
     # Get test data
     imgs = [Mat.read(file) for file in glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG")]
