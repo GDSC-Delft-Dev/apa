@@ -5,7 +5,6 @@ from ...modules.modules import Modules
 import glob
 import cv2
 import numpy as np
-import pytest
 import os
 from google.cloud import storage
 
@@ -14,7 +13,6 @@ class TestPreprocessingModule:
     Unit testing for the preprocessing module.
     """
 
-    #@pytest.mark.skip(reason="Need the .npy file on Cloud Storage")
     def test_preprocessing(self):
         """
         Test the method run.   
@@ -34,6 +32,5 @@ class TestPreprocessingModule:
         blob = bucket.blob("expected_preprocess_masked.npy")
         blob.download_to_filename("expected_preprocess_masked.npy")
         expected = np.load("expected_preprocess_masked.npy", allow_pickle=True) 
-        print(out, expected)
         assert np.array_equal(out, expected)
         os.remove("expected_preprocess_masked.npy") 
