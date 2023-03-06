@@ -51,34 +51,34 @@ class Mosaicing(Module):
             stitched = Mat(stitched, data.input[0].channels) 
             data.modules[self.type]["stitched"] = stitched
 
-            # calculate the masks that are used to ignore certain
-            # parts of the image and the a new Mat that contains an
-            # alpha channel 
-            mask, alpha_stitched = self.process(stitched)
-            data.modules[self.type]["mask"] = mask
-            data.modules[self.type]["alpha_img"] = alpha_stitched
-            # split the image into equal patches for the segmentation module
-            # height and width of the patches
-            height = width = 512
-            channels = data.input[0].channels
+        # calculate the masks that are used to ignore certain
+        # parts of the image and the a new Mat that contains an
+        # alpha channel 
+        mask, alpha_stitched = self.process(data.modules[self.type]["stitched"])
+        data.modules[self.type]["mask"] = mask
+        data.modules[self.type]["alpha_img"] = alpha_stitched
+        # split the image into equal patches for the segmentation module
+        # height and width of the patches
+        height = width = 512
+        channels = data.input[0].channels
 
-            # Calculate the number of patches to create
-            num_patches_horizontal = stitched.get().shape[1] // width
-            num_patches_vertical = stitched.get().shape[0] // height
+        # Calculate the number of patches to create
+        num_patches_horizontal = stitched.get().shape[1] // width
+        num_patches_vertical = stitched.get().shape[0] // height
 
-            patches: list[Mat] = []
-            # Loop through the image and extract each patch
-            for i in range(num_patches_vertical):
-                for j in range(num_patches_horizontal):
-                    patch = stitched.get()[i*height:(i+1)*height, j*width:(j+1)*width, :]
-                    patches.append(Mat(patch, channels))
-            # save the calculated patches for further usage
-            data.modules[self.type]["patches"] = patches
+        patches: list[Mat] = []
+        # Loop through the image and extract each patch
+        for i in range(num_patches_vertical):
+            for j in range(num_patches_horizontal):
+                patch = stitched.get()[i*height:(i+1)*height, j*width:(j+1)*width, :]
+                patches.append(Mat(patch, channels))
+        # save the calculated patches for further usage
+        data.modules[self.type]["patches"] = patches
             
         # Run the next module
         return super().run(data)
     
-    def process(self, img: Mat) -> (np.ndarray, Mat):
+    def process(self, img: Mat) -> (Mat, Mat):
         """
         Extract and process information from the orthomosaic image.
 
