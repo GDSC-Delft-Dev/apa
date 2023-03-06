@@ -14,6 +14,7 @@ class Channels(IntEnum):
     FIR = 4
     T = 5
     A = 6
+    GREYSCALE = 7
 
 default_channels = [Channels.R, Channels.G, Channels.B]
 

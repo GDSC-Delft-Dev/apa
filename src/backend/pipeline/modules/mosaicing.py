@@ -96,9 +96,5 @@ class Mosaicing(Module):
         # expand the number of dimensions for concatenation
         mask = np.expand_dims(mask, 2)
         alpha_image = np.concatenate((img.get(), mask), axis=2)
-        return np.where(mask == 1, 0, 1), Mat(alpha_image, channels=[Channels.R, 
+        return Mat(np.where(mask == 1, 0, 1), channels=[Channels.GREYSCALE]), Mat(alpha_image, channels=[Channels.R, 
                             Channels.G, Channels.B, Channels.A])
-
-
-
-

@@ -32,9 +32,9 @@ class TestMosaicingModule:
         collapsed = np.sum(stitched.get(), axis=2)
         mask = np.where(collapsed == 0.0, 1, 0)
         mask = np.expand_dims(mask, 2)
-        assert np.array_equal(np.where(mask == 1, 0, 1), result.modules[Modules.MOSAIC]["mask"])
+        assert np.array_equal(np.where(mask == 1, 0, 1), result.modules[Modules.MOSAIC]["mask"].get())
 
-    def test_mosaicing(self):
+    def test_mosaicing_dimensions(self):
         """
         Test the method run of the mosaic module.
         """
@@ -46,11 +46,14 @@ class TestMosaicingModule:
         imgs_shape = [mat.get().shape for mat in imgs]
         # add up all the shapes
         sumx = [0, 0]
+        min_x, min_y = (1e9, 1e9)
         for s in imgs_shape:
             sumx[0] += s[0]
             sumx[1] += s[1]
+            min_x = min(min_x, s[0])
+            min_y = min(min_y, s[1])
         stitched_shape = result.modules[Modules.MOSAIC]["stitched"].get().shape
-        assert stitched_shape[0] <= sumx[0]
-        assert stitched_shape[1] <= sumx[1]
+        assert min_x <= stitched_shape[0] and stitched_shape[0] <= sumx[0]
+        assert min_y <= stitched_shape[1] and stitched_shape[1] <= sumx[1]
         # only have RGB channels
         assert stitched_shape[2] == 3
