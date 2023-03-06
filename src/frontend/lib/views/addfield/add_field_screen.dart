@@ -18,12 +18,12 @@ class AddFieldScreen extends StatefulWidget {
 }
 
 class _AddFieldScreenState extends State<AddFieldScreen> {
-
   @override
   void initState() {
     super.initState();
     Provider.of<NewFieldProvider>(context, listen: false).clearGeoPoints();
   }
+
   @override
   Widget build(BuildContext context) {
     // Curent user that is logged in
@@ -76,14 +76,34 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
                         borderRadius: BorderRadius.circular(10.0), child: const AddFieldMap()),
                   ),
                 ),
-                BottomBarAddField(
-                  onPressed: (Provider.of<NewFieldProvider>(context).isPolygonReady()
-                      ? () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const AddFieldDetailsScreen(polygon: []),
-                            ),
-                          )
-                      : null),
+                Column(
+                  children: [
+                    Text(
+                      Provider.of<NewFieldProvider>(context).isPolygonReady()
+                          ? "Polygon is valid!"
+                          : Provider.of<NewFieldProvider>(context).geoPoints.length < 3
+                              ? "You need ${3 - Provider.of<NewFieldProvider>(context).geoPoints.length} more points!"
+                              : "The field is self intersecting.",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Provider.of<NewFieldProvider>(context).isPolygonReady()
+                            ? Colors.green
+                            : Colors.red,
+                        fontFamily: 'Roboto',
+                        letterSpacing: 0.05,
+                      ),
+                    ),
+                    BottomBarAddField(
+                      onPressed: (Provider.of<NewFieldProvider>(context).isPolygonReady()
+                          ? () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const AddFieldDetailsScreen(),
+                                ),
+                              )
+                          : null),
+                    ),
+                  ],
                 )
               ],
             ),
