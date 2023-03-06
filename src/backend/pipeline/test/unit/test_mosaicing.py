@@ -32,7 +32,7 @@ class TestMosaicingModule:
         collapsed = np.sum(stitched.get(), axis=2)
         mask = np.where(collapsed == 0.0, 1, 0)
         mask = np.expand_dims(mask, 2)
-        assert np.array_equal(np.where(mask == 1, 0, 1), result.modules[Modules.MOSAIC]["mask"].get())
+        assert np.array_equal(np.where(mask == 1, 0, 1), result.modules[Modules.MOSAIC]["mask"])
 
     def test_mosaicing_dimensions(self):
         """
