@@ -8,8 +8,8 @@ def main():
     """Main entry point."""
 
     # Get test data
-    paths = np.array([glob.glob(f"pipeline/test/data/mosaicing/multispectral/*_{channel}.tif") for channel in range(1, 4)]).T
-    imgs = [Mat.fread([(path[0], [Channels.R]), (path[1], [Channels.B]), (path[2], [Channels.R])]) for path in paths]
+    paths = glob.glob(f"C:/Users/jesuschrist/Downloads/dataverse_files/dataset/2017-06-21_Wageningen_TestField_Sequoia_F3_7_55/Level_2/*.tif")
+    imgs = Mat.fread([(paths[0], [Channels.G]), (paths[1], [Channels.NIR]), (paths[2], [Channels.RE]), (paths[3], [Channels.R])])
 
     # Run the pipeline
     pipeline = default_pipeline()
