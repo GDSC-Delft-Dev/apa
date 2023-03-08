@@ -38,8 +38,7 @@ class NDVI(Runnable):
             # Calculate 
             ndvi = self.calculate(nir, red)
             data.modules[Modules.INDEX]["runnables"][self.type]["index"] = ndvi
-            plt.imshow(ndvi, cmap='RdYlGn', vmin=-1.0, vmax=1.0)
-            plt.show()
+
             return True
 
         # Catch exception
