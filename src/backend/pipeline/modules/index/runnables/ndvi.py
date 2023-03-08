@@ -3,6 +3,7 @@ from ...data import Data, Modules
 from ..indicies import Indicies
 from ....mat import Channels
 import numpy as np
+import cv2
 import matplotlib.pyplot as plt
 
 class NDVI(Runnable):
@@ -37,8 +38,8 @@ class NDVI(Runnable):
             # Calculate 
             ndvi = self.calculate(nir, red)
             data.modules[Modules.INDEX]["runnables"][self.type]["index"] = ndvi
-            plt.imshow(ndvi, cmap='RdYlGn', vmin=-1.0, vmax=1.0)
-            plt.show()
+            # cv2.imwrite("ndvi.tif", np.array(255 * ndvi, np.uint8))
+
             return True
 
         # Catch exception
