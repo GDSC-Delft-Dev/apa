@@ -1,4 +1,4 @@
-from ...runnable import Runnable
+from ...runnable import Runnable, Dependencies
 from ...data import Data, Modules
 from ..indicies import Indicies
 from ....mat import Channels
@@ -12,7 +12,8 @@ class NDVI(Runnable):
     """
 
     def __init__(self, data: Data):
-        super().__init__(data, name="NDVI")
+        super().__init__(data, name="NDVI", 
+                         dependencies = Dependencies([Channels.NIR, Channels.R], []))
         self.type = Indicies.NDVI
 
     def run(self, data: Data) -> bool:
