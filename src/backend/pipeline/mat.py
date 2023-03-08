@@ -1,20 +1,18 @@
 from __future__ import annotations
-from enum import IntEnum
+from enum import Enum
 import cv2
 import numpy as np
 
-class Channels(IntEnum):
-    """
-    Defines channel types for the input images
-    """
-    R = 0
-    G = 1
-    B = 2
-    NIR = 3
-    FIR = 4
-    T = 5
-    A = 6
-    GREYSCALE = 7
+class Channels(Enum):
+    """Defines channel types for the input images"""
+    R = "Red"
+    G = "Green"
+    B = "Blue"
+    RE = "Red Edge"
+    NIR = "Near Infrared"
+    MIR = "Mid Infrared"
+    T = "Thermal"
+    GREYSCALE = "Grayscale"
 
 default_channels = [Channels.R, Channels.G, Channels.B]
 
@@ -65,19 +63,19 @@ class Mat():
         """
 
         # Load the images
-        mats = [cv2.imread(path[0], cv2.IMREAD_GRAYSCALE) if len(path[1]) == 1 
+        mats = [cv2.imread(path[0], cv2.IMREAD_UNCHANGED) if len(path[1]) == 1
                 else cv2.imread(path[0])
                 for path in paths]
-        channels = sum([path[1] for path in paths], [])
 
         # Verify input data integrity
+        assert len(mats) == len(paths), "Reading images failed"
         shape = mats[0].shape[:2]
         for mat, channels in zip(mats, [path[1] for path in paths]): #type: tuple[cv2.Mat, list[Channels]]
             # Check number of channels
             if len(channels) == 1:
-                assert mat.ndim == 2
+                assert mat.ndim == 2, "Image is not grayscale"
             else:
-                assert len(channels) == mat.shape[2]
+                assert len(channels) == mat.shape[2], "Image has incorrect number of channels"
 
             # Check image dimensions
             assert shape == mat.shape[:2]
@@ -88,7 +86,9 @@ class Mat():
 
         # Concatenate grayscales
         arr = np.transpose(mats, (1, 2, 0))
-        print(arr.shape)
+
+        # Aggregate channels
+        channels = sum([path[1] for path in paths], [])
 
         # Return the combined data
         return cls(arr, channels)
