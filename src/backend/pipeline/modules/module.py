@@ -12,7 +12,7 @@ class Module(Runnable):
     Represents an arbitrary image processing pipeline module.
     """
 
-    def __init__(self, data: Data, channels: list[Channels] = [], input_data: Any = None,
+    def __init__(self, data: Data, channels: list[Channels] = None, input_data: Any = None,
                  name: str = "Unnamed module", module_type: Modules = Modules.DEFAULT):  
         """
         Initializes the module metadata and the data object.
@@ -27,7 +27,7 @@ class Module(Runnable):
         Attributes:
             next: the next module in the chain
         """
-        super().__init__(data, name, channels)
+        super().__init__(data, name, [] if channels is None else channels)
         self.next: Module | None = None
         self.type: Modules = module_type
 

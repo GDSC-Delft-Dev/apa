@@ -2,9 +2,8 @@ import copy
 from typing import Any, Type
 from .modules.module import Module
 from .modules.parallel_module import ParallelModule
-from .mat import Mat, Channels
+from .mat import Mat
 from .modules.data import Data
-from .modules.index.index import Index
 from .config import Config
 
 class Pipeline:
@@ -44,8 +43,8 @@ class Pipeline:
             return module(self.data_proto, 
                           runnables=input_data["runnables"],
                           input_data=input_data["config"])
-        else:
-            return module(self.data_proto, input_data=input_data)
+
+        return module(self.data_proto, input_data=input_data)
 
     def run(self, imgs: Mat | list[Mat]) -> Data:
         """
