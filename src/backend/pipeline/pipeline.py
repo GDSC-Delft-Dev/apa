@@ -20,25 +20,32 @@ class Pipeline:
 
         # Build the head
         head_config = next(iter(config.modules.items()))
-        if issubclass(head_config[0], ParallelModule):
-            module, input_data = head_config
-            self.head: ParallelModule = module(
-                                    self.data_proto, 
-                                    runnables=input_data["runnables"], 
-                                    input_data=input_data["config"])
-        else:
-            self.head: Module = head_config[0](self.data_proto, input_data=head_config[1])
+        self.head = self.build_module(head_config[0], head_config[1])
 
         # Build the rest
         tail: Module = self.head
         for module, input_data in list(config.modules.items())[1:]: #type: tuple[Type[Module], Any]
-            if issubclass(module, ParallelModule):
-                tail.next: ParallelModule = module(self.data_proto, 
-                                   runnables=input_data["runnables"], 
-                                   input_data=input_data["config"])
-            else:
-                tail.next: Module = module(self.data_proto, input_data=input_data)
+            tail.next = self.build_module(module, input_data)
             tail = tail.next
+
+    def build_module(self, module: Type[Module], input_data: Any) -> Module:
+        """
+        Builds a module and returns it.
+
+        Args:
+            module: the module class
+            input_data: the module initialization parameters
+
+        Returns:
+            The module object.
+        """
+
+        if issubclass(module, ParallelModule):
+            return module(self.data_proto, 
+                          runnables=input_data["runnables"],
+                          input_data=input_data["config"])
+        else:
+            return module(self.data_proto, input_data=input_data)
 
     def run(self, imgs: Mat | list[Mat]) -> Data:
         """
