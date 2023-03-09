@@ -32,7 +32,7 @@ Our project uses `mypy` and `pylint` to assert the quality of the code. You can 
 
 ```
 python -m mypy . --explicit-package-bases
-python -m pylint pipeline
+python -m pylint ./pipeline
 ```
 
 ### CI/CD
