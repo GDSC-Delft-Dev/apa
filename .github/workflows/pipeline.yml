@@ -16,34 +16,45 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+
       - name: Install dependencies
         run: |
           cd src/backend
           python -m pip install --upgrade pip
           pip install mypy pylint
           pip install -r requirements.txt
+
       - name: Run pylint
-        run: pylint ../pipeline
+        run: pylint ../pipeline --fail-under 9.5
+
       - name: Run mypy
         run: mypy . --explicit-package-bases
 
   test:
     runs-on: ubuntu-latest
     steps:  
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+
       - name: Install dependencies
         run: |
           cd src/backend
           python -m pip install --upgrade pip
           pip install pytest
           pip install -r requirements.txt
+
       - name: Run pytest
         run: pytest 
 
