@@ -2,7 +2,7 @@ import copy
 from typing import Any, Type
 from .modules.module import Module
 from .modules.parallel_module import ParallelModule
-from .mat import Mat
+from .mat import Mat, Channels
 from .modules.data import Data
 from .config import Config
 
@@ -69,13 +69,13 @@ class Pipeline:
         data.set(imgs)
 
         # Verify input integrity
-        if self.verify(imgs):
+        if self.verify(data.input):
             # Run the chain
             self.head.run(data)
         
         return data
     
-    def verify(self, imgs: Mat | list[Mat]) -> bool:
+    def verify(self, imgs: list[Mat]) -> bool:
         """
         Verifies that the pipeline is valid.
         
@@ -87,12 +87,12 @@ class Pipeline:
         """
 
         # Extract channels present in all images and set the default return value
-        channels = set.intersection(*[set(img.channels) for img in imgs])
+        channels: list[Channels] = list(set.intersection(*[set(img.channels) for img in imgs]))
         satisfied: bool = True
 
         # Iterate through all modules to check whether their band
         # requirements are satisfied
-        tail: Module = self.head
+        tail: Module | None = self.head
         while tail is not None:
             # Verify the module
             if not tail.verify(channels):

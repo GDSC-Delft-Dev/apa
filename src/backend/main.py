@@ -10,10 +10,10 @@ def main():
     imgs = [Mat.read(file) for file in glob.glob("./pipeline/test/data/mosaicing/farm/D*.JPG")]
 
     # Run the pipeline
-    print(len(imgs))
     pipeline = default_pipeline()
     pipeline.show()
     res = pipeline.run(imgs)
+    
     # Print the result
     print(res)
 

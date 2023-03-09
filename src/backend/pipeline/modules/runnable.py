@@ -29,7 +29,7 @@ class Runnable(ABC):
             False otherwise.
         """
 
-        misisng: list[Channels] = set(self.channels) - set(channels)
+        misisng: list[Channels] = list(set(self.channels) - set(channels))
         if len(misisng) > 0:
             print(f"Runnable {self.name} is missing the following channels: {misisng}")
             return False
