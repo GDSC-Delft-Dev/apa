@@ -14,6 +14,7 @@ class Pipeline:
 
     def __init__(self, config: Config):
         """Build the pipeline according to the configuration."""
+
         # Build the data object
         self.data_proto: Data = Data()
 
@@ -69,11 +70,11 @@ class Pipeline:
         data.set(imgs)
 
         # Verify input integrity
-        if self.verify(data.input):
-            # Run the chain
-            self.head.run(data)
-        
-        return data
+        if not self.verify(data.input):
+            raise RuntimeError("Pipeline input integrity violated")
+
+        # Run the chain
+        return self.head.run(data)
     
     def verify(self, imgs: list[Mat]) -> bool:
         """
