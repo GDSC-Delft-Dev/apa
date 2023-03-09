@@ -18,15 +18,14 @@ class Pipeline:
         # Build the data object
         self.data_proto: Data = Data()
 
-        # Merge the simple module dict with the parallel dict
-        config.modules.update(config.parallel_modules)
-
         # Build the head
         head_config = next(iter(config.modules.items()))
-        if issubclass(head_config, ParallelModule):
-            self.head: ParallelModule = head_config[0](self.data_proto, 
-                                    runnables=head_config[1][0], 
-                                    input_data=head_config[1][1])
+        if issubclass(head_config[0], ParallelModule):
+            module, input_data = head_config
+            self.head: ParallelModule = module(
+                                    self.data_proto, 
+                                    runnables=input_data["runnables"], 
+                                    input_data=input_data["config"])
         else:
             self.head: Module = head_config[0](self.data_proto, input_data=head_config[1])
 
@@ -34,11 +33,11 @@ class Pipeline:
         tail: Module = self.head
         for module, input_data in list(config.modules.items())[1:]: #type: tuple[Type[Module], Any]
             if issubclass(module, ParallelModule):
-                tail.next = module(self.data_proto, runnables=input_data[0], 
-                                   input_data=input_data[1])
+                tail.next: ParallelModule = module(self.data_proto, 
+                                   runnables=input_data["runnables"], 
+                                   input_data=input_data["config"])
             else:
-                print(type(module))
-                tail.next = module(self.data_proto, input_data=input_data)
+                tail.next: Module = module(self.data_proto, input_data=input_data)
             tail = tail.next
 
     def run(self, imgs: Mat | list[Mat]) -> Data:
@@ -53,9 +52,6 @@ class Pipeline:
             The processed data.
         """
 
-        # Verify input integrity
-        self.verify(imgs)
-
         # Check that the channels of all images are the same
         if not isinstance(imgs, Mat):
             channels = [img.channels for img in imgs]
@@ -66,8 +62,11 @@ class Pipeline:
         data = copy.deepcopy(self.data_proto)
         data.set(imgs)
 
-        # Run the chain
-        self.head.run(data)
+        # Verify input integrity
+        if self.verify(imgs):
+            # Run the chain
+            self.head.run(data)
+        
         return data
     
     def verify(self, imgs: Mat | list[Mat]) -> bool:
@@ -81,12 +80,8 @@ class Pipeline:
             Whether the pipeline is valid.
         """
 
-        # Extract channels present in all images
-        if isinstance(imgs, Mat):
-            imgs = [imgs]
+        # Extract channels present in all images and set the default return value
         channels = set.intersection(*[set(img.channels) for img in imgs])
-        
-        # Set the default return value
         satisfied: bool = True
 
         # Iterate through all modules to check whether their band

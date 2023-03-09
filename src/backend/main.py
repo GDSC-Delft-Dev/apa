@@ -11,7 +11,7 @@ def main():
 
     # Run the pipeline
     print(len(imgs))
-    pipeline = nutrient_pipeline()
+    pipeline = default_pipeline()
     pipeline.show()
     res = pipeline.run(imgs)
     # Print the result

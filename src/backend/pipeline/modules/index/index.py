@@ -13,3 +13,7 @@ class Index(ParallelModule):
     def __init__(self, data: Data, runnables: list[Runnable], input_data: Any):
         """Initializes the index module and its runnables."""
         super().__init__(data, runnables, name="Index", module_type=Modules.INDEX)
+
+    @property
+    def getClass(self):
+        return Index

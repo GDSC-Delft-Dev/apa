@@ -28,13 +28,13 @@ class ParallelModule(Module):
         """
  
         super().__init__(data, 
-                        channels=list(set(sum([runnable.channels for runnable in runnables], []))), 
                         input_data=input_data, 
                         name=name, 
                         module_type=module_type)
 
         # Initialize runnables
         self.runnables: list[Runnable] = [runnable(data) for runnable in runnables]
+        self.channels: list[Channels] = list(set(sum([runnable.channels for runnable in self.runnables], [])))
 
     def run(self, data: Data) -> Data:
         """
