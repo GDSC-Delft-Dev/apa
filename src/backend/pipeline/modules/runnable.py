@@ -3,40 +3,10 @@ from abc import ABC, abstractmethod
 from .data import Data
 from ..mat import Channels
 
-class Dependencies:
-    """Represents the dependencies of a runnable."""
-
-    def __init__(self, bands: list[Channels] = [], runnables: list[str] = []):
-        self.bands: list[Channels] = []
-        self.runnables: list[str] = []
-
-    def delta(self, other: Dependencies) -> Dependencies:
-        """
-        Returns the difference between two dependencies.
-
-        Args:
-            other: the other dependencies
-
-        Returns:
-            The difference between the two dependencies.
-        """
-        return Dependencies(
-            bands = list(set(self.bands) - set(other.bands)),
-            runnables = list(set(self.runnables) - set(other.runnables)))
-    
-    def empty(self) -> bool:
-        """
-        Returns whether the dependencies are empty, i.e. satisfied.
-
-        Returns:
-            Whether the dependencies are empty.
-        """
-        return len(self.bands) == 0 and len(self.runnables) == 0
-
 class Runnable(ABC):
     """Represents arbitrary runnable logic for image processing."""
 
-    def __init__(self, _data: Data, name: str = "Unnamed runnable", dependencies: Dependencies = Dependencies()):
+    def __init__(self, _data: Data, name: str = "Unnamed runnable", channels: list[Channels] = []):
         """
         Initializes the runnable.
 
@@ -45,20 +15,27 @@ class Runnable(ABC):
             data: the pipeline data object
         """
         self.name: str = name
-        self.dependencies: Dependencies = dependencies
+        self.channels: list[Channels] = channels
 
-    def verify(self, satisfied: Dependencies) -> Dependencies:
+    def verify(self, channels: list[Channels]) -> bool:
         """
-        Verifies whether the runnable's dependencies are satisfied.
+        Verifies that the runnable can be run on the provided channels.
 
         Args:
-            satisfied: the satisfied dependencies
+            channels: the channels to verify
 
         Returns:
-            The unsatisfied dependencies.
+            True if the runnable can be run on the provided channels,
+            False otherwise.
         """
-        return self.dependencies.delta(satisfied)
-    
+
+        misisng: list[Channels] = set(self.channels) - set(channels)
+        if len(misisng) > 0:
+            print(f"Runnable {self.name} is missing the following channels: {misisng}")
+            return False
+
+        return True
+
     @abstractmethod
     def run(self, data: Data):   
         """

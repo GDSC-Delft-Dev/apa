@@ -2,7 +2,7 @@ import copy
 from typing import Any, Type
 from .modules.module import Module
 from .modules.parallel_module import ParallelModule
-from .mat import Mat
+from .mat import Mat, Channels
 from .modules.data import Data
 from .modules.index.index import Index
 from .config import Config
@@ -18,8 +18,9 @@ class Pipeline:
         # Build the data object
         self.data_proto: Data = Data()
 
-        # merge the simple module dict with the parallel dict
+        # Merge the simple module dict with the parallel dict
         config.modules.update(config.parallel_modules)
+
         # Build the head
         head_config = next(iter(config.modules.items()))
         if issubclass(head_config, ParallelModule):
@@ -28,6 +29,7 @@ class Pipeline:
                                     input_data=head_config[1][1])
         else:
             self.head: Module = head_config[0](self.data_proto, input_data=head_config[1])
+
         # Build the rest
         tail: Module = self.head
         for module, input_data in list(config.modules.items())[1:]: #type: tuple[Type[Module], Any]
@@ -52,6 +54,7 @@ class Pipeline:
         """
 
         # Verify input integrity
+        self.verify(imgs)
 
         # Check that the channels of all images are the same
         if not isinstance(imgs, Mat):
@@ -66,6 +69,38 @@ class Pipeline:
         # Run the chain
         self.head.run(data)
         return data
+    
+    def verify(self, imgs: Mat | list[Mat]) -> bool:
+        """
+        Verifies that the pipeline is valid.
+        
+        Args:
+            imgs: the input imasges
+
+        Returns:
+            Whether the pipeline is valid.
+        """
+
+        # Extract channels present in all images
+        if isinstance(imgs, Mat):
+            imgs = [imgs]
+        channels = set.intersection(*[set(img.channels) for img in imgs])
+        
+        # Set the default return value
+        satisfied: bool = True
+
+        # Iterate through all modules to check whether their band
+        # requirements are satisfied
+        tail: Module = self.head
+        while tail is not None:
+            # Verify the module
+            if not tail.verify(channels):
+                satisfied = False
+
+            # Set the next module
+            tail = tail.next
+
+        return satisfied
 
     def show(self):
         """Prints out the current state of the pipeline."""
