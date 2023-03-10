@@ -18,7 +18,7 @@ class InsightDetailsSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 20),
-          Center(child: Text('${insight.getDetails} detected!', style: TextStyle(fontSize: 20, color: Colors.red[900]),)),
+          Center(child: Text('${insight.getName} detected!', style: TextStyle(fontSize: 20, color: Colors.red[900]),)),
           SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
