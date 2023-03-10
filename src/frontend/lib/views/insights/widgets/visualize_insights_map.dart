@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:frontend/views/insights/widgets/insight_details_sheet.dart';
 import 'package:frontend/views/insights/widgets/menu_drawer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -80,31 +81,13 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
               ),
               context: context, 
-              builder: (context) => _buildInsightDetails(insight)),
+              builder: (context) => InsightDetailsSheet(insight: insight)),
             // infoWindow: InfoWindow(title: insight.getDetails),
             anchor: const Offset(0.5, 0.5)
           )
         );
         }
       });
-    }
-
-    /// Builds the bottom sheet with details about localized insight
-    Widget _buildInsightDetails(InsightModel insight) {
-      return Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
-        mainAxisSize: MainAxisSize.min,  // To make the card compact
-        children: [
-          Text('${insight.getDetails} detected!', style: TextStyle(fontSize: 20),),
-          Center(
-            child: ElevatedButton(
-              child: Text("Close", style: TextStyle(fontSize: 16),),
-              onPressed: () => Navigator.of(context).pop()),
-            )
-        ],
-        )
-      );
     }
 
     /// Adds custom icons to be used for markers
