@@ -13,7 +13,7 @@ class InsightModel {
   String properName;
   final GeoPoint center;
   final Timestamp date;
-  String characteristics;
+  String details;
   String image;
   List<String> recommendations;
   double area;
@@ -25,11 +25,11 @@ class InsightModel {
     required this.center,
     required this.fieldId,
     required this.date,
-    this.characteristics = "",
-    this.image = "",
-    this.properName = "",
-    this.recommendations = const [],
-    this.area = 0.0
+    required this.details,
+    required this.image,
+    required this.properName,
+    required this.recommendations,
+    required this.area
   });
 
   String get getInsightId => insightId;
@@ -50,7 +50,7 @@ class InsightModel {
 
   Timestamp get getDate => date;
 
-  String get getCharacteristics => characteristics;
+  String get getDetails => details;
 
   String get getImage => image;
 
@@ -60,8 +60,8 @@ class InsightModel {
     this.area = area;
   }
 
-  void setCharacteristics(String characteristics) {
-    this.characteristics = characteristics;
+  void setDetails(String details) {
+    this.details = details;
   }
 
   void setImage(String image) {

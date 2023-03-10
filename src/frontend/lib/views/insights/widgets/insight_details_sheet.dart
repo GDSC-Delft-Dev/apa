@@ -29,7 +29,7 @@ class InsightDetailsSheet extends StatelessWidget {
                 children: [
                   Text('Details', style: TextStyle(fontSize: 18)),
                   SizedBox(height: 10),
-                  Text('${insight.getCharacteristics}', style: TextStyle(fontSize: 16, color: Colors.grey[700])),
+                  Text('${insight.getDetails}', style: TextStyle(fontSize: 16, color: Colors.grey[700])),
                 ],
               ),
               ),
