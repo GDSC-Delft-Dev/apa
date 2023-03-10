@@ -25,8 +25,12 @@ class InsightDetailsSheet extends StatelessWidget {
               Text('Date: ', style: TextStyle(fontSize: 18),),
               Text('${insight.getDate}', style: TextStyle(fontSize: 14, fontFamily: 'Lato'),),
             ],),
-          // TODO: if pest, show area affected
-          // TODO: if pest and disease, show proper name
+          // For pests we show area affected
+          insight.getArea > 0.0 ? Row (
+            children: [
+              Text('Area affected: ', style: TextStyle(fontSize: 18),),
+              Text('${insight.getArea} ha', style: TextStyle(fontSize: 14, fontFamily: 'Lato'),),
+            ],) : Container(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -36,6 +40,9 @@ class InsightDetailsSheet extends StatelessWidget {
                 children: [
                   Text('Details', style: TextStyle(fontSize: 18)),
                   Text('${insight.getDetails}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')),
+                  insight.getProperName != '' ? 
+                    Text('Scientific name: ${insight.getProperName}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')) 
+                    : Container(),
                 ],
               ),
               ),
