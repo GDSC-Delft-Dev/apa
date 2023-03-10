@@ -80,8 +80,8 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
               ),
               context: context, 
-              builder: (context) => _buildInsightDetails()),
-            infoWindow: InfoWindow(title: insight.getDetails),
+              builder: (context) => _buildInsightDetails(insight)),
+            // infoWindow: InfoWindow(title: insight.getDetails),
             anchor: const Offset(0.5, 0.5)
           )
         );
@@ -89,16 +89,17 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
       });
     }
 
-    Widget _buildInsightDetails() {
+    /// Builds the bottom sheet with details about localized insight
+    Widget _buildInsightDetails(InsightModel insight) {
       return Container(
         padding: EdgeInsets.all(16),
         child: Column(
         mainAxisSize: MainAxisSize.min,  // To make the card compact
         children: [
-          Text("Insight details"),
+          Text('${insight.getDetails} detected!', style: TextStyle(fontSize: 20),),
           Center(
             child: ElevatedButton(
-              child: Text("Close"),
+              child: Text("Close", style: TextStyle(fontSize: 16),),
               onPressed: () => Navigator.of(context).pop()),
             )
         ],
