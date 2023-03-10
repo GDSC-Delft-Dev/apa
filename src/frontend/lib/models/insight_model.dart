@@ -12,6 +12,9 @@ class InsightModel {
   final GeoPoint center;
   final String fieldId;
   final Timestamp date;
+  final String characteristics;
+  final String image;
+  final List<String> recommendations;
 
   InsightModel({
     required this.insightId,
@@ -19,7 +22,10 @@ class InsightModel {
     required this.details,
     required this.center,
     required this.fieldId,
-    required this.date
+    required this.date,
+    required this.characteristics,
+    required this.image,
+    required this.recommendations
   });
 
   String get getInsightId => insightId;
@@ -35,5 +41,11 @@ class InsightModel {
   String get getFieldId => fieldId;
 
   Timestamp get getDate => date;
+
+  String get getCharacteristics => characteristics;
+
+  String get getImage => image;
+
+  List<String> get getRecommendations => recommendations;
 
 }

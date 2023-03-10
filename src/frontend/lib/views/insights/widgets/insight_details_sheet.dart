@@ -24,6 +24,7 @@ class InsightDetailsSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Details', style: TextStyle(fontSize: 18)),
+              Text('${insight.getCharacteristics}'),
               SizedBox(width: 10),
               Image.asset('assets/images/black-spot-fungal-disease.jpg', width: 100.0, height: 100.0,)
             ],

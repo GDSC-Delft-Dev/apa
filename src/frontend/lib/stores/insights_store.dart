@@ -15,7 +15,10 @@ class InsightsStore {
         details: snapshot['details'],
         center: snapshot['center'],
         fieldId: snapshot['field_id'],
-        date: snapshot['date']);
+        date: snapshot['date'],
+        characteristics: snapshot['characteristics'],
+        image: snapshot['image'],
+        recommendations: snapshot['recommendations']); // TODO: check if this is indeed a list
   }
 
   Future<InsightModel> getInsightById(String insightId) async {
@@ -44,7 +47,10 @@ class InsightsStore {
           details: doc.get('details'),
           center: doc.get('center'),
           fieldId: doc.get('field_id'),
-          date: doc.get('date'));
+          date: doc.get('date'), 
+          characteristics: doc.get('characteristics'),
+          image: doc.get('image'),
+          recommendations: List<String>.from(doc.get('recommendations')));
     }).toList();
   }
 
