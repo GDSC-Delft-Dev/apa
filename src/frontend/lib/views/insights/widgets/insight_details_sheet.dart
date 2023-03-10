@@ -20,6 +20,13 @@ class InsightDetailsSheet extends StatelessWidget {
           SizedBox(height: 20),
           Center(child: Text('${insight.getName} detected!', style: TextStyle(fontSize: 20, color: Colors.red[900]),)),
           SizedBox(height: 20),
+          Row (
+            children: [
+              Text('Date: ', style: TextStyle(fontSize: 18),),
+              Text('${insight.getDate}', style: TextStyle(fontSize: 14, fontFamily: 'Lato'),),
+            ],),
+          // TODO: if pest, show area affected
+          // TODO: if pest and disease, show proper name
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -28,18 +35,21 @@ class InsightDetailsSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Details', style: TextStyle(fontSize: 18)),
-                  SizedBox(height: 10),
-                  Text('${insight.getDetails}', style: TextStyle(fontSize: 16, color: Colors.grey[700])),
+                  Text('${insight.getDetails}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')),
                 ],
               ),
               ),
               SizedBox(width: 10),
-              Image.asset('assets/images/black-spot-fungal-disease.jpg', width: 100.0, height: 100.0,)
+              Image.asset('${insight.getImage}', width: 100.0, height: 100.0,)
             ],
           ),
-          SizedBox(height: 12),
           Text('Recommendations', style: TextStyle(fontSize: 18)),
-          SizedBox(height: 36),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: insight.getRecommendations.map((recommendation) => 
+                  Text('\u2022 $recommendation', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato'))).toList()
+          ),
+          SizedBox(height: 20),
           Center(
             child: ElevatedButton(
               child: Text("Close", style: TextStyle(fontSize: 16),),

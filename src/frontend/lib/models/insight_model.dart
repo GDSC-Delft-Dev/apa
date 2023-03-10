@@ -48,7 +48,9 @@ class InsightModel {
 
   String get getFieldId => fieldId;
 
-  Timestamp get getDate => date;
+  String get getDate {
+    return date.toDate().toString().split(' ').first;
+  }
 
   String get getDetails => details;
 
