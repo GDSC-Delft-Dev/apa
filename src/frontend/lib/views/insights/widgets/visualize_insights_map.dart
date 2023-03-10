@@ -72,12 +72,38 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                   insight.getType == InsightType.pest ? _pestMarkerIcon : 
                   insight.getType == InsightType.nutrient ? _nutrientMarkerIcon : 
                   BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            // Open bottom sheet with details about localized insight
+            onTap: () => showModalBottomSheet(
+              enableDrag: false,
+              isScrollControlled: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+              ),
+              context: context, 
+              builder: (context) => _buildInsightDetails()),
             infoWindow: InfoWindow(title: insight.getDetails),
             anchor: const Offset(0.5, 0.5)
           )
         );
         }
       });
+    }
+
+    Widget _buildInsightDetails() {
+      return Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+        mainAxisSize: MainAxisSize.min,  // To make the card compact
+        children: [
+          Text("Insight details"),
+          Center(
+            child: ElevatedButton(
+              child: Text("Close"),
+              onPressed: () => Navigator.of(context).pop()),
+            )
+        ],
+        )
+      );
     }
 
     /// Adds custom icons to be used for markers
