@@ -11,6 +11,7 @@ import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
 import 'maps_dropdown.dart';
 
+
 /// This class builds the insight map chosen by user
 class VisualizeInsightsMap extends StatefulWidget {
 
@@ -38,7 +39,6 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   BitmapDescriptor _pestMarkerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor _diseaseMarkerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor _nutrientMarkerIcon = BitmapDescriptor.defaultMarker;
-
 
   /// Takes a list of field models and created polygons to draw on the map
   void _drawInsightMap(InsightMapType mapType) {    

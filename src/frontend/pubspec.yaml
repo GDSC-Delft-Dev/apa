@@ -48,6 +48,11 @@ dependencies:
   poly_collisions: ^1.4.0
   geojson_vi: ^2.0.7
   flutter_zoom_drawer: ^3.0.3
+  cloud_functions: ^4.0.12
+  # google_maps_flutter_platform_interface:
+  #   git:
+  #     url: https://github.com/bytestreme/plugins.git
+  #     path: packages/google_maps_flutter/google_maps_flutter_platform_interface/
 
 dev_dependencies:
   # A build system for Dart code generation and modular compilation.
