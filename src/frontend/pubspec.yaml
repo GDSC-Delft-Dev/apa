@@ -85,6 +85,7 @@ flutter:
     - assets/images/pest_marker.png
     - assets/images/black-spot-fungal-disease.jpg
     - assets/images/caterpillars-pest.jpg
+    - assets/images/nitrogen-deficiency.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
