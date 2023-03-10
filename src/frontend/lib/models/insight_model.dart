@@ -26,6 +26,8 @@ class InsightModel {
 
   InsightType get getType => type;
 
+  String get getTypeString => type.toString().split('.').last;
+
   String get getDetails => details;
 
   GeoPoint get getCenter => center;

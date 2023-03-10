@@ -15,9 +15,21 @@ class InsightDetailsSheet extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: Column(
         mainAxisSize: MainAxisSize.min,  // To make the card compact
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 20),
-          Text('${insight.getDetails} detected!', style: TextStyle(fontSize: 20, color: Colors.red[900]),),
+          Center(child: Text('${insight.getDetails} detected!', style: TextStyle(fontSize: 20, color: Colors.red[900]),)),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Details', style: TextStyle(fontSize: 18)),
+              SizedBox(width: 10),
+              Image.asset('assets/images/black-spot-fungal-disease.jpg', width: 100.0, height: 100.0,)
+            ],
+          ),
+          SizedBox(height: 12),
+          Text('Recommendations', style: TextStyle(fontSize: 18)),
           SizedBox(height: 36),
           Center(
             child: ElevatedButton(
