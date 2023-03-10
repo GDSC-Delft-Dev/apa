@@ -12,12 +12,12 @@ Through an intuitive dashboard, farmers are able to automatically track historic
         <img src="https://user-images.githubusercontent.com/74115586/219357528-0ea762fe-0228-4e00-8d6e-9baad15b8fbc.png" width="470" />
          &nbsp &nbsp
         <img src="https://user-images.githubusercontent.com/74115586/219357760-b6b828e5-6330-4898-82cd-9eb31c03e607.png" width="300" />
-        &nbsp &nbsp
-        <img src="https://user-images.githubusercontent.com/74115586/219358000-6267bbd4-87cf-40ec-8459-26cc5ff6af04.png" width="400" />
+        <!-- &nbsp &nbsp
+        <img src="https://user-images.githubusercontent.com/74115586/219358000-6267bbd4-87cf-40ec-8459-26cc5ff6af04.png" width="400" /> -->
     </p>
 </p>
 
-<p align="center">Example wireframes</p>
+<p align="center">Example screenshots</p>
 
 
 ## Getting started
@@ -123,16 +123,17 @@ flutter-app/
 |- test
 ````
 
-Folder structure used by us:
+`lib` folder structure we use is as follows:
 ````
 lib/
-|- models/ - Contains data models
-|- services/ - Contains API endpoints
-|- views/ - Contains all the UI screens of the application
-|- widgets/ - Contains the common widgets used in the application
-| - stores/ - Contains store(s) for state-management of your application, to connect the reactive data of your application with the UI
-|- utils/ - Contains the common utility functions of the application
-|- main.dart - Starting point of the application - all the application level configurations are defined in this file i.e, theme, routes, title, orientation etc.
+|- models/ - Data models that correspond to our Firebase documents (e.g. fields, crops)
+|- providers/ - Containers that hold application state and notify listeners
+|- services/ - Business logic that queries external API endpoints
+|- views/ - Main UI widgets of the application
+|- widgets/ - Common widgets used in the application
+| - stores/ - Services that handle database querying
+|- utils/ - Common utility functions of the application
+|- main.dart - Starting point of the application - all the application level configurations are defined in this file i.e, theme, routes, title etc.
 ````
 
 ## Routes
@@ -141,20 +142,53 @@ The following routes are defined in `main.dart`
       routes: {
         '/': (context) => const Wrapper(),
         '/load': (context) => Loading(),
-        '/home': (context) => const Home(title: 'APA'),
+        '/home': (context) => const Home(title: 'Terrafarm'),
         '/add': (context) => const AddField(),
         '/fields': (context) => const MyFields(),
-        '/fly': (context) => const FlyDrone(droneName: 'DJI Mavic 3',),
         '/settings': (context) => const Settings(),
       }
 ````
 The initial route that is entered is the `Wrapper()`, which listens for authentication status changes - will return `MainPage()` if logged in or `Authenticate()` if not logged in (both under `views/`).
 `MainPage()` renders screen that the user sees currently - which screen is displayed depends on which icon is toggled in the bottom navigation bar.
 
-<!-- ## Data models
+## Data Models
+````
+lib/models/
+|- user_model.dart - represent users of the application
+|- field_model.dart - represent fields owned by users
+|- insight_model.dart - represent insights detected by the image processing pipeline, specific to soem geolocation within given field
+|- crop_model.dart - represent crops that are grown in fields (e.g. lettuce, aloe vera)
+````
+
+
+## Providers
+````
+lib/providers/
+|- insight_choices_provider.dart - handles user preferences regarding visualization of field insights
+|- map_settings_provider.dart - handles user preferences regarding maps displayed (e.g. map type, zoom level)
+|- new_field_provider.dart - handles the process of adding new fields to the system
+````
+
+
 ## Services
-## Views
-## Utils
-## Widgets
-## Utils
- -->
+````
+lib/services/
+|- auth_service.dart - communicates with Firebase Authentication API to handle user management
+|- location_service.dart - communinates with Google Maps API to handle searching for locations on the map
+````
+
+
+
+## Stores
+````
+lib/stores/
+|- user_store.dart - handles CRUD operations regarding the user model
+|- fields_store.dart - handles CRUD operations regarding the field model
+|- insights_store.dart - handles CRUD operations regarding the insights model
+|- crop_store.dart - handles CRUD operations regarding the crop model
+````
+
+
+<!-- ## Cloud Functions -->
+
+
