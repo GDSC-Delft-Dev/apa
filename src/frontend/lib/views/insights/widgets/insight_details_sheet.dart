@@ -25,10 +25,10 @@ class InsightDetailsSheet extends StatelessWidget {
           Center(child: Text('${insightType.name} detected!', style: TextStyle(fontSize: 20, color: Colors.red[900]),)),
           const SizedBox(height: 20),
           // For pests we show area affected
-          5 > 0.0 ? Row (
+          insight.data['area'] > 0.0 ? Row (
             children: [
               Text('Area affected: ', style: TextStyle(fontSize: 18),),
-              Text('${5} ha', style: TextStyle(fontSize: 14, fontFamily: 'Lato'),),
+              Text('${insight.data['area']} ha', style: TextStyle(fontSize: 14),),
             ],) : Container(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,7 +40,7 @@ class InsightDetailsSheet extends StatelessWidget {
                   Text('Details', style: TextStyle(fontSize: 18)),
                   // Text('${insight.data}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')),
                   insight.data.containsKey('proper_name') ? 
-                    Text('Scientific name: ${insight.data['proper_name']}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')) 
+                    Text('Scientific name: ${insight.data['proper_name']}', style: TextStyle(fontSize: 14, color: Colors.grey[700])) 
                     : Container(),
                 ],
               ),
@@ -53,7 +53,7 @@ class InsightDetailsSheet extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: insightType.recommendations.map((recommendation) => 
-                  Text('\u2022 $recommendation', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato'))).toList()
+                  Text('\u2022 $recommendation', style: TextStyle(fontSize: 14, color: Colors.grey[700]))).toList()
           ),
           SizedBox(height: 20),
           Center(
