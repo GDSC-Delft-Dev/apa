@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:frontend/views/insights/widgets/menu_drawer.dart';
+import 'package:frontend/views/insights/widgets/insight_details_sheet.dart';
+import 'package:frontend/views/insights/widgets/menu_drawer_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../../models/field_model.dart';
@@ -9,7 +10,10 @@ import '../../../models/insight_model.dart';
 import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
 import 'bottom_insights_sheet.dart';
+import 'hidden_drawer.dart';
+import 'insights_selection.dart';
 import 'maps_dropdown.dart';
+
 
 /// This class builds the insight map chosen by user
 class VisualizeInsightsMap extends StatefulWidget {
@@ -60,18 +64,26 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
         _insightMarkers.add(Marker(
             markerId: MarkerId(insight.insightId),
             position: LatLng(insight.getCenter.latitude, insight.getCenter.longitude),
-            icon: insight.getType == InsightType.disease
-                ? _diseaseMarkerIcon
-                : insight.getType == InsightType.pest
-                    ? _pestMarkerIcon
-                    : insight.getType == InsightType.nutrient
-                        ? _nutrientMarkerIcon
-                        : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-            infoWindow: InfoWindow(title: insight.getDetails),
-            anchor: const Offset(0.5, 0.5)));
-      }
-    });
-  }
+            icon: insight.getType == InsightType.disease ? _diseaseMarkerIcon : 
+                  insight.getType == InsightType.pest ? _pestMarkerIcon : 
+                  insight.getType == InsightType.nutrient ? _nutrientMarkerIcon : 
+                  BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            // Open bottom sheet with details about localized insight
+            onTap: () => showModalBottomSheet(
+              enableDrag: false,
+              isScrollControlled: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+              ),
+              context: context, 
+              builder: (context) => InsightDetailsSheet(insight: insight)),
+            // infoWindow: InfoWindow(title: insight.getDetails),
+            anchor: const Offset(0.5, 0.5)
+          )
+        );
+        }
+      });
+    }
 
   /// Adds custom icons to be used for markers
   void _addCustomIcons() {
@@ -124,21 +136,39 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
           return Column(
             children: [
               Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    GoogleMap(
-                      mapToolbarEnabled: false,
-                      zoomGesturesEnabled: true,
-                      scrollGesturesEnabled: true,
-                      rotateGesturesEnabled: true,
-                      initialCameraPosition:
-                          utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
-                      mapType: MapType.satellite,
-                      markers: _insightMarkers,
-                      polygons: _polygons,
-                      onMapCreated: (GoogleMapController controller) {
-                        _controller.complete(controller);
-                      },
+                    child: Stack(
+                      children: <Widget>[
+                        GoogleMap(
+                          mapToolbarEnabled: false,
+                          zoomGesturesEnabled: true,	
+                          scrollGesturesEnabled: true,
+                          rotateGesturesEnabled: true,
+                          initialCameraPosition: utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
+                          mapType: MapType.satellite,
+                          markers: _insightMarkers,
+                          polygons: _polygons,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 20, left: 20),
+                          alignment: Alignment.topLeft,
+                          child: Column(          
+                            children: <Widget>[
+                              InsightsSelection(),
+                              SizedBox(height: 10),
+                              MenuDrawerButton(),
+                              // HiddenDrawer()
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 30, right: 60, left: 170),
+                          alignment: Alignment.topRight,
+                          child: const MapsDropdown()
+                        ),
+                      ],
                     ),
                     Container(
                       padding: const EdgeInsets.only(top: 20, left: 20),

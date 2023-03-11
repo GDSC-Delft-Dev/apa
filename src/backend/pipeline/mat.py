@@ -1,18 +1,18 @@
 from __future__ import annotations
-from enum import IntEnum
+from enum import Enum
 import cv2
 import numpy as np
 
-class Channels(IntEnum):
-    """
-    Defines channel types for the input images
-    """
-    R = 0
-    G = 1
-    B = 2
-    NIR = 3
-    FIR = 4
-    T = 5
+class Channels(Enum):
+    """Defines channel types for the input images"""
+    R = "Red"
+    G = "Green"
+    B = "Blue"
+    RE = "Red Edge"
+    NIR = "Near Infrared"
+    MIR = "Mid Infrared"
+    T = "Thermal"
+    GREYSCALE = "Grayscale"
 
 default_channels = [Channels.R, Channels.G, Channels.B]
 
@@ -49,10 +49,11 @@ class Mat():
         return cls(mat, channels = default_channels)
 
     @classmethod
-    def fread(cls, paths: dict[str, list[Channels]]) -> Mat:
+    def fread(cls, paths: list[tuple[str, list[Channels]]]) -> Mat:
         """
-        UNTESTED. Full reads an image with an arbitrary number of
-        channels from multiple source paths.
+        Rreads an image with an arbitrary number of
+        channels from multiple source paths that contain images 
+        with different numbers of channels.
 
         Args:
             paths: a dictionary of paths and their corresponding channels
@@ -63,23 +64,53 @@ class Mat():
         """
 
         # Load the images
-        mats = [cv2.imread(path) for path in paths.keys()]
+        mats = [cv2.imread(path[0], cv2.IMREAD_UNCHANGED) if len(path[1]) == 1
+                else cv2.imread(path[0])
+                for path in paths]
 
-        # Verify that the number of channels match and the
-        # dimensions match
+        # Verify input data integrity
+        assert len(mats) == len(paths), "Reading images failed"
         shape = mats[0].shape[:2]
-        for mat, channels in zip(mats, paths.values()): #type: tuple[cv2.Mat, list[Channels]]
-            assert mat.ndim == len(channels)
+        for mat, channels in zip(mats, [path[1] for path in paths]): #type: tuple[cv2.Mat, list[Channels]]
+            # Check number of channels
+            if len(channels) == 1:
+                assert mat.ndim == 2, "Image is not grayscale"
+            else:
+                assert len(channels) == mat.shape[2], "Image has incorrect number of channels"
+
+            # Check image dimensions
             assert shape == mat.shape[:2]
 
-        # Flatten channels
-        channels = sum(paths.values(), [])
-
         # Combine arrays
-        arr = np.concatenate([np.asarray(mat[:,:,:]) for mat in mats], axis=2)
+        # Split multichannel mats
+        mats = np.array([mat if mat.ndim == 2 else np.split(mat) for mat in mats])
+
+        # Concatenate grayscales
+        arr = np.transpose(mats, (1, 2, 0))
+
+        # Aggregate channels
+        channels = sum([path[1] for path in paths], [])
 
         # Return the combined data
         return cls(arr, channels)
+    
+    @classmethod
+    def freads(cls, paths: list[str], channels: list[Channels]) -> Mat:
+        """
+        Reads an image with an arbitrary number of channels from
+        multiple source paths containing grayscale images only.
+
+        Args:
+            paths: a list of paths to read the images from
+            channels: a list of channels in the images paths
+                      (in the order they appear in the paths)
+        
+        Returns:
+            The loaded Mat.
+        """
+
+        assert len(paths) == len(channels), "Number of paths and channels must match"
+        return Mat.fread([(path, [channel]) for path, channel in zip(paths, channels)])
 
     def get(self) -> cv2.Mat:
         """

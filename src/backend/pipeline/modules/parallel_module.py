@@ -1,5 +1,6 @@
 from __future__ import annotations
 import cv2
+from ..mat import Channels
 from .module import Module
 from .data import Data
 from .runnable import Runnable
@@ -26,10 +27,14 @@ class ParallelModule(Module):
             type: the type of the module
         """
  
-        super().__init__(data, input_data, name=name, module_type=module_type)
+        super().__init__(data, 
+                        input_data=input_data, 
+                        name=name, 
+                        module_type=module_type)
 
         # Initialize runnables
         self.runnables: list[Runnable] = [runnable(data) for runnable in runnables]
+        self.channels: list[Channels] = list(set(sum([runnable.channels for runnable in self.runnables], [])))
 
     def run(self, data: Data) -> Data:
         """
@@ -54,6 +59,27 @@ class ParallelModule(Module):
 
         # Run the module functionality
         return super().run(data)
+    
+    def verify(self, channels: list[Channels]) -> bool:
+        """
+        Verifies that the module's runnables can run on the given channels.
+
+        Args:
+            channels: the channels to verify
+
+        Returns:
+            True if all the module can run on the given channels, False otherwise
+        """
+
+        # Set the default return value
+        satisfied: bool = True
+
+        # Verify all the runnables
+        for runnable in self.runnables:
+            if not runnable.verify(channels):
+                satisfied = False
+                
+        return satisfied
 
     def prepare(self, data: Data) -> None:
         """Prepares the module to be run."""
