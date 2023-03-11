@@ -94,5 +94,9 @@ You can play with the datasets in the `notebooks` folder.
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 # Contact
-Google Developers Student Club Delft - dsc.delft@gmail.com
+- Google Developers Student Club Delft - dsc.delft@gmail.com
+- Paul Misterka - pawel.mist@gmail.com
+- Mircea Lica - mirceatlx@gmail.com
+- David Dinucu-Jianu - david.dinucujianu@gmail.com
+- Nadine Kuo - kuonadine@gmail.com
 <!-- Not sure if I shou -->
