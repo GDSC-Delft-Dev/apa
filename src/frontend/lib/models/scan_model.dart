@@ -9,7 +9,7 @@ class ScanModel {
   final String drone;
   final List<InsightModel> insights;
   final List<String> pipelines;
-  final Map<String, Map<String, String>> indices;
+  final Map<String, dynamic> indices;
   
   ScanModel({
     required this.scanId,

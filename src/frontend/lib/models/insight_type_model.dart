@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InsightTypeModel {
@@ -14,12 +13,20 @@ class InsightTypeModel {
     required this.icon,
   });
 
-
   factory InsightTypeModel.fromDocumentSnapshot(DocumentSnapshot snapshot) {
     return InsightTypeModel(
       id: snapshot.id,
       name: snapshot['name'],
       recommendations: snapshot['recommendations'],
+      icon: snapshot['icon'],
+    );
+  }
+
+  factory InsightTypeModel.fromQueryDocumentSnapshot(QueryDocumentSnapshot snapshot) {
+    return InsightTypeModel(
+      id: snapshot.id,
+      name: snapshot['name'],
+      recommendations: (snapshot['recommendations'] as List<dynamic>).map((e) => e.toString()).toList(),
       icon: snapshot['icon'],
     );
   }

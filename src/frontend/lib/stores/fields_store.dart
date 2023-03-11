@@ -46,7 +46,7 @@ class FieldsStore {
     addFieldData['user_id'] = userId;
     addFieldData['boundaries'] = boundaries;
     addFieldData['has_insights'] = false; // by default, a field has no insights yet
-    addFieldData['scans'] = []; // by default, a field has no scans yet
+    addFieldData['runs'] = []; // by default, a field has no scans yet
     return fieldsCollection.doc().set(addFieldData);
   }
 

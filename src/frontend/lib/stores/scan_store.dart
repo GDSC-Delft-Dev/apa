@@ -9,7 +9,6 @@ class ScanStore {
 
   /// Return scan details
   Future<ScanModel> getScanDetails(String scanId) async {
-    print(scanId);
     return await scansCollection.doc(scanId).get().then(_scanModelFromSnapshot);
   }
 
@@ -19,7 +18,6 @@ class ScanStore {
     for (var scanId in scanIds) {
       scans.add(await getScanDetails(scanId));
     }
-    print(scans);
 
     // We sort them based on start date. This is useful for the scan history feature.
     scans.sort(
@@ -40,6 +38,10 @@ class ScanStore {
             false) {
       throw Exception('Scan result not found');
     }
+    List<InsightModel> insights = [];
+    for (var insight in snapshot['insights']) {
+      insights.add(InsightModel.fromMap(insight));
+    }
 
     return ScanModel(
       scanId: snapshot.id,
@@ -47,11 +49,11 @@ class ScanStore {
       endDate: snapshot['end'].toDate(),
       result: Result.values
           .firstWhere((element) => element.name == snapshot['result'].toString().toLowerCase()),
-      drone: snapshot['drone'],
-      insights: snapshot['insights'].map((x) => InsightModel.fromMap(x)) ?? [],
+      drone: snapshot['drone'] ?? "",
+      insights: insights,
       // Pipelines are a reference to the pipeline document in Firestore
       pipelines: [],
-      indices: snapshot['indices'] ?? [],
+      indices: snapshot['indicies'] ?? [],
     );
   }
 }

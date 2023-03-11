@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/field_scan_provider.dart';
+import 'package:frontend/providers/insight_types_provider.dart';
 import 'package:frontend/views/insights/widgets/bottom_time_sheet.dart';
 import 'package:frontend/views/insights/widgets/visualize_insights_map.dart';
 import 'package:frontend/views/loading.dart';
@@ -33,23 +35,32 @@ class _FieldInsightsState extends State<FieldInsights> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final FieldModel currField = snapshot.data!; // Assert that snapshot.data is not null
-          return StreamProvider<List<InsightModel>>.value(
-              value: InsightsStore().insights,
-              initialData: [],
-              child: Scaffold(
-                appBar: AppBar(title: Text('Field insights: ${currField.fieldName}')),
-                backgroundColor: Colors.grey[200],
-                body: Stack(
-                  children: [
-                    Center(
-                      child: VisualizeInsightsMap(currField: currField),
-                    ),
-                    BottomTimeSheet(
-                      fieldModel: currField,
-                    )
-                  ],
-                ),
-              ));
+          return FutureBuilder<List<dynamic>>(
+              future: Future.wait([
+                Provider.of<InsightTypesProvider>(context, listen: false).fetchInsightTypes(),
+                Provider.of<FieldScanProvider>(context, listen: false)
+                    .fetchFieldScans(currField.runs),
+              ]),
+              builder: (context, snapshot) {
+                if(snapshot.connectionState != ConnectionState.done) {
+                  return Loading();
+                }
+
+                return Scaffold(
+                  appBar: AppBar(title: Text('Field insights: ${currField.fieldName}')),
+                  backgroundColor: Colors.grey[200],
+                  body: Stack(
+                    children: [
+                      Center(
+                        child: VisualizeInsightsMap(currField: currField),
+                      ),
+                      BottomTimeSheet(
+                        fieldModel: currField,
+                      )
+                    ],
+                  ),
+                );
+              });
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
