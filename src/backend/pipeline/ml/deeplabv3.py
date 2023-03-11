@@ -41,6 +41,10 @@ def convolution_block(
 
 
 def DilatedSpatialPyramidPooling(dspp_input):
+    """
+    Create Dilated Spatial Pyramid Pooling Structure for the DeepLabv3+ model. 
+    Consist of four convolution blocks with 1, 6, 12, 18 dilation rates.
+    """
     # dimensions of the input
     dims = dspp_input.shape
     x = layers.AveragePooling2D(pool_size=(dims[-3], dims[-2]))(dspp_input)

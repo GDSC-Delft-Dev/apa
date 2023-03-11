@@ -34,8 +34,8 @@ class Pipeline:
         self.base_url = "https://storage.cloud.google.com/" + config.bucket_name + "/"
 
         # Connect to Firestore client
-        self.db = firestore.client()
-        self.collection = self.db.collection('test')
+        self.client = firestore.client()
+        self.collection = self.client.collection('test')
 
         # Build the head
         head_config = next(iter(config.modules.items()))
@@ -61,6 +61,8 @@ class Pipeline:
         # start time of the pipeline
         self.collection.document(str(self.uuid)).set({
             'id': str(self.uuid),
+        })
+        self.collection.document(str(self.uuid)).update({
             'start': time.time()
         })
 
