@@ -78,7 +78,7 @@ class Mosaicing(Module):
         # Run the next module
         return super().run(data)
     
-    def process(self, img: Mat) -> (np.ndarray, Mat):
+    def process(self, img: Mat) -> tuple[np.ndarray, Mat]:
         """
         Extract and process information from the orthomosaic image.
 

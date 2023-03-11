@@ -3,7 +3,7 @@ from screeninfo import get_monitors
 from .runnable import Runnable
 from .data import Data
 from .modules import Modules
-from ..mat import Mat
+from ..mat import Mat, Channels
 import cv2
 from typing import Any
 
@@ -12,13 +12,14 @@ class Module(Runnable):
     Represents an arbitrary image processing pipeline module.
     """
 
-    def __init__(self, data: Data, input_data: Any = None,
+    def __init__(self, data: Data, channels: list[Channels] = [], input_data: Any = None,
                  name: str = "Unnamed module", module_type: Modules = Modules.DEFAULT):  
         """
         Initializes the module metadata and the data object.
 
         Args:
             data: the pipeline data object
+            channels: the channels that the module requires
             input_data: the module initialization parameters
             name: the name of the module
             type: the type of the module
@@ -26,7 +27,7 @@ class Module(Runnable):
         Attributes:
             next: the next module in the chain
         """
-        super().__init__(data, name)
+        super().__init__(data, name, channels)
         self.next: Module | None = None
         self.type: Modules = module_type
 

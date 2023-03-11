@@ -10,8 +10,6 @@ class Config:
     Args:
         modules: dictionary of modules to initialize and their initialization data
     """
-    def __init__(self, modules: dict[Type[Module], Any], 
-                 parallel_modules: dict[Type[Module], Any]):
+    def __init__(self, modules: dict[Type[Module], Any]):
+        assert len(modules) > 0, "No modules specified"
         self.modules: dict[Type[Module], Any] = modules
-        self.parallel_modules: dict[Type[Module], Any] = parallel_modules
-        

@@ -3,7 +3,7 @@ name: Pipeline build
 on:
   push:
     paths:
-      - 'src/backend'
+      - 'src/backend/**'
     branches:
       - '*'
 

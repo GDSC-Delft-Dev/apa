@@ -10,6 +10,6 @@ from typing import Any
 class Index(ParallelModule):
     """Pipeline module for calculating indicies."""
 
-    def __init__(self, data: Data, runnables: list[Runnable], input_data: Any):
+    def __init__(self, data: Data, runnables: list[type[Runnable]], input_data: Any):
         """Initializes the index module and its runnables."""
         super().__init__(data, runnables, name="Index", module_type=Modules.INDEX)
