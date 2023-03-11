@@ -17,9 +17,9 @@ def main():
     imgs = imgs[:1]
 
     # Run the pipeline
-    pipeline = full_pipeline()
+    pipeline = default_pipeline()
     pipeline.show()
-    res = pipeline.run(imgs)
+    res = asyncio.run(pipeline.run(imgs))
     # Print the result
     print(res)
 

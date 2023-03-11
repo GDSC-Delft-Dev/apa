@@ -47,7 +47,7 @@ class Pipeline:
             tail.next = module(self.data_proto, input_data=input_data)
             tail = tail.next
 
-    def run(self, imgs: Mat | list[Mat]) -> Data:
+    async def run(self, imgs: Mat | list[Mat]) -> Data:
         """
         Runs the pipeline on the provided input images.
 
@@ -81,9 +81,9 @@ class Pipeline:
             # Run the module
             data = iterator.run(data)
             # Upload data to the cloud async
-            #asyncio.create_task(asyncio.to_thread(
+            asyncio.create_task(asyncio.to_thread(
             iterator.upload(data, self.collection, self.bucket, self.base_url)
-            #))
+            ))
             # Go to the next module
             iterator = iterator.next
         # log end time of the pipeline
