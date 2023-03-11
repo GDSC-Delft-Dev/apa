@@ -151,9 +151,6 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         padding: const EdgeInsets.only(top: 30, right: 60, left: 170),
                         alignment: Alignment.topRight,
                         child: const MapsDropdown()),
-                    BottomInsightsSheet(
-                      field: widget.currField,
-                    )
                   ],
                 ),
               )
@@ -165,4 +162,3 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     );
   }
 }
-

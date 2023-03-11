@@ -11,16 +11,16 @@ enum InsightMapType {
 /// A provider that stores the user's choices for insights
 class InsightChoicesProvider extends ChangeNotifier { 
 
-  List<InsightType> _selectedInsights = [InsightType.disease, InsightType.pest, InsightType.nutrient];  // All choices are selected by default
+  List<InsightType> _selectedInsights = InsightsTypeStore();  // All choices are selected by default
   List<InsightType> get selectedInsights => _selectedInsights;
   InsightMapType _currInsightMapType = InsightMapType.ndvi;
   InsightMapType get currInsightMapType => _currInsightMapType;
 
-  void itemChange(InsightMenuItem item, bool isSelected) {
+  void itemChange(String insightTypeId, bool isSelected) {
     if (isSelected) {
-      _selectedInsights.add(item.type);
+      _selectedInsights.add(insightTypeId);
     } else {
-      _selectedInsights.remove(item.type);
+      _selectedInsights.remove(insightTypeId);
     }
     notifyListeners();
   }
