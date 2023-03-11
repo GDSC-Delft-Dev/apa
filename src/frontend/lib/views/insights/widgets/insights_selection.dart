@@ -26,7 +26,7 @@ class _InsightsSelectionState extends State<InsightsSelection> {
             dense: true,
             secondary: CachedNetworkImage(
               imageUrl: item.icon,
-              height: 20,
+              height: 40,
               width: 40,
             ),
             title: Text(
