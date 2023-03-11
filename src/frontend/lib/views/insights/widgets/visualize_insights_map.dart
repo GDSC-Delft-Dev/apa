@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/views/insights/widgets/insight_details_sheet.dart';
-import 'package:frontend/views/insights/widgets/menu_drawer.dart';
+import 'package:frontend/views/insights/widgets/menu_drawer_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../../models/field_model.dart';
@@ -9,6 +9,8 @@ import 'package:frontend/utils/polygon_utils.dart' as utils;
 import '../../../models/insight_model.dart';
 import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
+import 'insights_button.dart';
+import 'insights_selection.dart';
 import 'maps_dropdown.dart';
 
 
@@ -148,9 +150,11 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         Container(
                           padding: const EdgeInsets.only(top: 20, left: 20),
                           alignment: Alignment.topLeft,
-                          child: Column(
+                          child: Column(          
                             children: const <Widget>[
-                              MenuDrawer()
+                              InsightsButton(),
+                              SizedBox(height: 10),
+                              MenuDrawerButton()
                             ],
                           ),
                         ),

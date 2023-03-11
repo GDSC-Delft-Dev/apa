@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
-class MenuDrawer extends StatelessWidget {
+class MenuDrawerButton extends StatelessWidget {
 
-  const MenuDrawer({super.key });
+  const MenuDrawerButton({super.key });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class MenuDrawer extends StatelessWidget {
               // TODO: Display name of insight map somewhere
               onPressed: ZoomDrawer.of(context)!.toggle,
               child: Icon(
-                  Icons.lightbulb_outline)
+                  Icons.menu)
     );
   }
 
