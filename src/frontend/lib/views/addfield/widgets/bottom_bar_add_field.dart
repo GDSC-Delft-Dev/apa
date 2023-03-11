@@ -51,7 +51,6 @@ class BottomBarAddField extends StatelessWidget {
                 child: Text('Next',
                     style: TextStyle(
                       fontSize: 16,
-                      fontFamily: 'Roboto',
                       fontWeight: FontWeight.bold,
                     )),
               ),

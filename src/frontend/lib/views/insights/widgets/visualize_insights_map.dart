@@ -128,9 +128,12 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                     children: <Widget>[
                       GoogleMap(
                         mapToolbarEnabled: false,
+                        zoomControlsEnabled: false,
                         zoomGesturesEnabled: true,
                         scrollGesturesEnabled: true,
                         rotateGesturesEnabled: true,
+                        tiltGesturesEnabled: true,
+                        myLocationEnabled: false,
                         initialCameraPosition:
                             utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                         mapType: MapType.satellite,
@@ -153,7 +156,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         ),
                       ),
                       Container(
-                          padding: const EdgeInsets.only(top: 30, right: 60, left: 170),
+                          padding: const EdgeInsets.only(top: 20, right: 10, left: 170),
                           alignment: Alignment.topRight,
                           child: const MapsDropdown()),
                     ],

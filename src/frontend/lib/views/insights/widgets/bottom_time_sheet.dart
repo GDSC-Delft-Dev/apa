@@ -47,7 +47,7 @@ class _BottomTimeSheetState extends State<BottomTimeSheet> {
                           ),
                           Text(
                             DateFormat('dd-MM-yyyy').format(selectedFieldScan.endDate),
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           IconButton(
                             icon: const Icon(Icons.arrow_forward_ios),

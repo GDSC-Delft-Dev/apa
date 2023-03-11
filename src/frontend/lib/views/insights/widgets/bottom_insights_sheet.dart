@@ -34,7 +34,7 @@ class _BottomInsightsSheetState extends State<BottomInsightsSheet> {
               const Center(
                 child: Text(
                   'Crop information',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 40),
@@ -102,7 +102,6 @@ class _GrowthStageVisualizerState extends State<GrowthStageVisualizer> {
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: 'Roboto',
                               ),
                             ),
                           )
