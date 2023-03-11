@@ -13,6 +13,7 @@ class Channels(Enum):
     MIR = "Mid Infrared"
     T = "Thermal"
     GREYSCALE = "Grayscale"
+    A = "Alpha"
 
 default_channels = [Channels.R, Channels.G, Channels.B]
 
@@ -83,10 +84,10 @@ class Mat():
 
         # Combine arrays
         # Split multichannel mats
-        mats = np.array([mat if mat.ndim == 2 else np.split(mat) for mat in mats])
+        arr_mats = np.array([mat if mat.ndim == 2 else np.split(mat) for mat in mats])
 
         # Concatenate grayscales
-        arr = np.transpose(mats, (1, 2, 0))
+        arr = np.transpose(arr_mats, (1, 2, 0))
 
         # Aggregate channels
         channels = sum([path[1] for path in paths], [])

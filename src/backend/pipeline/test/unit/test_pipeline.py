@@ -17,13 +17,13 @@ class TestPipeline:
         """Test the create method."""
         
         with pytest.raises(AssertionError):
-            config: Config = Config({})
+            config: Config = Config({}, bucket_name="test")
             pipeline = Pipeline(config)        
 
     def test_init_module(self):
         """Test the create method with a normal module."""
         
-        config: Config = Config({ Mosaicing: None })
+        config: Config = Config({ Mosaicing: None }, bucket_name="test")
         pipeline = Pipeline(config)
         assert isinstance(pipeline.head, Mosaicing)
         assert isinstance(pipeline.data_proto, Data)
@@ -32,7 +32,8 @@ class TestPipeline:
     def test_init_modules(self):
         """Test the create method with multiple modules."""
         
-        config: Config = Config({ Mosaicing: None, Index: {"config": None, "runnables": [NDVI] }})
+        config: Config = Config({ Mosaicing: None, Index: {"config": None, "runnables": [NDVI] }}, 
+                                bucket_name="test")
         pipeline = Pipeline(config)
         assert isinstance(pipeline.head, Mosaicing)
         assert isinstance(pipeline.head.next, Index)
@@ -43,7 +44,8 @@ class TestPipeline:
 
         imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
         
-        config: Config = Config({ Index: {"config": None, "runnables": [NDVI] }})
+        config: Config = Config({ Index: {"config": None, "runnables": [NDVI] }}, 
+                                bucket_name="test")
         pipeline = Pipeline(config)
 
         with pytest.raises(RuntimeError):

@@ -31,14 +31,14 @@ class TestMat:
 
     def test_fread_grayscales(self):
         """Tests the fread method with grayscale images only."""
-        paths = glob.glob(f"../data/mosaicing/multispectral/*.TIF")
+        paths = glob.glob("../data/mosaicing/multispectral/*.TIF")
         img = Mat.freads(paths, [Channels.G, Channels.NIR, Channels.RE, Channels.R])
 
         assert len(img.channels) == 4, "The number of channels is incorrect"
 
     def test_fread_missing_channel(self):
         """Tests the fread method with a missing channel."""
-        paths = glob.glob(f"../data/mosaicing/multispectral/*.TIF")
+        paths = glob.glob("../data/mosaicing/multispectral/*.TIF")
 
         with pytest.raises(AssertionError):
             Mat.freads(paths, [Channels.G, Channels.RE, Channels.R])

@@ -82,3 +82,6 @@ class NDVI(Runnable):
         super().prepare(data)
         self.to_persist(data)
         data.modules[Modules.INDEX.value]["runnables"][self.type.value] = frozenset()
+
+    def upload(self, data: Data, collection, bucket, base_url: str):
+        pass

@@ -1,5 +1,5 @@
 import glob
-from pipeline.templates import full_pipeline, default_pipeline
+from pipeline.templates import full_pipeline, default_pipeline, training_pipeline, nutrient_pipeline
 import firebase_admin
 from firebase_admin import credentials, firestore
 import asyncio
@@ -19,7 +19,7 @@ def main():
     imgs = imgs[:1]
 
     # Run the pipeline
-    pipeline = default_pipeline()
+    pipeline = nutrient_pipeline()
     pipeline.show()
     res = asyncio.run(pipeline.run(imgs))
     # Print the result

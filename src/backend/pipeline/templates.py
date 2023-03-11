@@ -8,6 +8,7 @@ from .modules.preprocess import AgricultureVisionPreprocess
 from .modules.segmentation import SemanticSegmentation
 from .modules.index.runnables.nutrient import Nutrient
 from .modules.index.runnables.ndvi import NDVI
+from .modules.index.index import Index
 
 def default_pipeline() -> Pipeline:
     """Default pipeline."""

@@ -4,6 +4,7 @@ from ..mat import Mat
 from .modules import Modules
 from ..mat import Channels
 import cv2
+import numpy as np
 import asyncio
 from typing import Any
 
@@ -55,6 +56,7 @@ class Mosaicing(Module):
             # calculate the masks that are used to ignore certain
         # parts of the image and the a new Mat that contains an
         # alpha channel 
+        stitched = data.modules[self.type.value]["stitched"]
         mask, alpha_stitched = self.process(data.modules[self.type.value]["stitched"])
         data.modules[self.type.value]["mask"] = mask
         data.modules[self.type.value]["alpha_img"] = alpha_stitched
