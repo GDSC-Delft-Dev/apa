@@ -8,3 +8,4 @@ __pycache__
 expected_preprocess_masked.npy
 nutrient_masks.npy
 .vscode
+.idea

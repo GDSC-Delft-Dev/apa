@@ -3,6 +3,7 @@ from ...data import Data, Modules
 from ..indicies import Indicies
 from ....mat import Channels
 import numpy as np
+import cv2
 import matplotlib.pyplot as plt
 
 class NDVI(Runnable):
@@ -37,6 +38,8 @@ class NDVI(Runnable):
             # Calculate 
             ndvi = self.calculate(nir, red)
             data.modules[Modules.INDEX]["runnables"][self.type]["index"] = ndvi
+
+            # cv2.imwrite("ndvi.tif", np.array(255 * ndvi, np.uint8))
 
             return True
 
