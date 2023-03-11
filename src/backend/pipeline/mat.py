@@ -95,7 +95,7 @@ class Mat():
         return cls(arr, channels)
     
     @classmethod
-    def fread(cls, paths: list[str], channels: list[Channels]) -> Mat:
+    def freads(cls, paths: list[str], channels: list[Channels]) -> Mat:
         """
         Reads an image with an arbitrary number of channels from
         multiple source paths containing grayscale images only.
@@ -110,7 +110,7 @@ class Mat():
         """
 
         assert len(paths) == len(channels), "Number of paths and channels must match"
-        return cls.fread(list(zip(paths, channels)))
+        return Mat.fread([(path, [channel]) for path, channel in zip(paths, channels)])
 
     def get(self) -> cv2.Mat:
         """
