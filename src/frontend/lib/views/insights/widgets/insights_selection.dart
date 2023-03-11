@@ -33,31 +33,33 @@ class _InsightsSelectionState extends State<InsightsSelection> {
     super.initState();
   }
 
-    Widget buildMenuItems(InsightMenuItem item) => CheckboxListTile(
-    activeColor: Colors.green,
-    dense: true,
-    secondary: Icon(item.icon, color: Colors.black),
-    title: Text(
-      item.title,
-      style: TextStyle(fontSize: 13, letterSpacing: 0.5),
-    ),
-    value: Provider.of<InsightChoicesProvider>(context).selectedInsights.contains(item.type),
-    onChanged: (bool? isChecked) => Provider.of<InsightChoicesProvider>(context, listen: false).itemChange(item, isChecked!),
-    );
+    Widget buildMenuItems(InsightMenuItem item) => StatefulBuilder(builder: (BuildContext context, StateSetter setState) => CheckboxListTile(
+      activeColor: Colors.green,
+      dense: true,
+      secondary: Icon(item.icon, color: Colors.black),
+      title: Text(
+        item.title,
+        style: TextStyle(fontSize: 13, letterSpacing: 0.5),
+      ),
+      value: Provider.of<InsightChoicesProvider>(context).selectedInsights.contains(item.type),
+      onChanged: (bool? isChecked) => {
+          setState(() {
+            Provider.of<InsightChoicesProvider>(context, listen: false).itemChange(item, isChecked!);
+          })
+      } ,
+    ));
+    
 
   @override
   Widget build(BuildContext context) {
-
-     return FloatingActionButton(
+      return FloatingActionButton(
               backgroundColor: Colors.white,
-              // TODO: Allow user to pick insight maps
-              // TODO: Display name of insight map somewhere
               onPressed: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Pick localized insights to display'),
+                        title: const Text('Pick localized insights to display'),
                         content: SingleChildScrollView(
                           child: ListBody(
                             children: InsightMenuItems.choices.map(buildMenuItems).toList()
