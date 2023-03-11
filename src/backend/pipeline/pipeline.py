@@ -78,7 +78,7 @@ class Pipeline:
         data.set(imgs)
 
         # Run the chain
-        iterator = self.head
+        iterator: Module | None = self.head
         while iterator is not None:
             # Run the module
             data = iterator.run(data)

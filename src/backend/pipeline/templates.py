@@ -3,7 +3,6 @@ import cv2
 import glob
 from .pipeline import Pipeline
 from .config import Config
-from .modules.index.index import Index
 from .modules.mosaicing import Mosaicing
 from .modules.preprocess import AgricultureVisionPreprocess
 from .modules.segmentation import SemanticSegmentation

@@ -8,7 +8,6 @@ from .runnable import Runnable
 from .modules import Modules
 from concurrent.futures import ThreadPoolExecutor, wait
 from typing import Any, Type
-
 class ParallelModule(Module):
     """
     Represents an arbitrary image processing pipeline module that can
@@ -27,7 +26,6 @@ class ParallelModule(Module):
             name: the name of the module
             type: the type of the module
         """
- 
         super().__init__(data, input_data, name=name, module_type=module_type)
 
         # Initialize runnables
