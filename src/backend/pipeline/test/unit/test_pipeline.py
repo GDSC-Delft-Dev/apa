@@ -17,14 +17,15 @@ class TestPipeline:
         """Test the create method."""
         
         with pytest.raises(AssertionError):
-            config: Config = Config({}, bucket_name="test")
+            config: Config = Config({})
             pipeline = Pipeline(config)        
 
     def test_init_module(self):
         """Test the create method with a normal module."""
         
-        config: Config = Config({ Mosaicing: None }, bucket_name="test")
+        config: Config = Config({ Mosaicing: None })
         pipeline = Pipeline(config)
+
         assert isinstance(pipeline.head, Mosaicing)
         assert isinstance(pipeline.data_proto, Data)
         assert pipeline.head.next is None
@@ -32,21 +33,22 @@ class TestPipeline:
     def test_init_modules(self):
         """Test the create method with multiple modules."""
         
-        config: Config = Config({ Mosaicing: None, Index: {"config": None, "runnables": [NDVI] }}, 
-                                bucket_name="test")
+        config: Config = Config({ Mosaicing: None, 
+                                  Index: {"config": None, "runnables": [NDVI] }})
         pipeline = Pipeline(config)
+
         assert isinstance(pipeline.head, Mosaicing)
         assert isinstance(pipeline.head.next, Index)
         assert pipeline.head.next.next is None
 
-    def test_verify_fail(self):
+    @pytest.mark.asyncio
+    async def test_verify_fail(self):
         """Test the verify method."""
 
         imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
         
-        config: Config = Config({ Index: {"config": None, "runnables": [NDVI] }}, 
-                                bucket_name="test")
+        config: Config = Config({ Index: {"config": None, "runnables": [NDVI] }})
         pipeline = Pipeline(config)
 
         with pytest.raises(RuntimeError):
-            pipeline.run(imgs)
+            await pipeline.run(imgs)

@@ -20,23 +20,14 @@ class Pipeline:
     def __init__(self, config: Config):
         """Build the pipeline according to the configuration."""
 
+        # Save config
+        self.config = config
         
         # Give the pipeline object a unique id
         self.uuid = uuid.uuid4()
 
         # Build the data object
         self.data_proto: Data = Data(self.uuid)
-
-        # Connect to Cloud Storage
-        self.storage_client = storage.Client()
-        self.bucket = self.storage_client.bucket(config.bucket_name)
-
-        # Set base URL
-        self.base_url = "https://storage.cloud.google.com/" + config.bucket_name + "/"
-
-        # Connect to Firestore client
-        self.client = firestore.client()
-        self.collection = self.client.collection('test')
 
         # Build the head
         head_config = next(iter(config.modules.items()))
@@ -78,13 +69,27 @@ class Pipeline:
         Returns:
             The processed data.
         """
-        # start time of the pipeline
-        self.collection.document(str(self.uuid)).set({
-            'id': str(self.uuid),
-        })
-        self.collection.document(str(self.uuid)).update({
-            'start': time.time()
-        })
+
+        # Initialize cloud resources
+        print("Use cloud: " + str(self.config.cloud.use_cloud))
+        if self.config.cloud.use_cloud:
+            # Connect to Cloud Storage
+            self.storage_client = storage.Client()
+            self.bucket = self.storage_client.bucket(self.config.cloud.bucket_name)
+
+            # Set base URL
+            self.base_url = "https://storage.cloud.google.com/" + self.config.cloud.config.bucket_name + "/"
+
+            # Connect to Firestore client
+            self.client = firestore.client()
+            self.collection = self.client.collection('test')
+
+            # Start time of the pipeline
+            # TODO: change to server-side timestamp
+            self.collection.document(str(self.uuid)).set({
+                'id': str(self.uuid),
+                'start': time.time()
+            })
 
         # Verify input integrity
         # Check that the channels of all images are the same
@@ -106,16 +111,22 @@ class Pipeline:
         while iterator is not None:
             # Run the module
             data = iterator.run(data)
-            # Upload data to the cloud async
-            asyncio.create_task(asyncio.to_thread(
-            iterator.upload(data, self.collection, self.bucket, self.base_url)
-            ))
+
+            # Upload data to the cloud asynchronously
+            if self.config.cloud.use_cloud:
+                asyncio.create_task(
+                    asyncio.to_thread(
+                        iterator.upload(data, self.collection, self.bucket, self.base_url)))
+            
             # Go to the next module
             iterator = iterator.next
-        # log end time of the pipeline
-        self.collection.document(str(self.uuid)).update({
-            'end': time.time()
-        })
+
+        # Log end time of the pipeline
+        if self.config.cloud.use_cloud:
+            self.collection.document(str(self.uuid)).update({
+                'end': time.time()
+            })
+
         return data
     
     def verify(self, imgs: list[Mat]) -> bool:

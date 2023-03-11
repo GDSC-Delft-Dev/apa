@@ -2,7 +2,7 @@
 import cv2
 import glob
 from .pipeline import Pipeline
-from .config import Config
+from .config import Config, CloudConfig
 from .modules.mosaicing import Mosaicing
 from .modules.preprocess import AgricultureVisionPreprocess
 from .modules.segmentation import SemanticSegmentation
@@ -14,7 +14,7 @@ def default_pipeline() -> Pipeline:
     """Default pipeline."""
     cfg = Config(modules={Mosaicing: None,
                           Index: {"config": None, "runnables": [NDVI]}}, 
-                          bucket_name="terrafarm-example")
+                cloud=CloudConfig(True, "terrafarm-example"))
     return Pipeline(cfg)
 
 def full_pipeline() -> Pipeline:
@@ -24,8 +24,10 @@ def full_pipeline() -> Pipeline:
     paths = {3:"./pipeline/ml/deepv3_seg_3/", 4:"./pipeline/ml/deepv3_seg_4/"}
 
     # Run the pipeline
-    cfg = Config(modules={Mosaicing: None, AgricultureVisionPreprocess: None,
-                          SemanticSegmentation: paths}, bucket_name="terrafarm-example")
+    cfg = Config(modules={Mosaicing: None, 
+                          AgricultureVisionPreprocess: None,
+                          SemanticSegmentation: paths},
+                cloud=CloudConfig(True, "terrafarm-example"))
     return Pipeline(cfg)
 
 def training_pipeline() -> Pipeline:
@@ -34,8 +36,9 @@ def training_pipeline() -> Pipeline:
     # Get the masks
     masks = [cv2.imread(file) for file in glob.glob("../test/data/mosaicing/farm/mask*.JPG")]
     # Run the pipeline
-    cfg = Config(modules={AgricultureVisionPreprocess: masks, Mosaicing: None}, 
-                 bucket_name="terrafarm-example")
+    cfg = Config(modules={AgricultureVisionPreprocess: masks, 
+                          Mosaicing: None}, 
+                 cloud=CloudConfig(True, "terrafarm-example"))
     return Pipeline(cfg)
 
 def nutrient_pipeline() -> Pipeline:
@@ -45,5 +48,6 @@ def nutrient_pipeline() -> Pipeline:
                           AgricultureVisionPreprocess: None,
                           SemanticSegmentation: paths,
                           Index: {"config": None, "runnables": [Nutrient]}}, 
-                          bucket_name="terrafarm-example")
+                          bucket_name="terrafarm-example",
+                cloud=CloudConfig(True, "terrafarm-example"))
     return Pipeline(cfg)
