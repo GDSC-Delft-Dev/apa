@@ -38,15 +38,15 @@ class InsightDetailsSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Details', style: TextStyle(fontSize: 18)),
-                  Text('${insight.data}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')),
-                  insightType.name != '' ? 
-                    Text('Scientific name: ${insightType.name}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')) 
+                  // Text('${insight.data}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')),
+                  insight.data.containsKey('proper_name') ? 
+                    Text('Scientific name: ${insight.data['proper_name']}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')) 
                     : Container(),
                 ],
               ),
               ),
               SizedBox(width: 10),
-              CachedNetworkImage(imageUrl: insightType.icon, width: 100.0, height: 100.0,)
+              CachedNetworkImage(imageUrl: insight.data['image'], width: 100.0, height: 100.0,)
             ],
           ),
           Text('Recommendations', style: TextStyle(fontSize: 18)),

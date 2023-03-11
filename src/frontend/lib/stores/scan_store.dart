@@ -38,6 +38,7 @@ class ScanStore {
             false) {
       throw Exception('Scan result not found');
     }
+    
     List<InsightModel> insights = [];
     for (var insight in snapshot['insights']) {
       insights.add(InsightModel.fromMap(insight));
@@ -52,7 +53,8 @@ class ScanStore {
       drone: snapshot['drone'] ?? "",
       insights: insights,
       // Pipelines are a reference to the pipeline document in Firestore
-      pipelines: [],
+      // TODO: Add pipelines to scan model
+      pipelines: <String>[],
       indices: snapshot['indicies'] ?? [],
     );
   }
