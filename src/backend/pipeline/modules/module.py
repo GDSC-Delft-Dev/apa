@@ -88,13 +88,13 @@ class Module(Runnable):
     def upload(self, data: Data, collection, bucket, base_url: str):
         """Upload data to Google Storage."""
         try:
-            uris = dict()
-            for v in data.persistable[self.type.value]:
-                path = v.replace(".", "/")
+            uris = {}
+            for val in data.persistable[self.type.value]:
+                path = val.replace(".", "/")
                 blob = bucket.blob(str(data.uuid) + "/" + path)
-                uris[v.split(".")[-1]] =  base_url + str(data.uuid) + "/" + path
-                value = pydash.get(data.modules, v)
-                #print(data.modules["Modules.MOSAIC"]["stitched"], "aaaaa")
+                uris[val.split(".")[-1]] =  base_url + str(data.uuid) + "/" + path
+                # get persisted data
+                value = pydash.get(data.modules, val)
                 # WARNING: this is due to Google Cloud not liking big images
                 value.arr = cv2.resize(value.arr, dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
                 blob.upload_from_string(pickle.dumps(value))

@@ -19,11 +19,11 @@ class Nutrient(Runnable):
         try:
             # take the calculated masks from the segmentation module
             # TODO: see the actual mask order
-            masks = data.modules[Modules.SEGMENTATION]["masks"][:, 0]
+            masks = data.modules[Modules.SEGMENTATION.value]["masks"][:, 0]
             masks = [np.where(mask.get() == 1, 255, 0) for mask in masks]
-            patches = data.modules[Modules.SEGMENTATION]["patches"]
+            patches = data.modules[Modules.SEGMENTATION.value]["patches"]
             results = self.calculate(masks, patches)
-            data.modules[Modules.INDEX]["runnables"][self.type]["index"] = results
+            data.modules[Modules.INDEX.value]["runnables"][self.type.value]["index"] = results
             return True
         except Exception as exception:
             print("Nutrient calculation failed!")
@@ -53,4 +53,4 @@ class Nutrient(Runnable):
             data: the pipeline data object
         """
         super().prepare(data)
-        data.modules[Modules.INDEX]["runnables"][self.type] = {}
+        data.modules[Modules.INDEX.value]["runnables"][self.type.value] = {}

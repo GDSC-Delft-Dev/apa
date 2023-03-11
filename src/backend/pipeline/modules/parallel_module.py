@@ -72,7 +72,7 @@ class ParallelModule(Module):
         """Upload data to Google Storage."""
         try:
             uris = []
-            for k, v in data.modules[self.type.value]["runnables"].items():
+            for k, _ in data.modules[self.type.value]["runnables"].items():
                 for persist in data.persistable[self.type.value]["runnables"][k]:
                     path = persist.replace(".","/")
                     blob = bucket.blob(str(data.uuid) + "/" + path)

@@ -10,7 +10,7 @@ from .modules.segmentation import SemanticSegmentation
 
 def default_pipeline() -> Pipeline:
     """Default pipeline."""
-    cfg = Config(modules={Mosaicing: None})
+    cfg = Config(modules={Mosaicing: None}, bucket_name="terrafarm-example")
     return Pipeline(cfg)
 
 def full_pipeline() -> Pipeline:
@@ -30,5 +30,6 @@ def training_pipeline() -> Pipeline:
     # Get the masks
     masks = [cv2.imread(file) for file in glob.glob("../test/data/mosaicing/farm/mask*.JPG")]
     # Run the pipeline
-    cfg = Config(modules={AgricultureVisionPreprocess: masks, Mosaicing: None})
+    cfg = Config(modules={AgricultureVisionPreprocess: masks, Mosaicing: None}, 
+                 bucket_name="terrafarm-example")
     return Pipeline(cfg)

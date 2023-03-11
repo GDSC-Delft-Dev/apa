@@ -1,4 +1,5 @@
 # pylint: disable=C0103
+# pylint: disable=E0401
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -30,7 +31,7 @@ def convolution_block(
         num_filters,
         kernel_size=kernel_size,
         dilation_rate=dilation_rate,
-        padding="same",
+        padding=padding,
         use_bias=use_bias,
         kernel_initializer=keras.initializers.HeNormal(),
     )(block_input)

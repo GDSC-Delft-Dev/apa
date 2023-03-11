@@ -14,11 +14,11 @@ class Data:
         stages: the list pipeline stages ready for configuration
         current: the current pipeline stage; initially none
     """
-    def __init__(self, uuid: uuid) -> None:
-        self.uuid = uuid
+    def __init__(self, uuid_value: uuid.UUID) -> None:
+        self.uuid = uuid_value
         self.input: list[Mat] = []
-        self.modules: dict[Modules, Any] = {module_type : {"input": {}} for module_type in Modules}
-        self.persistable: dict[Modules, list] = {module_type: {frozenset([])} for module_type in Modules}
+        self.modules: dict[str, Any] = {module_type.value : {"input": {}} for module_type in Modules}
+        self.persistable: dict[str, Any] = {module_type.value: {frozenset()} for module_type in Modules}
         self.current: None | Modules = None
 
     def set(self, img: Mat | list[Mat]) -> None:
@@ -37,7 +37,7 @@ class Data:
         Returns:
             The data of the specified module.
         """
-        return self.modules[module]
+        return self.modules[module.value]
 
     def get_current(self) -> dict:
         """

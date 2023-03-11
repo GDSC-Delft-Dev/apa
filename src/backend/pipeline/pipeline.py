@@ -8,8 +8,6 @@ import uuid
 import asyncio
 from firebase_admin import firestore
 from google.cloud import storage
-from google.protobuf import timestamp_pb2
-import datetime
 import time
 
 class Pipeline:
@@ -78,7 +76,7 @@ class Pipeline:
         data.set(imgs)
 
         # Run the chain
-        iterator: Module = self.head
+        iterator = self.head
         while iterator is not None:
             # Run the module
             data = iterator.run(data)

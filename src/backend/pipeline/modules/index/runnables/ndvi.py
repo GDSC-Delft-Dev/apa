@@ -31,12 +31,12 @@ class NDVI(Runnable):
         """
         try:
             # Get the channels
-            nir = data.modules[Modules.MOSAIC]["stitched"][Channels.NIR].get()
-            red = data.modules[Modules.MOSAIC]["stitched"][Channels.R].get()
+            nir = data.modules[Modules.MOSAIC.value]["stitched"][Channels.NIR].get()
+            red = data.modules[Modules.MOSAIC.value]["stitched"][Channels.R].get()
 
             # Calculate 
             ndvi = self.calculate(nir, red)
-            data.modules[Modules.INDEX]["runnables"][self.type]["index"] = ndvi
+            data.modules[Modules.INDEX.value]["runnables"][self.type.value]["index"] = ndvi
             plt.imshow(ndvi, cmap='RdYlGn', vmin=-1.0, vmax=1.0)
             plt.show()
             return True
@@ -67,9 +67,9 @@ class NDVI(Runnable):
                          casting="unsafe")
 
     def to_persist(self, data: Data):
-        persist: str = Modules.INDEX + "." + "runnables" + "." + \
-                            str(self.type) + "." + "index"
-        data.persistable[Modules.INDEX]["runnables"][self.type] = frozenset([persist])
+        persist: str = Modules.INDEX.value + "." + "runnables" + "." + \
+                            self.type.value + "." + "index"
+        data.persistable[Modules.INDEX.value]["runnables"][self.type.value] = frozenset([persist])
 
     def prepare(self, data: Data):
         """
@@ -80,4 +80,4 @@ class NDVI(Runnable):
         """
         super().prepare(data)
         self.to_persist(data)
-        data.modules[Modules.INDEX]["runnables"][self.type] = {}
+        data.modules[Modules.INDEX.value]["runnables"][self.type.value] = frozenset()
