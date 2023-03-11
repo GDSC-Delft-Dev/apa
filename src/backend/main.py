@@ -2,7 +2,9 @@ import glob
 from pipeline.templates import full_pipeline, default_pipeline
 from pipeline.mat import Mat
 import firebase_admin
-from firebase_admin import credentials
+from firebase_admin import credentials, firestore
+import asyncio
+import datetime
 
 def main():
     """Main entry point."""
@@ -17,8 +19,7 @@ def main():
     # Run the pipeline
     pipeline = full_pipeline()
     pipeline.show()
-    res = pipeline.run(imgs)
-
+    res = asyncio.run(pipeline.run(imgs))
     # Print the result
     print(res)
 

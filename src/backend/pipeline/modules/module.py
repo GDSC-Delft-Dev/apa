@@ -80,7 +80,7 @@ class Module(Runnable):
 
         data.modules[self.type] = {}
 
-    async def upload(self, data: Data, collection, bucket, base_url: str):
+    def upload(self, data: Data, collection, bucket, base_url: str):
         """Upload data to Google Storage."""
         try:
             uris = []

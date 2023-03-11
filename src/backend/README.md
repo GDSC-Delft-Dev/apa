@@ -40,7 +40,7 @@ The CI/CD pushes the build from the latest commit to the `pipelines-dev` reposit
 
 ### Modules
 To make the code extendible, maintainable, and multithreaded, the pipeline is divided into modules. Modules are run sequentially, and each can have multiple implementations that execute different logic, but compute the same type of data. We distinguish the following modules:
-- Mosaicing module - transforms the flyover images into a single farmland bird's eye view image
+- Mosaicing module - transforms the flyover images into a single farmland bird's eye view image. Moreover the module creates non-overlapping patches used in subsequent pipeline stages.
 - Index module - computes pixel-level indicies that provide general information about the field
 - Insight module - evaluates the database and indicies to provide actionable and localized insights that identify issues and improve farming efficiency
 - Segmentation module - computes pixel-level masks for a number of different annotations that can be directly shown to the user

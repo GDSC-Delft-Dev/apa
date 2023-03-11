@@ -8,6 +8,8 @@ import uuid
 import asyncio
 from firebase_admin import firestore
 from google.cloud import storage
+from google.protobuf import timestamp_pb2
+import datetime
 import time
 
 class Pipeline:
@@ -47,7 +49,7 @@ class Pipeline:
             tail.next = module(self.data_proto, input_data=input_data)
             tail = tail.next
 
-    def run(self, imgs: Mat | list[Mat]) -> Data:
+    async def run(self, imgs: Mat | list[Mat]) -> Data:
         """
         Runs the pipeline on the provided input images.
 
@@ -59,10 +61,9 @@ class Pipeline:
             The processed data.
         """
         # start time of the pipeline
-        start = time.time()
         self.collection.document(str(self.uuid)).set({
             'id': str(self.uuid),
-            'start': start
+            'start': time.time()
         })
 
         # Verify input integrity
@@ -77,18 +78,22 @@ class Pipeline:
         data.set(imgs)
 
         # Run the chain
-        iterator = self.head
+        iterator: Module = self.head
         while iterator is not None:
             # Run the module
             data = iterator.run(data)
             # Upload data to the cloud async
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(
-                iterator.upload(data, self.collection, self.bucket, self.base_url))
+            asyncio.create_task(asyncio.to_thread(
+                iterator.upload(data, self.collection, self.bucket, self.base_url)
+            ))
             # Go to the next module
             iterator = iterator.next
+        # log end time of the pipeline
+        self.collection.document(str(self.uuid)).update({
+            'end': time.time()
+        })
         return data
+    
 
     def show(self):
         """Prints out the current state of the pipeline."""
