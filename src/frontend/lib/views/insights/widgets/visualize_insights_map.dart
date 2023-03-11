@@ -9,7 +9,6 @@ import 'package:frontend/utils/polygon_utils.dart' as utils;
 import '../../../models/insight_model.dart';
 import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
-import 'insights_button.dart';
 import 'insights_selection.dart';
 import 'maps_dropdown.dart';
 
@@ -152,7 +151,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                           alignment: Alignment.topLeft,
                           child: Column(          
                             children: const <Widget>[
-                              InsightsButton(),
+                              InsightsSelection(),
                               SizedBox(height: 10),
                               MenuDrawerButton()
                             ],

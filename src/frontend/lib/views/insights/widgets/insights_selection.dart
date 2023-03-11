@@ -34,12 +34,12 @@ class _InsightsSelectionState extends State<InsightsSelection> {
   }
 
     Widget buildMenuItems(InsightMenuItem item) => CheckboxListTile(
-    activeColor: Colors.orange,
+    activeColor: Colors.green,
     dense: true,
-    secondary: Icon(item.icon, color: Colors.white),
+    secondary: Icon(item.icon, color: Colors.black),
     title: Text(
       item.title,
-      style: TextStyle(color: Colors.white, fontSize: 13, letterSpacing: 0.5),
+      style: TextStyle(fontSize: 13, letterSpacing: 0.5),
     ),
     value: Provider.of<InsightChoicesProvider>(context).selectedInsights.contains(item.type),
     onChanged: (bool? isChecked) => Provider.of<InsightChoicesProvider>(context, listen: false).itemChange(item, isChecked!),
@@ -48,28 +48,35 @@ class _InsightsSelectionState extends State<InsightsSelection> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      backgroundColor: Colors.blueAccent,
-      body: SafeArea(
-        child: Column (
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Spacer(),
-            const Padding(
-              padding: EdgeInsets.only(left: 20.0, bottom: 20.0),
-              child: Text(
-                'Pick localized insights to display on map',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            ...InsightMenuItems.choices.map(buildMenuItems).toList(),
-            const Spacer(flex: 2),
-          ],)
-      ),
+     return FloatingActionButton(
+              backgroundColor: Colors.white,
+              // TODO: Allow user to pick insight maps
+              // TODO: Display name of insight map somewhere
+              onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Pick localized insights to display'),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: InsightMenuItems.choices.map(buildMenuItems).toList()
+                          )
+                          ),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              child: Icon(
+                  Icons.lightbulb_outline)
     );
   }
 
