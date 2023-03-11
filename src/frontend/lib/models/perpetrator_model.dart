@@ -1,22 +1,21 @@
 // A class that represents either a Pest or a Disease.
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PerpetratorModel {
-  final String id;
-  final String name;
+import 'insight_item_model.dart';
+
+class PerpetratorModel extends InsightItemModel {
   final String properName;
   final List<String> alternativeNames;
   final String referenceImage;
-  final String description;
   final String category;
 
   PerpetratorModel({
-    required this.id,
-    required this.name,
+    required super.id,
+    required super.name,
+    required super.description,
     required this.properName,
     required this.alternativeNames,
     required this.referenceImage,
-    required this.description,
     required this.category,
   });
 
@@ -24,10 +23,10 @@ class PerpetratorModel {
     return PerpetratorModel(
       id: snapshot.id,
       name: snapshot['name'],
-      properName: snapshot['properName'],
-      alternativeNames: (snapshot['alternativeNames'] as List<dynamic>).map((e) => e.toString()).toList(),
-      referenceImage: snapshot['referenceImage'],
       description: snapshot['description'],
+      properName: snapshot['proper_name'],
+      alternativeNames: List<String>.from(snapshot['alternative_names']),
+      referenceImage: snapshot['reference_image'],
       category: snapshot['category'],
     );
   }
@@ -36,10 +35,10 @@ class PerpetratorModel {
     return PerpetratorModel(
       id: snapshot.id,
       name: snapshot['name'],
-      properName: snapshot['properName'],
-      alternativeNames: (snapshot['alternativeNames'] as List<dynamic>).map((e) => e.toString()).toList(),
-      referenceImage: snapshot['referenceImage'],
       description: snapshot['description'],
+      properName: snapshot['proper_name'],
+      alternativeNames: List<String>.from(snapshot['alternative_names']),
+      referenceImage: snapshot['reference_image'],
       category: snapshot['category'],
     );
   }
@@ -48,28 +47,29 @@ class PerpetratorModel {
     return PerpetratorModel(
       id: map['id'],
       name: map['name'],
-      properName: map['properName'],
-      alternativeNames: map['alternativeNames'],
-      referenceImage: map['referenceImage'],
       description: map['description'],
+      properName: map['proper_name'],
+      alternativeNames: List<String>.from(map['alternative_names']),
+      referenceImage: map['reference_image'],
       category: map['category'],
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'properName': properName,
-      'alternativeNames': alternativeNames,
-      'referenceImage': referenceImage,
       'description': description,
+      'proper_name': properName,
+      'alternative_names': alternativeNames,
+      'reference_image': referenceImage,
       'category': category,
     };
   }
 
   @override
   String toString() {
-    return 'Perpetrator{id: $id, name: $name, properName: $properName, alternativeNames: $alternativeNames, referenceImage: $referenceImage, description: $description, category: $category}';
+    return 'PerpetratorModel{id: $id, name: $name, description: $description, properName: $properName, alternativeNames: $alternativeNames, referenceImage: $referenceImage, category: $category}';
   }
 }

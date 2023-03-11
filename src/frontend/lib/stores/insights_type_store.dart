@@ -6,19 +6,22 @@ import '../utils/insights_utils.dart' as utils;
 class InsightsTypeStore {
   InsightsTypeStore();
 
-  final CollectionReference insightsTypeCollection = FirebaseFirestore.instance.collection('insights_type');
+  final CollectionReference insightsTypeCollection =
+      FirebaseFirestore.instance.collection('insights_types');
 
   InsightTypeModel _insightTypeModelFromSnapshot(DocumentSnapshot snapshot) {
     return InsightTypeModel(
       id: snapshot.id,
-      name: snapshot['name'],
-      recommendations: snapshot['recommendations'],
-      icon: snapshot['icon'],
+      name: snapshot['name'].toString(),
+      icon: snapshot['icon'].toString(),
     );
   }
 
   Future<InsightTypeModel> getInsightTypeById(String insightTypeId) async {
-    return await insightsTypeCollection.doc(insightTypeId).get().then(_insightTypeModelFromSnapshot);
+    return await insightsTypeCollection
+        .doc(insightTypeId)
+        .get()
+        .then(_insightTypeModelFromSnapshot);
   }
 
   Future<List<InsightTypeModel>> getInsightTypesByIds(List<String> insightTypeIds) async {
@@ -34,7 +37,6 @@ class InsightsTypeStore {
       return InsightTypeModel(
         id: doc.id,
         name: doc.get('name'),
-        recommendations: doc.get('recommendations'),
         icon: doc.get('icon'),
       );
     }).toList();
