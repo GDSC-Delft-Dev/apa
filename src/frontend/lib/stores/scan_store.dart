@@ -21,7 +21,7 @@ class ScanStore {
 
     // We sort them based on start date. This is useful for the scan history feature.
     scans.sort(
-      (a, b) => a.startDate.compareTo(b.startDate),
+      (a, b) => a.endDate.compareTo(b.endDate),
     );
 
     return scans;
