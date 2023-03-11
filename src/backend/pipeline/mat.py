@@ -51,8 +51,9 @@ class Mat():
     @classmethod
     def fread(cls, paths: list[tuple[str, list[Channels]]]) -> Mat:
         """
-        UNTESTED. Full reads an image with an arbitrary number of
-        channels from multiple source paths.
+        Rreads an image with an arbitrary number of
+        channels from multiple source paths that contain images 
+        with different numbers of channels.
 
         Args:
             paths: a dictionary of paths and their corresponding channels
@@ -92,6 +93,24 @@ class Mat():
 
         # Return the combined data
         return cls(arr, channels)
+    
+    @classmethod
+    def fread(cls, paths: list[str], channels: list[Channels]) -> Mat:
+        """
+        Reads an image with an arbitrary number of channels from
+        multiple source paths containing grayscale images only.
+
+        Args:
+            paths: a list of paths to read the images from
+            channels: a list of channels in the images paths
+                      (in the order they appear in the paths)
+        
+        Returns:
+            The loaded Mat.
+        """
+
+        assert len(paths) == len(channels), "Number of paths and channels must match"
+        return cls.fread(list(zip(paths, channels)))
 
     def get(self) -> cv2.Mat:
         """
