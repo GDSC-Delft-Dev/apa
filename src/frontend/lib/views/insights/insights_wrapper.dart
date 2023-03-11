@@ -20,8 +20,8 @@ class _InsightsWrapperState extends State<InsightsWrapper> {
   
   @override
   Widget build(BuildContext context) => ZoomDrawer(
-    angle: 0,
-    slideWidth: MediaQuery.of(context).size.width * 0.65,
+    angle: -10,
+    slideWidth: MediaQuery.of(context).size.width * 0.55,
     menuBackgroundColor: Colors.green.shade50,
     mainScreen: Stack(
           children: [

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/views/insights/field_insights.dart';
 import '../../loading.dart';
-import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 
 
 /// A widget that displays a hidden drawer that can be opened by swiping from the left edge of the screen
@@ -16,38 +15,37 @@ class HiddenDrawer extends StatefulWidget {
 }
 
 class _HiddenDrawerState extends State<HiddenDrawer> { 
-
-  List<ScreenHiddenDrawer> _screens = [];
   
   @override
   void initState() {
     super.initState();
-
-    _screens = [
-      ScreenHiddenDrawer(
-        ItemHiddenMenu(name: 'Crop Growth', baseStyle: TextStyle(), selectedStyle: TextStyle()),
-        Loading(),
-      ),
-       ScreenHiddenDrawer(
-        ItemHiddenMenu(name: 'Field Details', baseStyle: TextStyle(), selectedStyle: TextStyle()),
-        Loading(),
-      ),
-      // ScreenHiddenDrawer(
-      //    ItemHiddenMenu(name: 'Field Insights', baseStyle: TextStyle(), selectedStyle: TextStyle()),
-      //    FieldInsights(fieldId: widget.fieldId),
-      // )
-    ];
   }
 
   @override
   Widget build(BuildContext context) {
 
-    return HiddenDrawerMenu(
-      screens: _screens,   
-      backgroundColorMenu: Colors.green.shade50,
-      initPositionSelected: 0,
+    return Scaffold(
+      backgroundColor: Colors.green.shade50,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          drawerItem(Icons.auto_graph_rounded, 'Crop growth', () => Navigator.pushNamed(context, '/crop_growth')),
+          drawerItem(Icons.manage_search_sharp, 'Field details', () => Navigator.pushNamed(context, '/field_details')),
+          drawerItem(Icons.settings, 'Settings', () => Navigator.pushNamed(context, '/settings')),
+          drawerItem(Icons.logout, 'Logout', () => Navigator.pushNamed(context, '/login'))
+        ],
+      )
     );
-
   }
 
+  Widget drawerItem(IconData icon, String text, Function onTap) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(text),
+      onTap: () => onTap(),
+      
+    );
   }
+
+}

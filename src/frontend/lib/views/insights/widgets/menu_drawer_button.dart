@@ -11,8 +11,6 @@ class MenuDrawerButton extends StatelessWidget {
 
     return FloatingActionButton(
               backgroundColor: Colors.white,
-              // TODO: Allow user to pick insight maps
-              // TODO: Display name of insight map somewhere
               onPressed: () => ZoomDrawer.of(context)!.toggle(),
               child: Icon(Icons.menu)
     );
