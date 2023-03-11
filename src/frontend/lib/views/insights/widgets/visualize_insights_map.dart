@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:frontend/views/insights/widgets/menu_drawer.dart';
+import 'package:frontend/views/insights/widgets/insight_details_sheet.dart';
+import 'package:frontend/views/insights/widgets/menu_drawer_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../../models/field_model.dart';
@@ -8,7 +9,10 @@ import 'package:frontend/utils/polygon_utils.dart' as utils;
 import '../../../models/insight_model.dart';
 import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
+import 'hidden_drawer.dart';
+import 'insights_selection.dart';
 import 'maps_dropdown.dart';
+
 
 /// This class builds the insight map chosen by user
 class VisualizeInsightsMap extends StatefulWidget {
@@ -37,7 +41,6 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   BitmapDescriptor _pestMarkerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor _diseaseMarkerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor _nutrientMarkerIcon = BitmapDescriptor.defaultMarker;
-
 
   /// Takes a list of field models and created polygons to draw on the map
   void _drawInsightMap(InsightMapType mapType) {    
@@ -72,7 +75,16 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                   insight.getType == InsightType.pest ? _pestMarkerIcon : 
                   insight.getType == InsightType.nutrient ? _nutrientMarkerIcon : 
                   BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-            infoWindow: InfoWindow(title: insight.getDetails),
+            // Open bottom sheet with details about localized insight
+            onTap: () => showModalBottomSheet(
+              enableDrag: false,
+              isScrollControlled: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+              ),
+              context: context, 
+              builder: (context) => InsightDetailsSheet(insight: insight)),
+            // infoWindow: InfoWindow(title: insight.getDetails),
             anchor: const Offset(0.5, 0.5)
           )
         );
@@ -138,9 +150,12 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         Container(
                           padding: const EdgeInsets.only(top: 20, left: 20),
                           alignment: Alignment.topLeft,
-                          child: Column(
-                            children: const <Widget>[
-                              MenuDrawer()
+                          child: Column(          
+                            children: <Widget>[
+                              InsightsSelection(),
+                              SizedBox(height: 10),
+                              MenuDrawerButton(),
+                              // HiddenDrawer()
                             ],
                           ),
                         ),

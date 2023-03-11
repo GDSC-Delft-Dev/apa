@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/providers/insight_choices_provider.dart';
 import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/views/authenticate/authenticate.dart';
 import 'package:frontend/views/home/home.dart';
 import 'package:frontend/views/addfield/add_field_screen.dart';
 import 'package:frontend/views/loading.dart';
@@ -62,9 +63,11 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const Home(title: 'Terrafarm'),
           '/add': (context) => const AddFieldScreen(),
           '/fields': (context) => const MyFields(),
-          '/fly': (context) => const FlyDrone(
-                droneName: 'DJI Mavic 3',
-              ),
+          '/login': (context) => Authenticate(),
+          // TODO: add crop growth screen
+          '/crop_growth': (context) => Loading(),
+          // TODO: add field details screen
+          '/field_details':(context) => Loading(),
           '/settings': (context) => const Settings(),
         },
       ),
