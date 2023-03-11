@@ -20,9 +20,9 @@ class _InsightsWrapperState extends State<InsightsWrapper> {
   
   @override
   Widget build(BuildContext context) => ZoomDrawer(
-    angle: -10,
+    angle: 0,
     slideWidth: MediaQuery.of(context).size.width * 0.65,
-    menuBackgroundColor: Colors.blueAccent,
+    menuBackgroundColor: Colors.green.shade50,
     mainScreen: Stack(
           children: [
             Positioned.fill(
@@ -30,7 +30,9 @@ class _InsightsWrapperState extends State<InsightsWrapper> {
             ),
           ],
         ),
-    menuScreen: const HiddenDrawer()
+    menuScreen: const HiddenDrawer(),
+    borderRadius: 30,
+    showShadow: true,
   );
 
 }

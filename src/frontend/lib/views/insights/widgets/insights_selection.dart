@@ -67,7 +67,7 @@ class _InsightsSelectionState extends State<InsightsSelection> {
                           ),
                         actions: <Widget>[
                           ElevatedButton(
-                            child: Text('Close'),
+                            child: Text('Done'),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
