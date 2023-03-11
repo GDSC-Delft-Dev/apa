@@ -1,3 +1,4 @@
+# type: ignore
 from __future__ import annotations
 from ..parallel_module import ParallelModule
 from .runnables.ndvi import NDVI

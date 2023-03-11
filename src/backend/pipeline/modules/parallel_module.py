@@ -1,5 +1,7 @@
 from __future__ import annotations
 import cv2
+import pickle
+import pydash
 from ..mat import Channels
 from .module import Module
 from .data import Data
@@ -7,7 +9,6 @@ from .runnable import Runnable
 from .modules import Modules
 from concurrent.futures import ThreadPoolExecutor, wait
 from typing import Any, Type
-
 class ParallelModule(Module):
     """
     Represents an arbitrary image processing pipeline module that can
@@ -26,11 +27,7 @@ class ParallelModule(Module):
             name: the name of the module
             type: the type of the module
         """
- 
-        super().__init__(data, 
-                        input_data=input_data, 
-                        name=name, 
-                        module_type=module_type)
+        super().__init__(data, input_data, name=name, module_type=module_type)
 
         # Initialize runnables
         self.runnables: list[Runnable] = [runnable(data) for runnable in runnables]
@@ -86,8 +83,31 @@ class ParallelModule(Module):
 
         # Initialize the module data
         super().prepare(data)
-        data.modules[self.type]["runnables"] = {}
+        data.modules[self.type.value]["runnables"] = {}
 
         # Initialize runnables' data
         for runnable in self.runnables:
             runnable.prepare(data)
+
+    def upload(self, data: Data, collection, bucket, base_url: str):
+        """Upload data to Google Storage."""
+        try:
+            uris = []
+            for k, _ in data.modules[self.type.value]["runnables"].items():
+                for persist in data.persistable[self.type.value]["runnables"][k]:
+                    path = persist.replace(".","/")
+                    blob = bucket.blob(str(data.uuid) + "/" + path)
+                    uris.append(base_url + str(data.uuid) + "/" + path)
+                    # get persistable from the specified dict path
+                    value = pydash.get(data.modules, persist)
+                    blob.upload_from_string(pickle.dumps({persist.split(".")[-1]: value}))
+
+            collection.document(str(data.uuid)).update({
+                str(self.type): uris
+            })
+            print(f"Persistable data from module {self.type} uploaded.")
+            return True
+        except Exception as exception:
+            print(exception)
+            print(f"Data could not be uploaded for {self.type}!") 
+            return False

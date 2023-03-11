@@ -5,6 +5,11 @@ from .modules.parallel_module import ParallelModule
 from .mat import Mat, Channels
 from .modules.data import Data
 from .config import Config
+import uuid
+import asyncio
+from firebase_admin import firestore
+from google.cloud import storage
+import time
 
 class Pipeline:
     """
@@ -15,8 +20,23 @@ class Pipeline:
     def __init__(self, config: Config):
         """Build the pipeline according to the configuration."""
 
+        
+        # Give the pipeline object a unique id
+        self.uuid = uuid.uuid4()
+
         # Build the data object
-        self.data_proto: Data = Data()
+        self.data_proto: Data = Data(self.uuid)
+
+        # Connect to Cloud Storage
+        self.storage_client = storage.Client()
+        self.bucket = self.storage_client.bucket(config.bucket_name)
+
+        # Set base URL
+        self.base_url = "https://storage.cloud.google.com/" + config.bucket_name + "/"
+
+        # Connect to Firestore client
+        self.client = firestore.client()
+        self.collection = self.client.collection('test')
 
         # Build the head
         head_config = next(iter(config.modules.items()))
@@ -47,7 +67,7 @@ class Pipeline:
 
         return module(self.data_proto, input_data=input_data)
 
-    def run(self, imgs: Mat | list[Mat]) -> Data:
+    async def run(self, imgs: Mat | list[Mat]) -> Data:
         """
         Runs the pipeline on the provided input images.
 
@@ -58,7 +78,15 @@ class Pipeline:
         Returns:
             The processed data.
         """
+        # start time of the pipeline
+        self.collection.document(str(self.uuid)).set({
+            'id': str(self.uuid),
+        })
+        self.collection.document(str(self.uuid)).update({
+            'start': time.time()
+        })
 
+        # Verify input integrity
         # Check that the channels of all images are the same
         if not isinstance(imgs, Mat):
             channels = [img.channels for img in imgs]
@@ -74,7 +102,21 @@ class Pipeline:
             raise RuntimeError("Pipeline input integrity violated")
 
         # Run the chain
-        return self.head.run(data)
+        iterator: Module | None = self.head
+        while iterator is not None:
+            # Run the module
+            data = iterator.run(data)
+            # Upload data to the cloud async
+            asyncio.create_task(asyncio.to_thread(
+            iterator.upload(data, self.collection, self.bucket, self.base_url)
+            ))
+            # Go to the next module
+            iterator = iterator.next
+        # log end time of the pipeline
+        self.collection.document(str(self.uuid)).update({
+            'end': time.time()
+        })
+        return data
     
     def verify(self, imgs: list[Mat]) -> bool:
         """
@@ -107,7 +149,7 @@ class Pipeline:
     def show(self):
         """Prints out the current state of the pipeline."""
 
-        print("-- Pipeline --")
+        print(f"-- Pipeline ({self.uuid})--")
         tail = self.head
         while tail:
             print(f"<{tail.name}>")

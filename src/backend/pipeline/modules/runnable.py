@@ -54,3 +54,24 @@ class Runnable(ABC):
         Args:
             data: the pipeline data object
         """
+
+    @abstractmethod
+    def upload(self, data: Data, collection, bucket, base_url: str):
+        """
+        Upload data to Google Cloud Storage.
+
+        Args:
+            data: the pipeline data object
+            collection: Firestore collection 
+            storage_client: Cloud Storage client
+            base_url: base url where data is persisted
+        """
+
+    @abstractmethod
+    def to_persist(self, data: Data):
+        """
+        Define what objects to persist for the runnable.
+
+        Args:
+            data: the pipeline data object
+        """

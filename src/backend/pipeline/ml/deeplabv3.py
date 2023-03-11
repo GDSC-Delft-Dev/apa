@@ -1,4 +1,5 @@
 # pylint: disable=C0103
+# pylint: disable=E0401
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -30,7 +31,7 @@ def convolution_block(
         num_filters,
         kernel_size=kernel_size,
         dilation_rate=dilation_rate,
-        padding="same",
+        padding=padding,
         use_bias=use_bias,
         kernel_initializer=keras.initializers.HeNormal(),
     )(block_input)
@@ -40,6 +41,10 @@ def convolution_block(
 
 
 def DilatedSpatialPyramidPooling(dspp_input):
+    """
+    Create Dilated Spatial Pyramid Pooling Structure for the DeepLabv3+ model. 
+    Consist of four convolution blocks with 1, 6, 12, 18 dilation rates.
+    """
     # dimensions of the input
     dims = dspp_input.shape
     x = layers.AveragePooling2D(pool_size=(dims[-3], dims[-2]))(dspp_input)

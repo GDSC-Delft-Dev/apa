@@ -24,7 +24,8 @@ class TestNutrientRunnable:
         """  
         paths = {3:"../../ml/deepv3_seg_3/", 4:"../../ml/deepv3_seg_4/"}
         cfg = Config(modules={Mosaicing: None, AgricultureVisionPreprocess: None,
-                          SemanticSegmentation: paths, Index: None})
+                          SemanticSegmentation: paths, Index: None}, 
+                          bucket_name="test")
         pipeline = Pipeline(cfg)
         imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
         result = pipeline.run(imgs)
