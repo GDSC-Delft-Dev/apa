@@ -32,10 +32,9 @@ class Mosaicing(Module):
         self.prepare(data)
         # Check if there are multiple input images
         if len(data.input) == 1:
-            data.modules[self.type]["stitched"] = data.input[0]
+            data.modules[self.type.value]["stitched"] = data.input[0]
             patches = self.create_patches(data.input[0], data.input[0].channels) 
-            data.modules[self.type]["patches"] = patches
-            data.persistable[self.type].add("stitched")
+            data.modules[self.type.value]["patches"] = patches
 
         else:
             # Initiate the stitcher
@@ -50,15 +49,18 @@ class Mosaicing(Module):
 
             # Make a mat
             stitched = Mat(stitched, data.input[0].channels) 
-            data.modules[self.type]["stitched"] = stitched
-            data.persistable[self.type]["stitched"] = stitched.get()
+            data.modules[self.type.value]["stitched"] = stitched
+            data.persistable[self.type.value]["stitched"] = stitched.get()
 
             # split the image into equal patches for the segmentation module
             patches = self.create_patches(stitched, data.input[0].channels) 
-            data.modules[self.type]["patches"] = patches
+            data.modules[self.type.value]["patches"] = patches
 
         return super().run(data)
-    
+
+    def to_persist(self, data: Data):
+        data.persistable[self.type.value] = frozenset([self.type.value + "." + "stitched"])
+
     def create_patches(self, stitched: Mat, channels) -> list[Mat]:
         """
         Divide the stitched image into equal patches.

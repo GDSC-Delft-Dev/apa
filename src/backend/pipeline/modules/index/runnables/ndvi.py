@@ -66,6 +66,11 @@ class NDVI(Runnable):
                          where=denominator!=0,
                          casting="unsafe")
 
+    def to_persist(self, data: Data):
+        persist: str = Modules.INDEX + "." + "runnables" + "." + \
+                            str(self.type) + "." + "index"
+        data.persistable[Modules.INDEX]["runnables"][self.type] = frozenset([persist])
+
     def prepare(self, data: Data):
         """
         Prepares the NDVI data space.
@@ -74,4 +79,5 @@ class NDVI(Runnable):
             data: the pipeline data object
         """
         super().prepare(data)
+        self.to_persist(data)
         data.modules[Modules.INDEX]["runnables"][self.type] = {}

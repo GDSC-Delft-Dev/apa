@@ -18,7 +18,7 @@ class Data:
         self.uuid = uuid
         self.input: list[Mat] = []
         self.modules: dict[Modules, Any] = {module_type : {"input": {}} for module_type in Modules}
-        self.persistable: dict[Modules, list] = {module_type: {frozenset()} for module_type in Modules}
+        self.persistable: dict[Modules, list] = {module_type: {frozenset([])} for module_type in Modules}
         self.current: None | Modules = None
 
     def set(self, img: Mat | list[Mat]) -> None:
@@ -49,7 +49,7 @@ class Data:
         if self.current is None:
             raise Exception("Cannot get current module as the current module isn't set")
 
-        return self.modules[self.current]
+        return self.modules[self.current.value]
     
     def get_persistable(self, module: Modules) -> list:
         """
@@ -61,4 +61,4 @@ class Data:
         Returns:
             The data that should be saved to Storage after the module was executed.
         """
-        return self.persistable[module]
+        return self.persistable[module.value]

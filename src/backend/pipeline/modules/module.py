@@ -7,7 +7,7 @@ from ..mat import Mat
 import cv2
 from typing import Any
 import pickle
-import asyncio
+import pydash
 from google.cloud import storage
 from firebase_admin import firestore
 
@@ -78,16 +78,26 @@ class Module(Runnable):
     def prepare(self, data: Data):
         """Prepares the module to be run."""
 
-        data.modules[self.type] = {}
+        data.modules[self.type.value] = {}
+        self.to_persist(data)
+
+    def to_persist(self, data: Data):
+        """Define what the module should persist."""
+        data.persistable[self.type.value] = frozenset()
 
     def upload(self, data: Data, collection, bucket, base_url: str):
         """Upload data to Google Storage."""
         try:
-            uris = []
-            for k, v in data.persistable[self.type].items():
-                blob = bucket.blob(str(data.uuid) + "/" + k)
-                uris.append(base_url + str(data.uuid) + "/" + k)
-                blob.upload_from_string(pickle.dumps(v))
+            uris = dict()
+            for v in data.persistable[self.type.value]:
+                path = v.replace(".", "/")
+                blob = bucket.blob(str(data.uuid) + "/" + path)
+                uris[v.split(".")[-1]] =  base_url + str(data.uuid) + "/" + path
+                value = pydash.get(data.modules, v)
+                #print(data.modules["Modules.MOSAIC"]["stitched"], "aaaaa")
+                # WARNING: this is due to Google Cloud not liking big images
+                value.arr = cv2.resize(value.arr, dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
+                blob.upload_from_string(pickle.dumps(value))
 
             collection.document(str(data.uuid)).update({
                 str(self.type): uris

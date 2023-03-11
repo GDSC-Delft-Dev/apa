@@ -45,3 +45,13 @@ class Runnable(ABC):
             storage_client: Cloud Storage client
             base_url: base url where data is persisted
         """
+
+    @abstractmethod
+    def to_persist(self, data: Data):
+        """
+        Define what objects to persist for the runnable.
+
+        Args:
+            data: the pipeline data object
+        """
+
