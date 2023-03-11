@@ -2,6 +2,7 @@ from .module import Module
 from .data import Data
 from ..mat import Mat
 from .modules import Modules
+from ..mat import Channels
 import cv2
 import asyncio
 from typing import Any
@@ -51,11 +52,16 @@ class Mosaicing(Module):
             stitched = Mat(stitched, data.input[0].channels) 
             data.modules[self.type.value]["stitched"] = stitched
             data.persistable[self.type.value]["stitched"] = stitched.get()
-
-            # split the image into equal patches for the segmentation module
-            patches = self.create_patches(stitched, data.input[0].channels) 
-            data.modules[self.type.value]["patches"] = patches
-
+            # calculate the masks that are used to ignore certain
+        # parts of the image and the a new Mat that contains an
+        # alpha channel 
+        mask, alpha_stitched = self.process(data.modules[self.type.value]["stitched"])
+        data.modules[self.type.value]["mask"] = mask
+        data.modules[self.type.value]["alpha_img"] = alpha_stitched
+        patches = self.create_patches(stitched, data.input[0].channels)
+        data.modules[self.type.value]["patches"] = patches
+            
+        # Run the next module
         return super().run(data)
 
     def to_persist(self, data: Data):
@@ -85,3 +91,24 @@ class Mosaicing(Module):
                 patches.append(Mat(patch, channels))
 
         return patches
+            
+    def process(self, img: Mat) -> tuple[np.ndarray, Mat]:
+        """
+        Extract and process information from the orthomosaic image.
+
+        Args:
+            img: a Mat object containing the stitched image
+        
+        Returns:
+            tuple consisting of a np.ndarray and a new Mat 
+            representation
+        """
+        # collapse channels to ensure all are 0
+        collapsed = np.sum(img.get(), axis=2)
+        # create the mask
+        mask = np.where(collapsed == 0.0, 1, 0)
+        # expand the number of dimensions for concatenation
+        mask = np.expand_dims(mask, 2)
+        alpha_image = np.concatenate((img.get(), mask), axis=2)
+        return np.where(mask == 1, 0, 1), Mat(alpha_image, channels=[Channels.R, 
+                            Channels.G, Channels.B, Channels.A])

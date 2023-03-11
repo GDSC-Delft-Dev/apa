@@ -3,6 +3,7 @@ from ...data import Data, Modules
 from ..indicies import Indicies
 from ....mat import Channels
 import numpy as np
+import cv2
 import matplotlib.pyplot as plt
 
 class NDVI(Runnable):
@@ -12,7 +13,7 @@ class NDVI(Runnable):
     """
 
     def __init__(self, data: Data):
-        super().__init__(data, name="NDVI")
+        super().__init__(data, name="NDVI", channels=[Channels.NIR, Channels.R])
         self.type = Indicies.NDVI
 
     def run(self, data: Data) -> bool:

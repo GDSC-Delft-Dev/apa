@@ -1,7 +1,8 @@
 import copy
 from typing import Any, Type
 from .modules.module import Module
-from .mat import Mat
+from .modules.parallel_module import ParallelModule
+from .mat import Mat, Channels
 from .modules.data import Data
 from .config import Config
 import uuid
@@ -39,13 +40,32 @@ class Pipeline:
 
         # Build the head
         head_config = next(iter(config.modules.items()))
-        self.head: Module = head_config[0](self.data_proto, input_data=head_config[1])
+        self.head = self.build_module(head_config[0], head_config[1])
 
         # Build the rest
         tail: Module = self.head
         for module, input_data in list(config.modules.items())[1:]: #type: tuple[Type[Module], Any]
-            tail.next = module(self.data_proto, input_data=input_data)
+            tail.next = self.build_module(module, input_data)
             tail = tail.next
+
+    def build_module(self, module: Type[Module], input_data: Any) -> Module:
+        """
+        Builds a module and returns it.
+
+        Args:
+            module: the module class
+            input_data: the module initialization parameters
+
+        Returns:
+            The module object.
+        """
+
+        if issubclass(module, ParallelModule):
+            return module(self.data_proto, 
+                          runnables=input_data["runnables"],
+                          input_data=input_data["config"])
+
+        return module(self.data_proto, input_data=input_data)
 
     async def run(self, imgs: Mat | list[Mat]) -> Data:
         """
@@ -77,6 +97,10 @@ class Pipeline:
         data = copy.deepcopy(self.data_proto)
         data.set(imgs)
 
+        # Verify input integrity
+        if not self.verify(data.input):
+            raise RuntimeError("Pipeline input integrity violated")
+
         # Run the chain
         iterator: Module | None = self.head
         while iterator is not None:
@@ -94,6 +118,33 @@ class Pipeline:
         })
         return data
     
+    def verify(self, imgs: list[Mat]) -> bool:
+        """
+        Verifies that the pipeline is valid.
+        
+        Args:
+            imgs: the input imasges
+
+        Returns:
+            Whether the pipeline is valid.
+        """
+
+        # Extract channels present in all images and set the default return value
+        channels: list[Channels] = list(set.intersection(*[set(img.channels) for img in imgs]))
+        satisfied: bool = True
+
+        # Iterate through all modules to check whether their band
+        # requirements are satisfied
+        tail: Module | None = self.head
+        while tail is not None:
+            # Verify the module
+            if not tail.verify(channels):
+                satisfied = False
+
+            # Set the next module
+            tail = tail.next
+
+        return satisfied
 
     def show(self):
         """Prints out the current state of the pipeline."""

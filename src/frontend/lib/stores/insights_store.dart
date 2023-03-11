@@ -11,11 +11,17 @@ class InsightsStore {
   InsightModel _insightModelFromSnapshot(DocumentSnapshot snapshot) {
     return InsightModel(
         insightId: snapshot.id,
-        type: InsightType.values[snapshot['type']],
-        details: snapshot['details'],
-        center: snapshot['center'],
         fieldId: snapshot['field_id'],
-        date: snapshot['date']);
+        type: InsightType.values[snapshot['type']],
+        name: snapshot['name'],
+        center: snapshot['center'],
+        date: snapshot['date'],
+        properName: snapshot['proper_name'] ?? '',
+        details: snapshot['details'] ?? '',
+        image: snapshot['image'] ?? '',
+        recommendations: List<String>.from(snapshot['recommendations'] ?? []),
+        area: snapshot['area'] ?? 0.0,
+        );
   }
 
   Future<InsightModel> getInsightById(String insightId) async {
@@ -40,11 +46,17 @@ class InsightsStore {
     return snapshot.docs.map((doc){
       return InsightModel(
           insightId: doc.id,
-          type: utils.enumFromString(doc.get('type'), InsightType.values),
-          details: doc.get('details'),
-          center: doc.get('center'),
           fieldId: doc.get('field_id'),
-          date: doc.get('date'));
+          type: utils.enumFromString(doc.get('type'), InsightType.values),
+          name: doc.get('name'),
+          center: doc.get('center'),
+          date: doc.get('date'), 
+          properName: doc.get('proper_name') ?? '',
+          details: doc.get('details') ?? '',
+          image: doc.get('image') ?? '',
+          recommendations: List<String>.from(doc.get('recommendations') ?? []),
+          area: doc.get('area') ?? 0.0,
+          );
     }).toList();
   }
 

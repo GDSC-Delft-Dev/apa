@@ -45,15 +45,18 @@ bool checkIfPolygonIsSelfIntersecting(List<GeoPoint> geoPoints) {
   return false;
 }
 
-// Get the area of a geo polygon
+// Get the area of a geo polygon in ha
 double getGeoArea(List<GeoPoint> geoPoints) {
   var world = {
     'type': 'Polygon',
     'coordinates': [geoPoints.map((e) => [e.latitude, e.longitude]).toList()]
   };
   final geoJSONPolygon = GeoJSONPolygon.fromMap(world);
-  return geoJSONPolygon.area;
+  double areaInSquareCentimeters = geoJSONPolygon.area;
+  double areaInHectares = areaInSquareCentimeters / 100000000.0;
+  return double.parse(areaInHectares.toStringAsFixed(1));
 }
+
   /// Returns a camera position that is good for the current polygon.
 CameraPosition getGoodCameraPositionForPolygon(List<GeoPoint> geoPoints) {
   if (geoPoints.isEmpty) {

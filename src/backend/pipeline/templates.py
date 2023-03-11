@@ -6,10 +6,14 @@ from .config import Config
 from .modules.mosaicing import Mosaicing
 from .modules.preprocess import AgricultureVisionPreprocess
 from .modules.segmentation import SemanticSegmentation
+from .modules.index.runnables.nutrient import Nutrient
+from .modules.index.runnables.ndvi import NDVI
 
 def default_pipeline() -> Pipeline:
     """Default pipeline."""
-    cfg = Config(modules={Mosaicing: None}, bucket_name="terrafarm-example")
+    cfg = Config(modules={Mosaicing: None,
+                          Index: {"config": None, "runnables": [NDVI]}}, 
+                          bucket_name="terrafarm-example")
     return Pipeline(cfg)
 
 def full_pipeline() -> Pipeline:
@@ -31,4 +35,14 @@ def training_pipeline() -> Pipeline:
     # Run the pipeline
     cfg = Config(modules={AgricultureVisionPreprocess: masks, Mosaicing: None}, 
                  bucket_name="terrafarm-example")
+    return Pipeline(cfg)
+
+def nutrient_pipeline() -> Pipeline:
+    """Nutrient deficiency pipeline."""
+    paths = {3:"./pipeline/ml/deepv3_seg_3/", 4:"./pipeline/ml/deepv3_seg_4/"}
+    cfg = Config(modules={Mosaicing: None,
+                          AgricultureVisionPreprocess: None,
+                          SemanticSegmentation: paths,
+                          Index: {"config": None, "runnables": [Nutrient]}}, 
+                          bucket_name="terrafarm-example")
     return Pipeline(cfg)
