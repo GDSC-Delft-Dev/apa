@@ -146,6 +146,9 @@ The following routes are defined in `main.dart`
         '/add': (context) => const AddField(),
         '/fields': (context) => const MyFields(),
         '/settings': (context) => const Settings(),
+        '/login': (context) => Authenticate(),
+        '/crop_growth': (context) => const CropGrowth(),
+        '/field_details': (context) => const FieldDetails(),
       }
 ````
 The initial route that is entered is the `Wrapper()`, which listens for authentication status changes - will return `MainPage()` if logged in or `Authenticate()` if not logged in (both under `views/`).
