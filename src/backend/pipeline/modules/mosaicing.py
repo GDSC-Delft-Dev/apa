@@ -52,7 +52,7 @@ class Mosaicing(Module):
             # Make a mat
             stitched = Mat(stitched, data.input[0].channels) 
             data.modules[self.type.value]["stitched"] = stitched
-            data.persistable[self.type.value]["stitched"] = stitched.get()
+            # data.persistable[self.type.value]["stitched"] = stitched.get()
             # calculate the masks that are used to ignore certain
         # parts of the image and the a new Mat that contains an
         # alpha channel 
