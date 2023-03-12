@@ -3,53 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/field_model.dart';
 import 'package:frontend/storage/crop_growth_stages_storage.dart';
 
-class BottomInsightsSheet extends StatefulWidget {
-  BottomInsightsSheet({
-    super.key,
-    required this.field,
-  });
-  FieldModel field;
-
-  @override
-  State<BottomInsightsSheet> createState() => _BottomInsightsSheetState();
-}
-
-class _BottomInsightsSheetState extends State<BottomInsightsSheet> {
-  @override
-  Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      builder: (context, scrollController) {
-        return Container(
-          padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          child: ListView(
-            controller: scrollController,
-            children: <Widget>[
-              const Center(
-                child: Text(
-                  'Crop information',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(height: 40),
-              // Horizontal scrolling list of crops
-              GrowthStageVisualizer(field: widget.field)
-            ],
-          ),
-        );
-      },
-      initialChildSize: 0.1,
-      minChildSize: 0.1,
-    );
-  }
-}
-
 class GrowthStageVisualizer extends StatefulWidget {
   const GrowthStageVisualizer({
     super.key,

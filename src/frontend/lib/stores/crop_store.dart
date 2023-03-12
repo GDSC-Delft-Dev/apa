@@ -23,4 +23,17 @@ class CropStore {
     print("getting crops");
     return cropsCollection.snapshots().map(_cropListFromSnapshot);
   }
+
+  /// Fetches crop by id from Firestore
+  /// Returns a Future<CropModel>
+  Future<CropModel> getCropById(String cropId) async {
+    return await cropsCollection.doc(cropId).get().then((doc) {
+      var data = doc.data() as Map<String, dynamic>;
+      return CropModel(
+        cropId: doc.id,
+        name: data.containsKey('name') ? data['name'] : '',
+        type: data.containsKey('type') ? data['type'] : '',
+      );
+    });
+  }
 }

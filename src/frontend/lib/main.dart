@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/field_scan_provider.dart';
+import 'package:frontend/providers/field_view_provider.dart';
 import 'package:frontend/providers/insight_choices_provider.dart';
 import 'package:frontend/providers/insight_types_provider.dart';
 import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/authenticate/authenticate.dart';
+import 'package:frontend/views/crop_growth/crop_growth_screen.dart';
 import 'package:frontend/views/home/home.dart';
 import 'package:frontend/views/addfield/add_field_screen.dart';
 import 'package:frontend/views/loading.dart';
@@ -61,6 +63,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FieldScanProvider>(
           create: (_) => FieldScanProvider(),
         ),
+        ChangeNotifierProvider<FieldViewProvider>(
+          create: (_) => FieldViewProvider(),
+        )
       ],
       child: MaterialApp(
         title: 'Autonomous Precision Agriculture using UAVs',
@@ -75,7 +80,7 @@ class MyApp extends StatelessWidget {
           '/fields': (context) => const MyFields(),
           '/login': (context) => Authenticate(),
           // TODO: add crop growth screen
-          '/crop_growth': (context) => Loading(),
+          '/crop_growth': (context) => CropGrowthScreen(),
           // TODO: add field details screen
           '/field_details': (context) => Loading(),
           '/settings': (context) => const Settings(),

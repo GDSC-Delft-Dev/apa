@@ -16,7 +16,6 @@ import 'package:frontend/utils/network_utils.dart' as nutils;
 import '../../../models/insight_model.dart';
 import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
-import 'bottom_insights_sheet.dart';
 import 'hidden_drawer.dart';
 import 'insights_selection.dart';
 import 'maps_dropdown.dart';

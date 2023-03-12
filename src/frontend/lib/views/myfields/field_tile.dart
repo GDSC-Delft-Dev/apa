@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/field_model.dart';
+import 'package:frontend/providers/field_view_provider.dart';
 import 'package:frontend/views/insights/field_insights.dart';
+import 'package:provider/provider.dart';
 
 import '../insights/insights_wrapper.dart';
 
@@ -25,10 +27,14 @@ class FieldTile extends StatelessWidget {
             subtitle: Text('${field.area} ha'),
             trailing: field.hasInsights ? Icon(Icons.keyboard_arrow_right_sharp) : Text('No insights yet', style: TextStyle(fontSize: 12, color: Colors.red),),
             onTap: field.hasInsights ? () async {
+              Provider.of<FieldViewProvider>(context, listen: false).updateField(
+                  field
+              );
+
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => InsightsWrapper(fieldId: field.fieldId),
+                    builder: (context) => InsightsWrapper(),
                   )
               );
             } : null,
