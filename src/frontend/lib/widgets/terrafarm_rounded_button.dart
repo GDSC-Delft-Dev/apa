@@ -29,7 +29,6 @@ class TerrafarmRoundedButton extends StatelessWidget {
           text,
           style: const TextStyle(
             fontSize: 16,
-            fontFamily: 'Roboto',
             fontWeight: FontWeight.bold,
           ),
         ),

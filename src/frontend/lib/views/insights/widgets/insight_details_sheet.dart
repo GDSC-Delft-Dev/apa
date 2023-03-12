@@ -1,4 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/insight_item_model.dart';
+import 'package:frontend/providers/insight_types_provider.dart';
+import 'package:frontend/stores/insight_item_store.dart';
+import 'package:frontend/views/loading.dart';
+import 'package:provider/provider.dart';
 import '../../../models/insight_model.dart';
 
 
@@ -11,59 +17,66 @@ class InsightDetailsSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
-        mainAxisSize: MainAxisSize.min,  // To make the card compact
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 20),
-          Center(child: Text('${insight.getName} detected!', style: TextStyle(fontSize: 20, color: Colors.red[900]),)),
-          SizedBox(height: 20),
-          Row (
+    var insightType = Provider.of<InsightTypesProvider>(context, listen: false).getInsightTypeById(insight.typeId);
+    return FutureBuilder<InsightItemModel>(
+      future: InsightItemStore().getInsightItemById(insight.data['item'], insightType.id),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return SizedBox.shrink();
+        }
+
+        var insightItem = snapshot.data!;
+
+        return Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+            mainAxisSize: MainAxisSize.min,  // To make the card compact
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Date: ', style: TextStyle(fontSize: 18),),
-              Text('${insight.getDate}', style: TextStyle(fontSize: 14, fontFamily: 'Lato'),),
-            ],),
-          // For pests we show area affected
-          insight.getArea > 0.0 ? Row (
-            children: [
-              Text('Area affected: ', style: TextStyle(fontSize: 18),),
-              Text('${insight.getArea} ha', style: TextStyle(fontSize: 14, fontFamily: 'Lato'),),
-            ],) : Container(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child:  Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(height: 20),
+              Center(child: Text('${insightType.name} detected!', style: TextStyle(fontSize: 20, color: Colors.red[900]),)),
+              const SizedBox(height: 20),
+              // For pests we show area affected
+              insight.data['area'] > 0.0 ? Row (
                 children: [
-                  Text('Details', style: TextStyle(fontSize: 18)),
-                  Text('${insight.getDetails}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')),
-                  insight.getProperName != '' ? 
-                    Text('Scientific name: ${insight.getProperName}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')) 
-                    : Container(),
+                  Text('Area affected: ', style: TextStyle(fontSize: 18),),
+                  Text('${insight.data['area']} ha', style: TextStyle(fontSize: 14),),
+                ],) : Container(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child:  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Details', style: TextStyle(fontSize: 18)),
+                      // Text('${insight.data}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')),
+                      insight.data.containsKey('proper_name') ? 
+                        Text('Scientific name: ${insight.data['proper_name']}', style: TextStyle(fontSize: 14, color: Colors.grey[700])) 
+                        : Container(),
+                    ],
+                  ),
+                  ),
+                  SizedBox(width: 10),
+                  CachedNetworkImage(imageUrl: insight.data['image'], width: 100.0, height: 100.0,)
                 ],
               ),
+              Text('Recommendations', style: TextStyle(fontSize: 18)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: insight.data['recommendations'].cast<String>().map((String recommendation) => 
+                      Text('\u2022 $recommendation', style: TextStyle(fontSize: 14, color: Colors.grey[700]))).toList().cast<Widget>()
               ),
-              SizedBox(width: 10),
-              Image.asset('${insight.getImage}', width: 100.0, height: 100.0,)
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  child: Text("Close", style: TextStyle(fontSize: 16),),
+                  onPressed: () => Navigator.of(context).pop()),
+              )
             ],
-          ),
-          Text('Recommendations', style: TextStyle(fontSize: 18)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: insight.getRecommendations.map((recommendation) => 
-                  Text('\u2022 $recommendation', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato'))).toList()
-          ),
-          SizedBox(height: 20),
-          Center(
-            child: ElevatedButton(
-              child: Text("Close", style: TextStyle(fontSize: 16),),
-              onPressed: () => Navigator.of(context).pop()),
-          )
-        ],
-        )
-      );
+            )
+          );
+      }
+    );
   }
 }

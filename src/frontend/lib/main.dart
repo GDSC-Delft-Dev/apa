@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/field_scan_provider.dart';
 import 'package:frontend/providers/insight_choices_provider.dart';
+import 'package:frontend/providers/insight_types_provider.dart';
 import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/authenticate/authenticate.dart';
@@ -13,6 +15,7 @@ import 'package:frontend/views/wrapper.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/firebase_options.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +37,8 @@ class MyApp extends StatelessWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
+    Permission.location.request();
     return MultiProvider(
       providers: [
         StreamProvider<UserModel?>.value(
@@ -50,12 +54,18 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<InsightChoicesProvider>(
           create: (_) => InsightChoicesProvider(),
-        )
+        ),
+        ChangeNotifierProvider<InsightTypesProvider>(
+          create: (_) => InsightTypesProvider(),
+        ),
+        ChangeNotifierProvider<FieldScanProvider>(
+          create: (_) => FieldScanProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'Autonomous Precision Agriculture using UAVs',
-        theme: ThemeData(
-            primarySwatch: Colors.lightGreen, textTheme: GoogleFonts.bebasNeueTextTheme()),
+        theme:
+            ThemeData(primarySwatch: Colors.lightGreen, textTheme: GoogleFonts.openSansTextTheme()),
         initialRoute: '/',
         routes: {
           '/': (context) => Wrapper(),
@@ -67,7 +77,7 @@ class MyApp extends StatelessWidget {
           // TODO: add crop growth screen
           '/crop_growth': (context) => Loading(),
           // TODO: add field details screen
-          '/field_details':(context) => Loading(),
+          '/field_details': (context) => Loading(),
           '/settings': (context) => const Settings(),
         },
       ),
