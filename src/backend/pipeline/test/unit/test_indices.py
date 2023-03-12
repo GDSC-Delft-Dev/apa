@@ -5,10 +5,9 @@ from ...modules.preprocess import AgricultureVisionPreprocess
 from ...pipeline import Pipeline
 from ...mat import Mat
 from ...modules.modules import Modules
-from ...config import Config
+from ...config import Config, CloudConfig
 from ...modules.index.indicies import Indicies
 import glob
-import cv2
 import numpy as np
 import pytest
 
@@ -17,15 +16,16 @@ class TestNutrientRunnable:
     Unit testing for the nutrient deficiency module.
     """
 
+    @pytest.mark.asyncio
     @pytest.mark.skip(reason="Need the .npy file on Cloud Storage")
-    def test_nutrient(self):
+    async def test_nutrient(self):
         """
         Test the method run.   
         """  
         paths = {3:"../../ml/deepv3_seg_3/", 4:"../../ml/deepv3_seg_4/"}
         cfg = Config(modules={Mosaicing: None, AgricultureVisionPreprocess: None,
                           SemanticSegmentation: paths, Index: None}, 
-                          bucket_name="test")
+                     cloud=CloudConfig())
         pipeline = Pipeline(cfg)
         imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
         result = pipeline.run(imgs)

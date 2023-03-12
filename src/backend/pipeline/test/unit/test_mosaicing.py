@@ -2,7 +2,7 @@ from ...modules.preprocess import Preprocess
 from ...modules.data import Data
 from ...mat import Mat
 from ...modules.modules import Modules
-from ...config import Config
+from ...config import Config, CloudConfig
 from ...modules.mosaicing import Mosaicing
 from ...pipeline import Pipeline
 import glob
@@ -15,16 +15,17 @@ class TestMosaicingModule:
     Unit testing for the preprocessing module.
     """
 
-    def test_alpha_mosaicing(self):
+    @pytest.mark.asyncio
+    async def test_alpha_mosaicing(self):
         """
         Test the mask created by the mosaicing module
         used to highlight the black borders.   
         """  
-        cfg = Config(modules={Mosaicing: None}, bucket_name="test")
+        cfg = Config(modules={Mosaicing: None}, cloud=CloudConfig())
         pipeline = Pipeline(cfg)
         imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
         # run the pipeline with the Mosaicing module
-        result = pipeline.run(imgs)
+        result = await pipeline.run(imgs)
         assert result.modules[Modules.MOSAIC]["mask"] is not None
         assert result.modules[Modules.MOSAIC]["alpha_img"] is not None
 
@@ -34,15 +35,16 @@ class TestMosaicingModule:
         mask = np.expand_dims(mask, 2)
         assert np.array_equal(np.where(mask == 1, 0, 1), result.modules[Modules.MOSAIC]["mask"])
 
-    def test_mosaicing_dimensions(self):
+    @pytest.mark.asyncio
+    async def test_mosaicing_dimensions(self):
         """
         Test the method run of the mosaic module.
         """
-        cfg = Config(modules={Mosaicing: None}, bucket_name="test")
+        cfg = Config(modules={Mosaicing: None}, cloud=CloudConfig())
         pipeline = Pipeline(cfg)
         imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
         # run the pipeline
-        result = pipeline.run(imgs)
+        result = await pipeline.run(imgs)
         imgs_shape = [mat.get().shape for mat in imgs]
         # add up all the shapes
         sumx = [0, 0]

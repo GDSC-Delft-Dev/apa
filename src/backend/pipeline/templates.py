@@ -47,7 +47,6 @@ def nutrient_pipeline() -> Pipeline:
     cfg = Config(modules={Mosaicing: None,
                           AgricultureVisionPreprocess: None,
                           SemanticSegmentation: paths,
-                          Index: {"config": None, "runnables": [Nutrient]}}, 
-                          bucket_name="terrafarm-example",
+                          Index: {"config": None, "runnables": [Nutrient]}},
                 cloud=CloudConfig(True, "terrafarm-example"))
     return Pipeline(cfg)
