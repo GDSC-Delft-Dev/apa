@@ -20,6 +20,25 @@ You can then run the default pipeline with
 
 `py main.py`
 
+### Manual Pipeline triggers
+
+Manual triggers allow you to run the latest pipeline builds from the Artifact Registry with custom input data using Cloud Run.
+You can run a job with either input data from your local file system or input data that already resides in the cloud.
+
+#### Provide input data from a local filesystem
+
+```bash
+sudo chmod +x trigger.sh
+./trigger.sh -l /path/to/data/ -n name-of-the-job
+```
+
+#### Provide input data from Cloud Storage
+
+```bash
+sudo chmod +x trigger.sh
+./trigger.sh -c /path/to/data/ -n name-of-the-job
+```
+
 ### Testing
 To test the code, run `pytest` unit tests:
 
