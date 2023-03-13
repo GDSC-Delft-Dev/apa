@@ -18,15 +18,15 @@ class TestPreprocessingModule:
         """
         Test the method run.   
         """  
-        masks = [cv2.imread(file) for file in glob.glob("./test/data/mosaicing/farm/mask*.JPG")]
-        imgs = [Mat.read(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
+        masks = [cv2.imread(file) for file in glob.glob("../data/mosaicing/farm/mask*.JPG")]
+        imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
         data: Data = Data(uuid.uuid4())
-        data.modules[Modules.PREPROCESS] = {}
+        data.modules[Modules.PREPROCESS.value] = {}
         module = Preprocess(data, masks)
         data.set(imgs)
         module.run(data)
-        assert data.modules[Modules.PREPROCESS]["masked"] is not None
-        out = np.array([x.get() for x in data.modules[Modules.PREPROCESS]["masked"]])
+        assert data.modules[Modules.PREPROCESS.value]["masked"] is not None
+        out = np.array([x.get() for x in data.modules[Modules.PREPROCESS.value]["masked"]])
         # connect to Cloud Storage
         storage_client = storage.Client()
         bucket = storage_client.bucket("terrafarm-test")
