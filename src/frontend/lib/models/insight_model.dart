@@ -1,37 +1,43 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-enum InsightType {disease, pest, nutrient}
 
 /// Represents an insight that has been detected by the image processing pipeline
 class InsightModel {
-
-  final String insightId;
-  final InsightType type;
-  final String details;
+  final String typeId;
   final GeoPoint center;
-  final String fieldId;
-  final Timestamp date;
+  final Map<String, dynamic> data;
 
   InsightModel({
-    required this.insightId,
-    required this.type,
-    required this.details,
+    required this.typeId,
     required this.center,
-    required this.fieldId,
-    required this.date
+    required this.data,
   });
 
-  String get getInsightId => insightId;
+  factory InsightModel.fromDocumentSnapshot(DocumentSnapshot snapshot) {
+    return InsightModel(
+      typeId: snapshot['typeId'],
+      center: snapshot['center'],
+      data: snapshot['data'],
+    );
+  }
 
-  InsightType get getType => type;
+  factory InsightModel.fromMap(Map<String, dynamic> map) {
+    return InsightModel(
+      typeId: map['typeId'],
+      center: map['center'],
+      data: map['data'],
+    );
+  }
 
-  String get getDetails => details;
+  Map<String, dynamic> toMap() {
+    return {
+      'typeId': typeId,
+      'center': center,
+      'data': data,
+    };
+  }
 
-  GeoPoint get getCenter => center;
-
-  String get getFieldId => fieldId;
-
-  Timestamp get getDate => date;
-
+  @override
+  String toString() {
+    return 'InsightModel{typeId: $typeId, center: $center, data: $data}';
+  }
 }

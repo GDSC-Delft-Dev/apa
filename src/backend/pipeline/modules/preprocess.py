@@ -26,11 +26,12 @@ class Preprocess(Module):
             The preprocessed image(s).
         """ 
         if self.masks is None: # there are no masks available
-            data.modules[self.type]["masked"] = data.input
+            data.modules[self.type.value]["masked"] = data.input
         else: # Apply masks to eliminate invalid areas in images 
             masked: list[Mat] = [Mat(cv2.multiply(x.get(), mask), data.input[0].channels)
                                  for (x, mask) in zip(data.input, self.masks)] 
-            data.modules[self.type]["masked"] = masked
+            data.modules[self.type.value]["masked"] = masked
+
         return super().run(data)
 
 class AgricultureVisionPreprocess(Preprocess):
@@ -59,10 +60,10 @@ class AgricultureVisionPreprocess(Preprocess):
         """  
 
         if self.masks is None: # there are no available masks for the input data
-            masked = [x.get() for x in data.modules[Modules.MOSAIC]["patches"]]
+            masked = [x.get() for x in data.modules[Modules.MOSAIC.value]["patches"]]
         else: # apply masks to eliminate invalid areas in images
             masked = [cv2.multiply(x.get(), mask) 
-                for (x, mask) in zip(data.modules[Modules.MOSAIC]["patches"], self.masks)]
+                for (x, mask) in zip(data.modules[Modules.MOSAIC.value]["patches"], self.masks)]
 
         # calculate the 5th and 95th percentile in the data
         percentiles = [(np.percentile(x, 5), np.percentile(x, 95)) for x in masked]
@@ -70,7 +71,7 @@ class AgricultureVisionPreprocess(Preprocess):
         bounds = [(max(0.0, p5 - 0.4 * (p95 - p5)), min(255.0, p95 + 0.4*(p95-p5))) 
                     for (p5, p95) in percentiles]
         # use the created bounds to clip the input data
-        data.modules[self.type]["clipping"] =\
+        data.modules[self.type.value]["clipping"] =\
             [Mat(np.clip(x.get(), v_lower, v_upper).astype(np.uint8), data.input[0].channels) 
-                for (x, (v_lower, v_upper)) in zip(data.modules[Modules.MOSAIC]["patches"], bounds)]
+                for (x, (v_lower, v_upper)) in zip(data.modules[Modules.MOSAIC.value]["patches"], bounds)]
         return super().run(data)

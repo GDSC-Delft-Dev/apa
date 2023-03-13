@@ -4,6 +4,7 @@ from ...mat import Mat
 from ...modules.modules import Modules
 import glob
 import cv2
+import uuid
 import numpy as np
 import os
 from google.cloud import storage
@@ -17,9 +18,9 @@ class TestPreprocessingModule:
         """
         Test the method run.   
         """  
-        masks = [cv2.imread(file) for file in glob.glob("../data/mosaicing/farm/mask*.JPG")]
-        imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
-        data: Data = Data()
+        masks = [cv2.imread(file) for file in glob.glob("./test/data/mosaicing/farm/mask*.JPG")]
+        imgs = [Mat.read(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
+        data: Data = Data(uuid.uuid4())
         data.modules[Modules.PREPROCESS] = {}
         module = Preprocess(data, masks)
         data.set(imgs)

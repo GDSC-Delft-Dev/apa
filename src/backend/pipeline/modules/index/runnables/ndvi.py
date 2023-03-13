@@ -3,6 +3,7 @@ from ...data import Data, Modules
 from ..indicies import Indicies
 from ....mat import Channels
 import numpy as np
+import cv2
 import matplotlib.pyplot as plt
 
 class NDVI(Runnable):
@@ -12,7 +13,7 @@ class NDVI(Runnable):
     """
 
     def __init__(self, data: Data):
-        super().__init__(data, name="NDVI")
+        super().__init__(data, name="NDVI", channels=[Channels.NIR, Channels.R])
         self.type = Indicies.NDVI
 
     def run(self, data: Data) -> bool:
@@ -31,12 +32,12 @@ class NDVI(Runnable):
         """
         try:
             # Get the channels
-            nir = data.modules[Modules.MOSAIC]["stitched"][Channels.NIR].get()
-            red = data.modules[Modules.MOSAIC]["stitched"][Channels.R].get()
+            nir = data.modules[Modules.MOSAIC.value]["stitched"][Channels.NIR].get()
+            red = data.modules[Modules.MOSAIC.value]["stitched"][Channels.R].get()
 
             # Calculate 
             ndvi = self.calculate(nir, red)
-            data.modules[Modules.INDEX]["runnables"][self.type]["index"] = ndvi
+            data.modules[Modules.INDEX.value]["runnables"][self.type.value]["index"] = ndvi
             plt.imshow(ndvi, cmap='RdYlGn', vmin=-1.0, vmax=1.0)
             plt.show()
             return True
@@ -66,6 +67,11 @@ class NDVI(Runnable):
                          where=denominator!=0,
                          casting="unsafe")
 
+    def to_persist(self, data: Data):
+        persist: str = Modules.INDEX.value + "." + "runnables" + "." + \
+                            self.type.value + "." + "index"
+        data.persistable[Modules.INDEX.value]["runnables"][self.type.value] = frozenset([persist])
+
     def prepare(self, data: Data):
         """
         Prepares the NDVI data space.
@@ -74,4 +80,8 @@ class NDVI(Runnable):
             data: the pipeline data object
         """
         super().prepare(data)
-        data.modules[Modules.INDEX]["runnables"][self.type] = {}
+        self.to_persist(data)
+        data.modules[Modules.INDEX.value]["runnables"][self.type.value] = frozenset()
+
+    def upload(self, data: Data, collection, bucket, base_url: str):
+        pass

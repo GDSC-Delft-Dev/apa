@@ -53,7 +53,6 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
                     fontSize: 12,
                     fontWeight: FontWeight.normal,
                     color: Colors.grey.shade600,
-                    fontFamily: 'Roboto',
                     letterSpacing: 0.05,
                   ),
                 ),
@@ -90,7 +89,6 @@ class _AddFieldScreenState extends State<AddFieldScreen> {
                         color: Provider.of<NewFieldProvider>(context).isPolygonReady()
                             ? Colors.green
                             : Colors.red,
-                        fontFamily: 'Roboto',
                         letterSpacing: 0.05,
                       ),
                     ),

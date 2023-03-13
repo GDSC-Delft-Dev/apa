@@ -109,7 +109,6 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                         : _cropId == null
                             ? Colors.red
                             : Colors.green,
-                    fontFamily: 'Roboto',
                     letterSpacing: 0.05,
                   ),
                 ),

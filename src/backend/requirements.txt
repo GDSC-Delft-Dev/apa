@@ -12,3 +12,6 @@ pytest==7.2.1
 google-cloud-storage==2.7.0
 google-cloud-firestore==2.10.0
 argparse==1.4.0
+firebase-admin==6.1.0
+pydash==6.0.2
+pytest-asyncio==0.20.3
