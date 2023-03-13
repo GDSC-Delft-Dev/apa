@@ -33,7 +33,6 @@ class _AddFieldCropTypeState extends State<AddFieldCropType> {
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                   color: Colors.grey.shade700,
-                  fontFamily: 'Roboto',
                   letterSpacing: 0.05,
                 ),
               ),
@@ -41,6 +40,7 @@ class _AddFieldCropTypeState extends State<AddFieldCropType> {
             StreamBuilder<List<CropModel>>(
                 stream: CropStore().crops,
                 builder: (context, snapshot) {
+                  print(snapshot.connectionState);
                   return Expanded(
                     // Combobox
                     child: DropdownButton<String>(
@@ -64,7 +64,6 @@ class _AddFieldCropTypeState extends State<AddFieldCropType> {
                         elevation: 16,
                         style: const TextStyle(color: Colors.black45, fontSize: 18),
                         onChanged: (String? newValue) {
-                          
                           widget.onChange(newValue!);
                           setState(() {
                             cropId = newValue;

@@ -1,8 +1,9 @@
-from ...mat import Mat
+from ...mat import Mat, Channels
 import cv2
 import numpy as np
 import os
-import sys
+import glob
+import pytest
 
 class TestMat:
     """
@@ -22,10 +23,22 @@ class TestMat:
         assert obj.channels == expected.channels, "The number of channels are different"
 
     def test_get(self):
-        """
-        Test the get method.
-        """
+        """Test the get method."""
         path = "../data/segmentation/1AD76MIZN_659-8394-1171-8906.jpg"
         arr = cv2.imread(path)
         obj = Mat(arr)
         assert np.array_equal(arr, obj.get())
+
+    def test_fread_grayscales(self):
+        """Tests the fread method with grayscale images only."""
+        paths = glob.glob("../data/mosaicing/multispectral/*.TIF")
+        img = Mat.freads(paths, [Channels.G, Channels.NIR, Channels.RE, Channels.R])
+
+        assert len(img.channels) == 4, "The number of channels is incorrect"
+
+    def test_fread_missing_channel(self):
+        """Tests the fread method with a missing channel."""
+        paths = glob.glob("../data/mosaicing/multispectral/*.TIF")
+
+        with pytest.raises(AssertionError):
+            Mat.freads(paths, [Channels.G, Channels.RE, Channels.R])

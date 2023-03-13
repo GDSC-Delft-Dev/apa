@@ -3,22 +3,27 @@ from screeninfo import get_monitors
 from .runnable import Runnable
 from .data import Data
 from .modules import Modules
-from ..mat import Mat
+from ..mat import Mat, Channels
 import cv2
 from typing import Any
+import pickle
+import pydash
+from google.cloud import storage
+from firebase_admin import firestore
 
 class Module(Runnable):
     """
     Represents an arbitrary image processing pipeline module.
     """
 
-    def __init__(self, data: Data, input_data: Any = None,
+    def __init__(self, data: Data, channels: list[Channels] = [], input_data: Any = None,
                  name: str = "Unnamed module", module_type: Modules = Modules.DEFAULT):  
         """
         Initializes the module metadata and the data object.
 
         Args:
             data: the pipeline data object
+            channels: the channels that the module requires
             input_data: the module initialization parameters
             name: the name of the module
             type: the type of the module
@@ -26,7 +31,7 @@ class Module(Runnable):
         Attributes:
             next: the next module in the chain
         """
-        super().__init__(data, name)
+        super().__init__(data, name, channels)
         self.next: Module | None = None
         self.type: Modules = module_type
 
@@ -45,7 +50,6 @@ class Module(Runnable):
             data.current = self.next.type
             self.next.prepare(data)
             print(f"Running <{self.name}>")
-            return self.next.run(data)
 
         # Otherwise, return the data
         return data
@@ -75,4 +79,33 @@ class Module(Runnable):
     def prepare(self, data: Data):
         """Prepares the module to be run."""
 
-        data.modules[self.type] = {}
+        data.modules[self.type.value] = {}
+        self.to_persist(data)
+
+    def to_persist(self, data: Data):
+        """Define what the module should persist."""
+        data.persistable[self.type.value] = frozenset()
+
+    def upload(self, data: Data, collection, bucket, base_url: str):
+        """Upload data to Google Storage."""
+        try:
+            uris = {}
+            for val in data.persistable[self.type.value]:
+                path = val.replace(".", "/")
+                blob = bucket.blob(str(data.uuid) + "/" + path)
+                uris[val.split(".")[-1]] =  base_url + str(data.uuid) + "/" + path
+                # get persisted data
+                value = pydash.get(data.modules, val)
+                # WARNING: this is due to Google Cloud not liking big images
+                value.arr = cv2.resize(value.arr, dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
+                blob.upload_from_string(pickle.dumps(value))
+
+            collection.document(str(data.uuid)).update({
+                str(self.type): uris
+            })
+            print(f"Persistable data from module {self.type} uploaded.")
+            return True
+        except Exception as exception:
+            print(exception)
+            print(f"Data could not be uploaded for {self.type}!") 
+            return False

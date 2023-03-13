@@ -6,5 +6,8 @@ __pycache__
 .mypy_cache
 .pytest_cache
 expected_preprocess_masked.npy
+.vscode
+*json
 nutrient_masks.npy
 .vscode
+.idea

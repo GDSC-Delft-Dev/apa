@@ -18,22 +18,22 @@ class Nutrient(Runnable):
     def run(self, data: Data) -> bool:
         try:
             # take the calculated masks from the segmentation module
-            masks = data.modules[Modules.SEGMENTATION]["masks"]
+            masks = data.modules[Modules.SEGMENTATION.value]["masks"]
             # assume index 0 is for the nutrient deficiency mask
             nutrient_masks = [mask[0][:, :, 0] for mask in masks]
-            data.modules[Modules.INDEX]["runnables"][self.type]["masks"] = nutrient_masks
+            data.modules[Modules.INDEX.value]["runnables"][self.type.value]["masks"] = nutrient_masks
             masks = [np.where(mask == 1, 255, 0) for mask in nutrient_masks]
-            patches = data.modules[Modules.MOSAIC]["patches"]
-            hsize, _ = data.modules[Modules.MOSAIC]["patches_dims"]
+            patches = data.modules[Modules.MOSAIC.value]["patches"]
+            hsize, _ = data.modules[Modules.MOSAIC.value]["patches_dims"]
             result = self.calculate(masks, patches, hsize)
-            data.modules[Modules.INDEX]["runnables"][self.type]["index"] = result
+            data.modules[Modules.INDEX.value]["runnables"][self.type.value]["index"] = result
             return True
         except Exception as exception:
             print("Nutrient calculation failed!")
             print(exception)
             return False
 
-    def calculate(self, masks, patches, hsize: int) -> list[np.ndarray]:
+    def calculate(self, masks, patches, hsize: int) -> np.ndarray:
         """
         Applies the masks on the patches and then concats into the mosaic image.
 
@@ -45,12 +45,12 @@ class Nutrient(Runnable):
         Returns:
             Nutrient deficit map
         """
-        def gray_to_rgb(x: np.ndarray):
+        def gray_to_rgb(value: np.ndarray):
             """
             Grayscale image to RGB.
             Used to duplicate channels. 
             """
-            return cv2.cvtColor(x.astype(np.uint8),cv2.COLOR_GRAY2RGB) 
+            return cv2.cvtColor(value.astype(np.uint8),cv2.COLOR_GRAY2RGB) 
         # overlay the masks over the patches
         results = [cv2.addWeighted(gray_to_rgb(mask), 1, image.get(), 1, 0) for mask, image in zip(masks, patches)]
         # stack patches horizontally
@@ -68,4 +68,13 @@ class Nutrient(Runnable):
             data: the pipeline data object
         """
         super().prepare(data)
-        data.modules[Modules.INDEX]["runnables"][self.type] = {}
+        data.modules[Modules.INDEX.value]["runnables"][self.type.value] = {}
+
+    def upload(self, data: Data, collection, bucket, base_url: str):
+        pass
+    
+    def to_persist(self, data: Data):
+        persist = Modules.INDEX.value + "." + "runnables" + \
+                self.type.value + "index"
+        data.persistable[Modules.INDEX.value]["runnables"][self.type.value] = frozenset([persist])
+        

@@ -29,7 +29,6 @@ class AddFieldInfoCard extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                   color: Colors.grey.shade700,
-                  fontFamily: 'Roboto',
                   letterSpacing: 0.05,
                 ),
               ),
@@ -42,7 +41,6 @@ class AddFieldInfoCard extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                   color: Colors.grey.shade700,
-                  fontFamily: 'Roboto',
                   letterSpacing: 0.05,
                 ),
                 decoration: InputDecoration(

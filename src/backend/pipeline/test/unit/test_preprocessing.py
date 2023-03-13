@@ -4,6 +4,7 @@ from ...mat import Mat
 from ...modules.modules import Modules
 import glob
 import cv2
+import uuid
 import numpy as np
 import pytest
 
@@ -19,7 +20,7 @@ class TestPreprocessingModule:
         """  
         masks = [cv2.imread(file) for file in glob.glob("./test/data/mosaicing/farm/mask*.JPG")]
         imgs = [Mat.read(file) for file in glob.glob("test/data/mosaicing/farm/D*.JPG")]
-        data: Data = Data()
+        data: Data = Data(uuid.uuid4())
         data.modules[Modules.PREPROCESS] = {}
         module = Preprocess(data, masks)
         data.set(imgs)

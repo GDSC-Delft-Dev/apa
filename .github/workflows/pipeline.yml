@@ -2,8 +2,8 @@ name: Pipeline build
 
 on:
   push:
-    paths:
-      - 'src/backend'
+    #paths:
+    #  - 'src/backend/**'
     branches:
       - '*'
 
@@ -13,7 +13,57 @@ env:
   GAR_REPOSITORY: pipelines-dev
   
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        name: Setup Python 3.10
+        with:
+          python-version: "3.10"
+          cache: 'pip'
+      - run: |
+          cd src/backend
+          python -m pip install --upgrade pip
+          pip install mypy pylint
+          pip install -r requirements.txt
+
+      - name: Run pylint
+        run: |
+          cd src/backend
+          pylint ./pipeline --fail-under 9
+
+      - name: Run mypy
+        run: |
+          cd src/backend
+          mypy . --explicit-package-bases
+
+  test:
+    runs-on: ubuntu-latest
+    steps:  
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          cd src/backend
+          python -m pip install --upgrade pip
+          pip install pytest
+          pip install -r requirements.txt
+
+      - name: Run pytest
+        run: pytest 
+
   deploy:
+    needs: [lint, test]
+
     # Add 'id-token' with the intended permissions for workload identity federation
     permissions:
       contents: 'read'
