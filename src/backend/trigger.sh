@@ -69,7 +69,8 @@ if [ -n "$local_source" ]; then
   echo "Created UUID for the local input data: $uuid"
   gsutil -m cp -r $local_source gs://terrafarm-inputs/$uuid/
   IFS='/' read -ra my_list <<< "$local_source"
-  cloud_path="$uuid/${my_list[-1]}"
+  last_folder=$(echo $local_source | rev | cut -d/ -f2 | rev)
+  cloud_path="$uuid/$last_folder"
   mode="local"
 
 fi

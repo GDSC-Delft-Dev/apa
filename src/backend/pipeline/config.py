@@ -6,9 +6,19 @@ from dataclasses import dataclass
 
 @dataclass
 class CloudConfig:
-    """Configures cloud resources."""
+    """
+    Configures cloud resources.
+
+    Args:
+        use_cloud: True if the pipeline uses cloud, False otherwise
+        bucket_name: name of the bucket for the pipeline input
+        staged_input: True if the input is staged from a local system, False otherwise
+        input_path: full bucket path to the input files
+    """
     use_cloud: bool = False
     bucket_name: str = ""
+    staged_input: bool = False
+    input_path: str = ""
 
 class Config:
     """
@@ -18,6 +28,8 @@ class Config:
         use_cloud: whether use cloud resources, e.g. persist data to cloud storage.
                    If False, the user doesn't need to provide GCP credentials.
         modules: dictionary of modules to initialize and their initialization data
+        mode: pipeline input is either from the cloud or locally provided from a manual trigger
+        path: path to the pipeline input data
     """
     def __init__(self, modules: dict[Type[Module], Any], cloud: CloudConfig = CloudConfig()):
         assert len(modules) > 0, "No modules specified"

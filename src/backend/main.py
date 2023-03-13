@@ -10,6 +10,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import asyncio
 from pipeline.mat import Mat, Channels
+from pipeline.config import CloudConfig
 import numpy as np
 
 def main():
@@ -26,16 +27,24 @@ def main():
     # check if we use cloud data or local data
     if path is None or mode is None:
         imgs = [Mat.read(file) for file in glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG")]
+        path = "pipeline/test/data/mosaicing/farm/D*.JPG"
+        cloud_config = CloudConfig()
     else:
+        cloud_config = CloudConfig()
         if not os.path.exists("./pipeline/data"):
             os.mkdir("./pipeline/data/")
         storage_client = storage.Client()
         if mode == "local":
             bucket = storage_client.get_bucket("terrafarm-inputs")
+            cloud_config.staged_input = True
         else:
+            cloud_config.staged_input = False
             bucket = storage_client.get_bucket("terrafarm-test")
 
+        # get all the files from the specified bucket and prefix path
         blobs=bucket.list_blobs(prefix=path + "/D", delimiter="/")
+        cloud_config.input_path = path
+        cloud_config.use_cloud = True
         for blob in blobs:
             print(blob)
             print(os.getcwd())
@@ -46,14 +55,14 @@ def main():
         imgs = [Mat.read(file) for file in glob.glob("pipeline/data/D*.JPG")]
     # Get test data
     imgs = imgs[:1]
-
+    cloud_config.bucket_name = "terrafarm-example"
     # Run the pipeline
-    pipeline = nutrient_pipeline()
+    pipeline = default_pipeline(cloud=cloud_config)
     pipeline.show()
 
     # Authenticate to firebase
     if pipeline.config.cloud.use_cloud:
-        cred = credentials.Certificate("terrafarm-378218-firebase-adminsdk-nept9-e49d1713c7.json")
+        cred = credentials.Certificate("terrafarm-378218-firebase-adminsdk-nept9-495078bd2b.json")
         firebase_admin.initialize_app(cred)
 
     # Run the pipeline

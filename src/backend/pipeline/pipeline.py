@@ -78,7 +78,7 @@ class Pipeline:
             self.bucket = self.storage_client.bucket(self.config.cloud.bucket_name)
 
             # Set base URL
-            self.base_url = "https://storage.cloud.google.com/" + self.config.cloud.config.bucket_name + "/"
+            self.base_url = "https://storage.cloud.google.com/" + self.config.cloud.bucket_name + "/"
 
             # Connect to Firestore client
             self.client = firestore.client()
@@ -108,9 +108,13 @@ class Pipeline:
 
         # Run the chain
         iterator: Module | None = self.head
+        failed: bool = False
         while iterator is not None:
             # Run the module
-            data = iterator.run(data)
+            try:
+                data = iterator.run(data)
+            except Exception as exception:
+                failed = True
 
             # Upload data to the cloud asynchronously
             if self.config.cloud.use_cloud:
@@ -126,6 +130,13 @@ class Pipeline:
             self.collection.document(str(self.uuid)).update({
                 'end': time.time()
             })
+
+        if self.config.cloud.staged_input == True and failed == False:
+            bucket = self.storage_client.bucket("terrafarm-inputs")
+            blobs=bucket.list_blobs(prefix=self.config.cloud.input_path + "/", delimiter="/")
+            for blob in blobs:
+                print(blob)
+                blob.delete()
 
         return data
     
