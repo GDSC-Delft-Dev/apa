@@ -8,13 +8,14 @@ import uuid
 import numpy as np
 import os
 from google.cloud import storage
+from ...auth import get_credentials
 
 class TestPreprocessingModule:
     """
     Unit testing for the preprocessing module.
     """
 
-    
+
 
     def test_preprocessing(self):
         """
@@ -30,7 +31,7 @@ class TestPreprocessingModule:
         assert data.modules[Modules.PREPROCESS.value]["masked"] is not None
         out = np.array([x.get() for x in data.modules[Modules.PREPROCESS.value]["masked"]])
         # connect to Cloud Storage
-        storage_client = storage.Client()
+        storage_client = storage.Client(credentials=get_credentials())
         bucket = storage_client.bucket("terrafarm-test")
         blob = bucket.blob("expected_preprocess_masked.npy")
         blob.download_to_filename("expected_preprocess_masked.npy")
