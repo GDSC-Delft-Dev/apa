@@ -2,21 +2,14 @@ import glob
 import sys
 import os
 import argparse
-from pipeline.templates import full_pipeline, default_pipeline
 from pipeline.mat import Mat
 from google.cloud import storage
 from pipeline.templates import full_pipeline, default_pipeline, training_pipeline, nutrient_pipeline
 import firebase_admin
 from firebase_admin import credentials, firestore
 import asyncio
-from pipeline.mat import Mat, Channels
 from pipeline.config import CloudConfig
-from pipeline.modules.modules import Modules
-import numpy as np
-import cv2
 from typing import Any
-import json
-import io
 
 def main(args: Any):
     """Main entry point."""
@@ -48,7 +41,7 @@ def main(args: Any):
             print(blob)
             print(os.getcwd())
             filename = f"./pipeline/data/{blob.name.split('/')[-1]}"
-            open(filename, 'a').close()
+            open(filename, 'a', 'utf-8').close()
             blob.download_to_filename(f"./pipeline/data/{blob.name.split('/')[-1]}")
         
         imgs = [Mat.read(file) for file in glob.glob("pipeline/data/D*.JPG")]
@@ -69,6 +62,11 @@ def main(args: Any):
     print(res)
 
 def init_firebase() -> None:
+    """
+    Initializes the firebase connection usign the GCP service 
+    account private key from the environment.
+    """
+
     firebase_admin.initialize_app(
         credentials.Certificate({
             "type": "service_account",
@@ -80,14 +78,13 @@ def init_firebase() -> None:
             "auth_uri": "https://accounts.google.com/o/oauth2/auth",
             "token_uri": "https://oauth2.googleapis.com/token",
             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-nept9%40terrafarm-378218.iam.gserviceaccount.com"
+            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/\
+                                     firebase-adminsdk-nept9%40terrafarm-378218.iam.gserviceaccount.com"
         })
     )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Runs the pipeline')
     parser.add_argument('--path', dest='path', default=None)
-    parser.add_argument('--mode', dest='mode', default=None)
-    args = parser.parse_args(sys.argv[1:])
-
-    main(args)
+    parser.add_argument('--mode', dest='mode', default=None)    
+    main(parser.parse_args(sys.argv[1:]))

@@ -22,6 +22,11 @@ class Pipeline:
 
         # Save config
         self.config = config
+
+        # Initialize cloud clients
+        if self.config.cloud.use_cloud:
+            self.storage_client = storage.Client()
+            self.client = firestore.client()
         
         # Give the pipeline object a unique id
         self.uuid = uuid.uuid4()
@@ -74,14 +79,12 @@ class Pipeline:
         print("Use cloud: " + str(self.config.cloud.use_cloud))
         if self.config.cloud.use_cloud:
             # Connect to Cloud Storage
-            self.storage_client = storage.Client()
             self.bucket = self.storage_client.bucket(self.config.cloud.bucket_name)
 
             # Set base URL
             self.base_url = "https://storage.cloud.google.com/" + self.config.cloud.bucket_name + "/"
 
             # Connect to Firestore client
-            self.client = firestore.client()
             self.collection = self.client.collection('test')
 
             # Start time of the pipeline
@@ -131,7 +134,7 @@ class Pipeline:
                 'end': time.time()
             })
 
-        if self.config.cloud.staged_input == True and failed == False:
+        if self.config.cloud.staged_input and not failed:
             bucket = self.storage_client.bucket("terrafarm-inputs")
             blobs=bucket.list_blobs(prefix=self.config.cloud.input_path + "/", delimiter="/")
             for blob in blobs:
