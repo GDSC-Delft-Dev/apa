@@ -14,7 +14,7 @@ def default_pipeline() -> Pipeline:
     """Default pipeline."""
     cfg = Config(modules={Mosaicing: None,
                           Index: {"config": None, "runnables": [NDVI]}}, 
-                cloud=CloudConfig(True, "terrafarm-example"))
+                cloud=CloudConfig(False, "terrafarm-example"))
     return Pipeline(cfg)
 
 def full_pipeline() -> Pipeline:

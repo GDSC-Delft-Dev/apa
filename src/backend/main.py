@@ -11,10 +11,10 @@ def main():
 
     # Get test data
     imgs = [Mat.read(file) for file in glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG")]
-    imgs = imgs[:1]
+    imgs = imgs[:3]
 
     # Run the pipeline
-    pipeline = nutrient_pipeline()
+    pipeline = default_pipeline()
     pipeline.show()
 
     # Authenticate to firebase
