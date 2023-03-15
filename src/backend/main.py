@@ -53,11 +53,11 @@ def main(args: Any):
             open(filename, 'a', 'utf-8').close()
             # download and append the data in the file created before
             blob.download_to_filename(f"./pipeline/data/{blob.name.split('/')[-1]}")
-        
+
         imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/data/D*.JPG"))]
 
     # Get test data
-    imgs = imgs[:4]
+    imgs = imgs[:3]
 
     # Run the pipeline
     pipeline = default_pipeline(cloud=cloud_config)
@@ -74,5 +74,5 @@ def main(args: Any):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Runs the pipeline')
     parser.add_argument('--path', dest='path', default=None)
-    parser.add_argument('--mode', dest='mode', default=None)    
+    parser.add_argument('--mode', dest='mode', default=None)
     main(parser.parse_args(sys.argv[1:]))

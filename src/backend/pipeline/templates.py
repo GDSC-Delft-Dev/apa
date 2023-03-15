@@ -12,7 +12,7 @@ from .modules.index.index import Index
 
 def default_pipeline(cloud: CloudConfig = CloudConfig()) -> Pipeline:
     """Default pipeline."""
-    cfg = Config(modules={Mosaicing: None}, 
+    cfg = Config(modules={Mosaicing: None, Index: None},
                 cloud=cloud)
     return Pipeline(cfg)
 

@@ -4,12 +4,13 @@ from ..indicies import Indicies
 from ....mat import Mat, Channels
 import numpy as np
 from abc import abstractmethod
+import traceback
 
 class GenericIndex(Runnable):
     """Generic index runnable."""
 
     def __init__(self, data: Data, name: str, color_map: str,
-                 channels: list[Channels], type: Indicies):
+                 channels: list[Channels], index_type: Indicies):
         """
         Initializes the generic index runnable.
         
@@ -18,10 +19,10 @@ class GenericIndex(Runnable):
             name: the name of the index
             color_map: the color map to used to display the index
             channels: the channels used to calculate the index
-            type: the type of the index
+            index_type: the type of the index
         """
         super().__init__(data, name=name, channels=channels)
-        self.type: Indicies = type
+        self.type: Indicies = index_type
         self.color_map: str = color_map
 
     def run(self, data: Data) -> bool:
@@ -36,19 +37,17 @@ class GenericIndex(Runnable):
         """
         try:
             # Get the channels
-            index = self.calculate([
-                np.asasarray(
-                    data.modules[Modules.MOSAIC.value]["stitched"][channel].get() ,
-                    dtype=np.float64)
-                for channel in self.channels])
+            index = self.calculate(data.modules[Modules.MOSAIC.value]["stitched"])
             
             # Calculate 
-            data.modules[Modules.INDEX.value]["runnables"][self.type.value]["index"] = index
+            data.modules[Modules.INDEX.value]["runnables"]\
+                        [self.type.value]["index"] = index
             return True
 
         # Catch exception
         except Exception as exception:
             print("Running " + self.name + " failed: " + str(exception))
+            traceback.print_exc()
             return False
 
     @abstractmethod
@@ -62,12 +61,12 @@ class GenericIndex(Runnable):
         Returns:
             The calculated index.
         """
-        pass
 
     def to_persist(self, data: Data):
         persist: str = Modules.INDEX.value + "." + "runnables" + "." + \
                             self.type.value + "." + "index"
-        data.persistable[Modules.INDEX.value]["runnables"][self.type.value] = frozenset([persist])
+        data.persistable[Modules.INDEX.value]["runnables"]\
+                        [self.type.value] = frozenset([persist])
 
     def prepare(self, data: Data):
         """
@@ -77,5 +76,9 @@ class GenericIndex(Runnable):
             data: the pipeline data object
         """
         super().prepare(data)
-        self.to_persist(data)
-        data.modules[Modules.INDEX.value]["runnables"][self.type.value] = frozenset()
+        data.modules[Modules.INDEX.value]["runnables"][self.type.value] = {}
+        # TODO: fix
+        # self.to_persist(data)
+        
+    def upload(self, data: Data, collection, bucket, base_url: str):
+        pass
