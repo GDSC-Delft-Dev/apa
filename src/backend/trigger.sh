@@ -59,18 +59,26 @@ if [[ -n "$local_source" && -n "$cloud_source" ]]; then
 fi
 
 
+# input images are taken from the local filesystem and uploaded to the cloud
 if [ -n "$local_source" ]; then
+  # create uuid for the input path in specified bucket
   uuid=$(uuidgen)
+  # make sure all characters are lower-case
   uuid=$(echo "$uuid" | tr '[:upper:]' '[:lower:]')
   echo "Created UUID for the local input data: $uuid"
+  # copy the data from a local path to the cloud
   gsutil -m cp -r $local_source gs://terrafarm-inputs/$uuid/
   IFS='/' read -ra my_list <<< "$local_source"
+  # take the last folder from the local path to complete cloud path
   last_folder=$(echo $local_source | rev | cut -d/ -f2 | rev)
+  # full cloud path without bucket name
   cloud_path="$uuid/$last_folder"
+  # specify mode of operation
   mode="local"
 
 fi
 
+# input images directly from a cloud bucket
 if [ -n "$cloud_source" ]; then
   cloud_path=$cloud_source
   mode="cloud"
@@ -79,10 +87,12 @@ fi
 parse_path="--path $cloud_path"
 parse_mode="--mode $mode"
 
+# create job with custom arguments
 gcloud beta run jobs create $job_name --image $VERSION --command=python,main.py --args="$parse_path","$parse_mode"
 echo "Job $job_name created"
 # execute job
 
+# run created job
 gcloud beta run jobs execute $job_name
 
 echo "Job $job_name finished" 

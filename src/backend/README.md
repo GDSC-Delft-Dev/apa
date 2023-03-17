@@ -20,20 +20,21 @@ You can then run the default pipeline with
 
 `py main.py`
 
-As there are multiple ways to run a pipeline, there is a list of arguments that can be used to specify options. Here is an exhaustive list of the supported arguments:
+As there are multiple ways to run a pipeline, there is a list of arguments that can be used to specify options. The supported arguments are:
 - path - specify the path on Google Cloud Storage where the input images are located. If not path is specified, the input images will be from the local filesystem. 
 - mode - specify if the input images are already in the cloud or need to be uploaded first from the local filesystem.
+- name - specify a unique name for the created job
 
 #### Examples
 
 Run the pipeline with images already in the cloud:
-`py main.py --path path/to/images --mode cloud`
+```py main.py --path path/to/images --mode cloud```
 
 Run the pipeline with images on your local filesystem:
-`py main.py --path path/to/images --mode local`
+```py main.py --path path/to/images --mode local```
 
 Run the pipeline without Google Cloud:
-`py main.py`
+```py main.py```
 
 ### Trigger an image processing job on Google Cloud Platform
 
