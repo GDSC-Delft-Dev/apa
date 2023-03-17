@@ -10,7 +10,7 @@ class FieldModel {
   final double area;
   final String cropId;
   final List<GeoPoint> boundaries;
-  final List<String> runs;
+  final List<String> scans;
   bool hasInsights;
 
   FieldModel(
@@ -19,7 +19,7 @@ class FieldModel {
       required this.area,
       required this.boundaries,
       required this.cropId,
-      required this.runs,
+      required this.scans,
       this.hasInsights = false});
 
   setHasInsights(bool hasInsights) {

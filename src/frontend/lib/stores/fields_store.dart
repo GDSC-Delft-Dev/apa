@@ -23,7 +23,7 @@ class FieldsStore {
       boundaries: List<GeoPoint>.from(
           snapshot['boundaries']?.map((loc) => GeoPoint(loc.latitude, loc.longitude)) ?? []),
       hasInsights: snapshot['has_insights'],
-      runs: List<String>.from(snapshot['runs'] ?? []),
+      scans: List<String>.from(snapshot['scans'] ?? []),
     );
   }
 
@@ -46,7 +46,7 @@ class FieldsStore {
     addFieldData['user_id'] = userId;
     addFieldData['boundaries'] = boundaries;
     addFieldData['has_insights'] = false; // by default, a field has no insights yet
-    addFieldData['runs'] = []; // by default, a field has no scans yet
+    addFieldData['scans'] = []; // by default, a field has no scans yet
     return fieldsCollection.doc().set(addFieldData);
   }
 
@@ -66,7 +66,7 @@ class FieldsStore {
           cropId: doc.get('crop_id') ?? '',
           // Convert Firebase array of GeoPoints into List<GeoPoint>
           boundaries: boundaries,
-          runs: List<String>.from(doc.get('runs') ?? []),
+          scans: List<String>.from(doc.get('scans') ?? []),
           hasInsights: doc.get('has_insights') ?? false);
     }).toList();
   }
