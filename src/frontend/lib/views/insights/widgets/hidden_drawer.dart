@@ -25,7 +25,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.green.shade50,
+      backgroundColor: Colors.green.shade100,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
