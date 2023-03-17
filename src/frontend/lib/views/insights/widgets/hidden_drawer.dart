@@ -31,8 +31,11 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           drawerItem(Icons.auto_graph_rounded, 'Crop growth', () => Navigator.pushNamed(context, '/crop_growth')),
+          SizedBox(height: 12),
           drawerItem(Icons.manage_search_sharp, 'Field details', () => Navigator.pushNamed(context, '/field_details')),
+          SizedBox(height: 12),
           drawerItem(Icons.settings, 'Settings', () => Navigator.pushNamed(context, '/settings')),
+          SizedBox(height: 12),
           drawerItem(Icons.logout, 'Logout', () => Navigator.pushNamed(context, '/login'))
         ],
       )
