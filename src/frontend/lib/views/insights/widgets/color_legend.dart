@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-// import 'package:syncfusion_flutter_gauges/gauges.dart';
+import '../../../providers/insight_choices_provider.dart';// import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 
 class ColorLegend extends StatelessWidget {
 
-  final String mapType;
+  final InsightMapType mapType;
 
   const ColorLegend({super.key, required this.mapType});
 
   @override
   Widget build(BuildContext context) {
+
+    List<Color> ndviColors = [Colors.yellow, Colors.red];
+    List<Color> soilMoistureColors = [Colors.blue, Colors.green];
+
     return Container(
       height: 40.0,
       margin: EdgeInsets.all(10.0),
@@ -17,7 +21,7 @@ class ColorLegend extends StatelessWidget {
         border: Border.all(color: Colors.black, width: 1.0),
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         gradient: LinearGradient(
-                    colors: [Colors.yellow, Colors.redAccent],
+                    colors: mapType == InsightMapType.ndvi ? ndviColors : soilMoistureColors,
                     begin: Alignment.centerLeft, end: Alignment.centerRight, tileMode: TileMode.clamp)
       ),
       child: Row(

@@ -158,7 +158,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                       Container(
                         padding: const EdgeInsets.only(bottom: 70, right: 10, left: 10),
                         alignment: Alignment.bottomCenter,
-                        child: const ColorLegend(mapType: 'NDVI')
+                        child: ColorLegend(mapType: Provider.of<InsightChoicesProvider>(context, listen: true).currInsightMapType)
                       )
                     ],
                   ),
