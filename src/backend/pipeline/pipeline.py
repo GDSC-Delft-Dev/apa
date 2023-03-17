@@ -1,5 +1,6 @@
 import copy
 from typing import Any, Type
+from tqdm import tqdm
 from .modules.module import Module
 from .modules.parallel_module import ParallelModule
 from .mat import Mat, Channels
@@ -10,6 +11,9 @@ import asyncio
 from firebase_admin import firestore
 from google.cloud import storage
 import time
+
+# temporary input bucket for manual triggers
+temp_input_bucket = "terrafarm-inputs"
 
 class Pipeline:
     """
@@ -135,10 +139,9 @@ class Pipeline:
             })
 
         if self.config.cloud.staged_input and not failed:
-            bucket = self.storage_client.bucket("terrafarm-inputs")
+            bucket = self.storage_client.bucket(temp_input_bucket)
             blobs=bucket.list_blobs(prefix=self.config.cloud.input_path + "/", delimiter="/")
-            for blob in blobs:
-                print(blob)
+            for blob in tqdm(blobs):
                 blob.delete()
 
         return data

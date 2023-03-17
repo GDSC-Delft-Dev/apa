@@ -25,11 +25,8 @@ class Config:
     Initializes the config.
 
     Args:
-        use_cloud: whether use cloud resources, e.g. persist data to cloud storage.
-                   If False, the user doesn't need to provide GCP credentials.
         modules: dictionary of modules to initialize and their initialization data
-        mode: pipeline input is either from the cloud or locally provided from a manual trigger
-        path: path to the pipeline input data
+        cloud: data class containing necessary information for Google Cloud usage
     """
     def __init__(self, modules: dict[Type[Module], Any], cloud: CloudConfig = CloudConfig()):
         assert len(modules) > 0, "No modules specified"

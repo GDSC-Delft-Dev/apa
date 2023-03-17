@@ -20,33 +20,29 @@ ${REGION}-docker.pkg.dev/${PROJECT}/${REPO} \
 
 echo "Latest artifact image $VERSION"
 
-# create the actual job:
-# JOB_NAME: the name of the job you want to create
-# IMAGE_URL: reference to a container image from the Artifact Registry
-# OPTIONS (any of the following): 
-#               --tasks: 	Accepts integers greater or equal to 1
-#               --max-retries: The number of times a failed task is retried
-#               --task-timeout: Accepts a duration like "2s". Defaults to 10 minutes; maximum is 1h. 
-#               --parallelism: The maximum number of tasks that can execute in parallel.
-#               --execute-now: If set, immediately after the job is created, a job execution is started. 
-#
-
-
+# use getopts to parse options in the command line
 while getopts ":l:c:v:n:" opt; do
+  # for each argument, check if its in the list of supported arguments or not
   case $opt in
+    # local argument
     l) local_source="$OPTARG"
     ;;
+    # cloud argument
     c) cloud_source="$OPTARG"
     ;;
+    # artifact image version (default latest)
     v) VERSION="$OPTARG"
     ;;
+    # custom name for the job
     n) job_name="$OPTARG"
     ;;
+    # the argument is not supported
     \?) echo "Invalid option -$OPTARG" >&2
     exit 1
     ;;
   esac
 
+  # return exit code 1 if one of the arguments is not supported
   case $OPTARG in
     -*) echo "Option $opt needs a valid argument"
     exit 1

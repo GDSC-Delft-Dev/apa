@@ -30,11 +30,11 @@ class TestPreprocessingModule:
         module.run(data)
         assert data.modules[Modules.PREPROCESS.value]["masked"] is not None
         out = np.array([x.get() for x in data.modules[Modules.PREPROCESS.value]["masked"]])
-        # connect to Cloud Storage
-        storage_client = storage.Client(credentials=get_credentials())
-        bucket = storage_client.bucket("terrafarm-test")
-        blob = bucket.blob("expected_preprocess_masked.npy")
-        blob.download_to_filename("expected_preprocess_masked.npy")
+        if not os.path.exists("expected_preprocess_masked.npy"):
+            # connect to Cloud Storage
+            storage_client = storage.Client(credentials=get_credentials())
+            bucket = storage_client.bucket("terrafarm-test")
+            blob = bucket.blob("expected_preprocess_masked.npy")
+            blob.download_to_filename("expected_preprocess_masked.npy")
         expected = np.load("expected_preprocess_masked.npy", allow_pickle=True) 
         assert np.array_equal(out, expected)
-        os.remove("expected_preprocess_masked.npy") 

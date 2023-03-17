@@ -20,10 +20,27 @@ You can then run the default pipeline with
 
 `py main.py`
 
-### Manual Pipeline triggers
+As there are multiple ways to run a pipeline, there is a list of arguments that can be used to specify options. Here is an exhaustive list of the supported arguments:
+- path - specify the path on Google Cloud Storage where the input images are located. If not path is specified, the input images will be from the local filesystem. 
+- mode - specify if the input images are already in the cloud or need to be uploaded first from the local filesystem.
+
+#### Examples
+
+Run the pipeline with images already in the cloud:
+`py main.py --path path/to/images --mode cloud`
+
+Run the pipeline with images on your local filesystem:
+`py main.py --path path/to/images --mode local`
+
+Run the pipeline without Google Cloud:
+`py main.py`
+
+### Trigger an image processing job on Google Cloud Platform
 
 Manual triggers allow you to run the latest pipeline builds from the Artifact Registry with custom input data using Cloud Run.
 You can run a job with either input data from your local file system or input data that already resides in the cloud.
+
+Custom inputs to the pipeline are removed from Google Cloud only if the pipeline run is successful.
 
 #### Provide input data from a local filesystem
 

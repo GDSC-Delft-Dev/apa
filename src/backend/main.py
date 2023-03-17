@@ -9,6 +9,14 @@ import asyncio
 from pipeline.config import CloudConfig
 from typing import Any
 from pipeline.auth import init_firebase
+from tqdm import tqdm
+
+# output bucket for pipeline results
+output_bucket = "terrafarm-example"
+# local input bucket
+local_input_bucket = "terrafarm-inputs"
+# cloud input bucket
+cloud_input_bucket = "terrafarm-test"
 
 def main(args: Any):
     """Main entry point."""
@@ -17,30 +25,33 @@ def main(args: Any):
     if args.path is None or args.mode is None:
         imgs = [Mat.read(file) for file in glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG")]
         path = "pipeline/test/data/mosaicing/farm/D*.JPG"
-        cloud_config = CloudConfig(bucket_name="terrafarm-example")
+        cloud_config = CloudConfig(bucket_name=output_bucket)
     else:
         storage_client = storage.Client()
         cloud_config = CloudConfig(
             use_cloud=True,
             input_path=args.path,
             staged_input=(args.mode == "local"),
-            bucket_name="terrafarm-example"
+            bucket_name=output_bucket
         )
 
         if not os.path.exists("./pipeline/data"):
             os.mkdir("./pipeline/data/")
         if args.mode == "local":
-            bucket = storage_client.get_bucket("terrafarm-inputs")
+            bucket = storage_client.get_bucket(local_input_bucket)
         else:
-            bucket = storage_client.get_bucket("terrafarm-test")
+            bucket = storage_client.get_bucket(cloud_input_bucket)
 
         # get all the files from the specified bucket and prefix path
         blobs = bucket.list_blobs(prefix=args.path + "/D", delimiter="/")
-        for blob in blobs:
+        for blob in tqdm(blobs):
             print(blob)
             print(os.getcwd())
+            # file path where the blob data from Google Storage is stored
             filename = f"./pipeline/data/{blob.name.split('/')[-1]}"
+            # create an empty file on the specified path
             open(filename, 'a', 'utf-8').close()
+            # download and append the data in the file created before
             blob.download_to_filename(f"./pipeline/data/{blob.name.split('/')[-1]}")
         
         imgs = [Mat.read(file) for file in glob.glob("pipeline/data/D*.JPG")]
