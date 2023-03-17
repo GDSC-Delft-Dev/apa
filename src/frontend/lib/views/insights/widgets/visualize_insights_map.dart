@@ -156,7 +156,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                           alignment: Alignment.topRight,
                           child: const MapsDropdown()),
                       Container(
-                        padding: const EdgeInsets.only(bottom: 90, right: 10, left: 10),
+                        padding: const EdgeInsets.only(bottom: 70, right: 10, left: 10),
                         alignment: Alignment.bottomCenter,
                         child: ColorLegend(mapType: Provider.of<InsightChoicesProvider>(context, listen: true).currInsightMapType)
                       )
