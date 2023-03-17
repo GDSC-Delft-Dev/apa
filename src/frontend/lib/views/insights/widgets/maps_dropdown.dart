@@ -27,14 +27,14 @@ class _MapsDropdownState extends State<MapsDropdown> {
                 ),
                 filled: true,
                 fillColor: Colors.white,
-                hintText: currMap.name.toString().split('.').last.replaceAll('_', ' '),
+                hintText: currMap == InsightMapType.ndvi ? 'NDVI' : 'Soil Moisture',
               ),
               value: currMap,
               icon: const Icon(Icons.arrow_downward),
               items: InsightMapType.values.map((InsightMapType type) {
                 return DropdownMenuItem<InsightMapType>(
                   value: type,
-                  child: Text(type.toString().split('.').last.replaceAll('_', ' '), style: TextStyle(fontSize: 16)),
+                  child: Text(type == InsightMapType.ndvi ? 'NDVI' : 'Soil Moisture'),
                 );
               }).toList(),
               onChanged: (InsightMapType? value) {
