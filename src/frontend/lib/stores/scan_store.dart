@@ -18,12 +18,10 @@ class ScanStore {
     for (var scanId in scanIds) {
       scans.add(await getScanDetails(scanId));
     }
-
     // We sort them based on start date. This is useful for the scan history feature.
     scans.sort(
       (a, b) => a.endDate.compareTo(b.endDate),
     );
-
     return scans;
   }
 

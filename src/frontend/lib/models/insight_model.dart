@@ -14,7 +14,7 @@ class InsightModel {
 
   factory InsightModel.fromDocumentSnapshot(DocumentSnapshot snapshot) {
     return InsightModel(
-      typeId: snapshot['typeId'],
+      typeId: snapshot['type_id'],
       center: snapshot['center'],
       data: snapshot['data'],
     );
@@ -22,7 +22,7 @@ class InsightModel {
 
   factory InsightModel.fromMap(Map<String, dynamic> map) {
     return InsightModel(
-      typeId: map['typeId'],
+      typeId: map['type_id'],
       center: map['center'],
       data: map['data'],
     );
@@ -30,7 +30,7 @@ class InsightModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'typeId': typeId,
+      'type_id': typeId,
       'center': center,
       'data': data,
     };
