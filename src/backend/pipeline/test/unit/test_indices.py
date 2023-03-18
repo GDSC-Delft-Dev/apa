@@ -36,6 +36,7 @@ class TestNutrientRunnable:
         imgs = [Mat.read(file) for file in sorted(glob.glob("../data/mosaicing/farm/D*.JPG"))]
         # run the pipeline
         result = await pipeline.run(imgs)
+        print(result.modules[Modules.INDEX.value])
         assert result.modules[Modules.INDEX.value]["runnables"][Indicies.NUTRIENT.value]["index"] is not None
         assert result.modules[Modules.INDEX.value]["runnables"][Indicies.NUTRIENT.value]["masks"] is not None
 
@@ -49,5 +50,6 @@ class TestNutrientRunnable:
 
         # load data and assert
         expected = np.load("nutrient_masks.npy", allow_pickle=True) 
+        print(result.modules[Modules.INDEX.value]["runnables"])
         out = result.modules[Modules.INDEX.value]["runnables"][Indicies.NUTRIENT.value]["masks"] 
         assert np.array_equal(out, expected)
