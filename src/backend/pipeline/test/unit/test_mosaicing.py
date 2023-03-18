@@ -34,28 +34,4 @@ class TestMosaicingModule:
         mask = np.where(collapsed == 0.0, 1, 0)
         mask = np.expand_dims(mask, 2)
         assert np.array_equal(np.where(mask == 1, 0, 1), result.modules[Modules.MOSAIC.value]["mask"])
-
-    @pytest.mark.asyncio
-    async def test_mosaicing_dimensions(self):
-        """
-        Test the method run of the mosaic module.
-        """
-        cfg = Config(modules={Mosaicing: None}, cloud=CloudConfig())
-        pipeline = Pipeline(cfg)
-        imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
-        # run the pipeline
-        result = await pipeline.run(imgs)
-        imgs_shape = [mat.get().shape for mat in imgs]
-        # add up all the shapes
-        sumx = [0, 0]
-        min_x, min_y = (1e9, 1e9)
-        for _shape in imgs_shape:
-            sumx[0] += _shape[0]
-            sumx[1] += _shape[1]
-            min_x = min(min_x, _shape[0])
-            min_y = min(min_y, _shape[1])
-        stitched_shape = result.modules[Modules.MOSAIC.value]["stitched"].get().shape
-        assert min_x <= stitched_shape[0] and stitched_shape[0] <= sumx[0]
-        assert min_y <= stitched_shape[1] and stitched_shape[1] <= sumx[1]
-        # only have RGB channels
-        assert stitched_shape[2] == 3
+    

@@ -11,6 +11,7 @@ env:
   PROJECT_ID: terrafarm-378218
   GAR_LOCATION: europe-west4
   GAR_REPOSITORY: pipelines-dev
+  GCP_FA_PRIVATE_KEY: ${{ secrets.GCP_FA_PRIVATE_KEY }}
   
 jobs:
   lint:

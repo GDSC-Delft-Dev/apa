@@ -10,11 +10,10 @@ from .modules.index.runnables.nutrient import Nutrient
 from .modules.index.runnables.ndvi import NDVI
 from .modules.index.index import Index
 
-def default_pipeline() -> Pipeline:
+def default_pipeline(cloud: CloudConfig = CloudConfig()) -> Pipeline:
     """Default pipeline."""
-    cfg = Config(modules={Mosaicing: None,
-                          Index: {"config": None, "runnables": [NDVI]}}, 
-                cloud=CloudConfig(True, "terrafarm-example"))
+    cfg = Config(modules={Mosaicing: None}, 
+                cloud=cloud)
     return Pipeline(cfg)
 
 def full_pipeline() -> Pipeline:
@@ -34,7 +33,7 @@ def training_pipeline() -> Pipeline:
     """Model training pipeline."""
 
     # Get the masks
-    masks = [cv2.imread(file) for file in glob.glob("../test/data/mosaicing/farm/mask*.JPG")]
+    masks = [cv2.imread(file) for file in sorted(glob.glob("../test/data/mosaicing/farm/mask*.JPG"))]
     # Run the pipeline
     cfg = Config(modules={AgricultureVisionPreprocess: masks, 
                           Mosaicing: None}, 
