@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/cloud_functions_service.dart';
 import 'package:frontend/views/home/widgets/visualize_home_map.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/field_model.dart';
 import '../../models/user_model.dart';
 import '../../stores/fields_store.dart';
@@ -21,6 +21,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  @override
+  void initState() {
+    super.initState();
+    CloudFunctionsService.testHealth();
+  }
 
   @override
   Widget build(BuildContext context) {

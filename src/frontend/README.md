@@ -20,6 +20,14 @@ Through an intuitive dashboard, farmers are able to automatically track historic
 <p align="center">Example screenshots</p>
 
 
+## Tools and Libraries Used
+- [Google Maps Platform](https://mapsplatform.google.com/)
+- [Firebase](https://firebase.google.com/) - Authentication, Cloud Firestore
+- [Google Cloud Storage](https://cloud.google.com/storage)
+- [Cloud Functions](https://cloud.google.com/functions)
+
+
+
 ## Getting started
 
 ### Step 1
@@ -64,17 +72,6 @@ Get information about installed tooling required for Flutter development
 flutter doctor
 ````
 
-
-## How to use
-
-### Logging into the app
-You can use the following dummy credentials for logging into the application:
-````
-e-mail: andyzaidman42@tudelft.net
-password: andy12345
-````
-For all invalid authentication attempts, an error message will be displayed.
-
 ### Firebase
 
 Follow [these instructions](https://firebase.google.com/docs/flutter/setup?platform=ios) in order to configure Firebase into your local project.
@@ -104,12 +101,32 @@ Note that `local.properties` and `Debug.xcconfig` are both under `.gitignore`.
 ````
 GOOGLE_MAPS_API_KEY={YOUR_PRIVATE_GOOGLE_MAPS_API_KEY}
 ````
+### Cloud Functions
 
-## Tools and Libraries Used
-- [Google Maps Platform](https://mapsplatform.google.com/)
-- [Firebase](https://firebase.google.com/) - Authentication, Cloud Firestore, hosting
-- [Google Cloud Storage](https://cloud.google.com/storage)
-- [Cloud Functions](https://cloud.google.com/functions)
+In order to be able to run Cloud Functions, you will need to install `TypeScript` and `ESLint`.
+````
+npm install -g typescript
+npm install -g eslint
+````
+
+
+
+## How to use
+
+### Logging into the app
+You can use the following dummy credentials for logging into the application:
+````
+e-mail: andyzaidman42@tudelft.net
+password: andy12345
+````
+For all invalid authentication attempts, an error message will be displayed.
+
+<!-- ### Adding Fields
+
+### Inspecting Field Insights -->
+
+
+
 
 ## Folder Structure
 
