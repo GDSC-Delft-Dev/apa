@@ -33,18 +33,19 @@ class _MyFieldsState extends State<MyFields> {
       initialData: [],
       child: Scaffold(
           appBar: AppBar(
-            title: Text('My fields'),
+            title: const Text('Fields'),
           ),
           backgroundColor: Colors.grey[200],
           body: Center(
             child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/farm-background.jpg'),
-                    fit: BoxFit.cover
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
                   )
                 ),
-                child: FieldList()
+                child: const FieldList()
             ),
           ),
           floatingActionButton: FloatingActionButton(
