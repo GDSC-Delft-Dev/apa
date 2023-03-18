@@ -34,9 +34,6 @@ class VisualizeInsightsMap extends StatefulWidget {
 class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  // Workaround lagging screen due to Google Maps initialization
-  final Future _mapFuture = Future.delayed(const Duration(milliseconds: 250), () => true);
-
   // For keeping track of polygons to  draw
   Set<Polygon> _polygons = Set<Polygon>();
 
@@ -134,6 +131,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         rotateGesturesEnabled: true,
                         tiltGesturesEnabled: true,
                         myLocationEnabled: false,
+                        groundOverlays: Set(),
                         initialCameraPosition:
                             utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                         mapType: MapType.satellite,
