@@ -33,7 +33,7 @@ def training_pipeline() -> Pipeline:
     """Model training pipeline."""
 
     # Get the masks
-    masks = [cv2.imread(file) for file in glob.glob("../test/data/mosaicing/farm/mask*.JPG")]
+    masks = [cv2.imread(file) for file in sorted(glob.glob("../test/data/mosaicing/farm/mask*.JPG"))]
     # Run the pipeline
     cfg = Config(modules={AgricultureVisionPreprocess: masks, 
                           Mosaicing: None}, 

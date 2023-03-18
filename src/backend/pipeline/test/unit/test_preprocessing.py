@@ -21,8 +21,8 @@ class TestPreprocessingModule:
         """
         Test the method run.   
         """  
-        masks = [cv2.imread(file) for file in glob.glob("../data/mosaicing/farm/mask*.JPG")]
-        imgs = [Mat.read(file) for file in glob.glob("../data/mosaicing/farm/D*.JPG")]
+        masks = [cv2.imread(file) for file in sorted(glob.glob("../data/mosaicing/farm/mask*.JPG"))]
+        imgs = [Mat.read(file) for file in sorted(glob.glob("../data/mosaicing/farm/D*.JPG"))]
         data: Data = Data(uuid.uuid4())
         data.modules[Modules.PREPROCESS.value] = {}
         module = Preprocess(data, masks)

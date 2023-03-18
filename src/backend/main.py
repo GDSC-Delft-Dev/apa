@@ -23,7 +23,7 @@ def main(args: Any):
 
     # check if we use cloud data or local data
     if args.path is None or args.mode is None:
-        imgs = [Mat.read(file) for file in glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG")]
+        imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG"))]
         path = "pipeline/test/data/mosaicing/farm/D*.JPG"
         cloud_config = CloudConfig(bucket_name=output_bucket)
     else:
@@ -54,7 +54,7 @@ def main(args: Any):
             # download and append the data in the file created before
             blob.download_to_filename(f"./pipeline/data/{blob.name.split('/')[-1]}")
         
-        imgs = [Mat.read(file) for file in glob.glob("pipeline/data/D*.JPG")]
+        imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/data/D*.JPG"))]
 
     # Get test data
     imgs = imgs[:4]
