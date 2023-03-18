@@ -24,7 +24,7 @@ class Nutrient(Runnable):
             data.modules[Modules.INDEX.value]["runnables"][self.type.value]["masks"] = nutrient_masks
             masks = [np.where(mask == 1, 255, 0) for mask in nutrient_masks]
             patches = data.modules[Modules.MOSAIC.value]["patches"]
-            hsize, _ = data.modules[Modules.MOSAIC.value]["patches_dims"]
+            hsize = 512
             result = self.calculate(masks, patches, hsize)
             data.modules[Modules.INDEX.value]["runnables"][self.type.value]["index"] = result
             return True
