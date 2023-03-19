@@ -3,8 +3,9 @@ from ...data import Data, Modules
 from ..indicies import Indicies
 from ....mat import Channels
 import numpy as np
-import cv2
+import traceback
 import matplotlib.pyplot as plt
+import sys
 
 class NDVI(Runnable):
     """
@@ -44,8 +45,8 @@ class NDVI(Runnable):
 
         # Catch exception
         except Exception as exception:
-            print("NDVI calculation failed!")
-            print(exception)
+            print("Running NDVI failed: " + str(exception))
+            print(traceback.format_exc())
             return False
 
     def calculate(self, nir, red) -> np.ndarray:

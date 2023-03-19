@@ -1,10 +1,11 @@
 from ...runnable import Runnable
 from ...data import Data, Modules
 from ..indicies import Indicies
-from ....mat import Channels
+import traceback
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
+import sys
 
 class Nutrient(Runnable):
     """
@@ -12,7 +13,7 @@ class Nutrient(Runnable):
     """
 
     def __init__(self, data: Data) -> None:
-        super().__init__(data, name="NUTRIENT")
+        super().__init__(data, name="Nutrient")
         self.type = Indicies.NUTRIENT
 
     def run(self, data: Data) -> bool:
@@ -24,13 +25,15 @@ class Nutrient(Runnable):
             data.modules[Modules.INDEX.value]["runnables"][self.type.value]["masks"] = nutrient_masks
             masks = [np.where(mask == 1, 255, 0) for mask in nutrient_masks]
             patches = data.modules[Modules.MOSAIC.value]["patches"]
-            hsize, _ = data.modules[Modules.MOSAIC.value]["patches_dims"]
+            hsize = 512
             result = self.calculate(masks, patches, hsize)
             data.modules[Modules.INDEX.value]["runnables"][self.type.value]["index"] = result
             return True
+        
+        # Catch exception
         except Exception as exception:
-            print("Nutrient calculation failed!")
-            print(exception)
+            print("Running Nutrient failed: " + str(exception))
+            print(traceback.format_exc())
             return False
 
     def calculate(self, masks, patches, hsize: int) -> np.ndarray:

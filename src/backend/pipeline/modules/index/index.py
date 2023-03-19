@@ -1,8 +1,5 @@
-# type: ignore
 from __future__ import annotations
 from ..parallel_module import ParallelModule
-from .runnables.ndvi import NDVI
-from .runnables.nutrient import Nutrient
 from ..runnable import Runnable
 from ..data import Data, Modules
 from typing import Any

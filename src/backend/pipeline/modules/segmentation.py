@@ -9,10 +9,11 @@ class SemanticSegmentation(Module):
     """Perform semantic segmentation using the DeepLabV3+ model."""
 
     def __init__(self, data: Data, input_data: Any) -> None:
-        super().__init__(data, name="Semantic Segmentation DeepLabv3+", module_type=Modules.SEGMENTATION)
+        super().__init__(data, name="Semantic Segmentation DeepLabv3+", 
+                         module_type=Modules.SEGMENTATION)
         self.paths = input_data # paths to model atrifacts 
 
-    def run(self, data: Data) -> Data:
+    def run(self, data: Data) -> None:
         """
         Perform inference using the images given.
         Each image should adhere to specific dimensions in order to be
@@ -30,5 +31,4 @@ class SemanticSegmentation(Module):
             predictions.append(model.predict(np.expand_dims((image.get()), axis=0)))
 
         data.modules[self.type.value]["masks"] = predictions
-        return super().run(data)
    

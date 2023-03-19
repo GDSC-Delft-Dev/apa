@@ -9,6 +9,8 @@ from .runnable import Runnable
 from .modules import Modules
 from concurrent.futures import ThreadPoolExecutor, wait
 from typing import Any, Type
+
+
 class ParallelModule(Module):
     """
     Represents an arbitrary image processing pipeline module that can
@@ -33,29 +35,24 @@ class ParallelModule(Module):
         self.runnables: list[Runnable] = [runnable(data) for runnable in runnables]
         self.channels: list[Channels] = list(set(sum([runnable.channels for runnable in self.runnables], [])))
 
-    def run(self, data: Data) -> Data:
+    def run(self, data: Data) -> None:
         """
         Processes the image using the runnables.
 
         Args:
-            img: the input image(s)
-            data: the job data
+            data: the pipeline data object
         """
-        
         # Spawn the executor
         # TODO: don't hardcode max_workers
         with ThreadPoolExecutor(max_workers=4) as executor:
             # Run the runnables
-            print("Parallel module running " +\
+            print("Running " +\
                 ', '.join(["<" + runnable.name + ">" for runnable in self.runnables]))
             futures = {executor.submit(runnable.run, data): runnable for runnable in self.runnables}
 
             # Wait for completion
             # TODO: add validation
             wait(futures)
-
-        # Run the module functionality
-        return super().run(data)
     
     def verify(self, channels: list[Channels]) -> bool:
         """
@@ -84,6 +81,10 @@ class ParallelModule(Module):
         # Initialize the module data
         super().prepare(data)
         data.modules[self.type.value]["runnables"] = {}
+
+        # Override super initialization
+        data.persistable[self.type.value] = {}
+        data.persistable[self.type.value]["runnables"] = {}
 
         # Initialize runnables' data
         for runnable in self.runnables:

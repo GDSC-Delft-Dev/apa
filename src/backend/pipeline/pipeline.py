@@ -11,6 +11,7 @@ import asyncio
 from firebase_admin import firestore
 from google.cloud import storage
 import time
+import traceback
 
 # temporary input bucket for manual triggers
 temp_input_bucket = "terrafarm-inputs"
@@ -47,6 +48,12 @@ class Pipeline:
         for module, input_data in list(config.modules.items())[1:]: #type: tuple[Type[Module], Any]
             tail.next = self.build_module(module, input_data)
             tail = tail.next
+
+        # Show the build pipeline
+        print('------------------')
+        print('Modules in the pipeline:')
+        print(' -> '.join(module.__name__ for module in config.modules.keys()))
+        print('------------------')
 
     def build_module(self, module: Type[Module], input_data: Any) -> Module:
         """
@@ -114,23 +121,31 @@ class Pipeline:
             raise RuntimeError("Pipeline input integrity violated")
 
         # Run the chain
-        iterator: Module | None = self.head
+        module: Module | None = self.head
         failed: bool = False
-        while iterator is not None:
-            # Run the module
+        while module is not None:
             try:
-                data = iterator.run(data)
+                # Prepare the module
+                print(f"Preparing <{module.name}>")
+                data.current = module.type
+                module.prepare(data)
+
+                # Run the module
+                print(f"Running <{module.name}>")
+                module.run(data)
             except Exception as exception:
+                print("Running " + module.name + " failed: " + str(exception))
+                print(traceback.format_exc())
                 failed = True
 
             # Upload data to the cloud asynchronously
             if self.config.cloud.use_cloud:
                 asyncio.create_task(
                     asyncio.to_thread(
-                        iterator.upload(data, self.collection, self.bucket, self.base_url)))
+                        module.upload(data, self.collection, self.bucket, self.base_url)))
             
             # Go to the next module
-            iterator = iterator.next
+            module = module.next
 
         # Log end time of the pipeline
         if self.config.cloud.use_cloud:

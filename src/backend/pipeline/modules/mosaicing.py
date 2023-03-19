@@ -16,7 +16,7 @@ class Mosaicing(Module):
     def __init__(self, data: Data, input_data: Any = None) -> None:
         super().__init__(data, name="Mosaicing", module_type=Modules.MOSAIC)
 
-    def run(self, data: Data) -> Data:
+    def run(self, data: Data) -> None:
         """
         Stitches the images to create an orthomosaic image of the farm.
         
@@ -26,9 +26,6 @@ class Mosaicing(Module):
 
         Raises:
             Exception: when the sticher fails to stich the images
-
-        Returns:
-            The stiched image.
         """
 
         self.prepare(data)
@@ -62,9 +59,6 @@ class Mosaicing(Module):
         data.modules[self.type.value]["alpha_img"] = alpha_stitched
         patches = self.create_patches(stitched, data.input[0].channels)
         data.modules[self.type.value]["patches"] = patches
-            
-        # Run the next module
-        return super().run(data)
 
     def to_persist(self, data: Data):
         data.persistable[self.type.value] = frozenset([self.type.value + "." + "stitched"])
