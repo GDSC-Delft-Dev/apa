@@ -12,7 +12,7 @@ from .modules.index.index import Index
 
 def default_pipeline(cloud: CloudConfig = CloudConfig()) -> Pipeline:
     """Default pipeline."""
-    cfg = Config(modules={Mosaicing: None}, 
+    cfg = Config(modules={Mosaicing: None, Index: None},
                 cloud=cloud)
     return Pipeline(cfg)
 
@@ -47,5 +47,5 @@ def nutrient_pipeline() -> Pipeline:
                           AgricultureVisionPreprocess: None,
                           SemanticSegmentation: paths,
                           Index: {"config": None, "runnables": [Nutrient]}},
-                cloud=CloudConfig(True, "terrafarm-example"))
+                cloud=CloudConfig(False, "terrafarm-example"))
     return Pipeline(cfg)
