@@ -85,6 +85,10 @@ class ParallelModule(Module):
         super().prepare(data)
         data.modules[self.type.value]["runnables"] = {}
 
+        # Override super initialization
+        data.persistable[self.type.value] = {}
+        data.persistable[self.type.value]["runnables"] = {}
+
         # Initialize runnables' data
         for runnable in self.runnables:
             runnable.prepare(data)
