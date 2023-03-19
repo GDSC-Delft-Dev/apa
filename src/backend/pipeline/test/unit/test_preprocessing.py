@@ -11,11 +11,7 @@ from google.cloud import storage
 from ...auth import get_credentials
 
 class TestPreprocessingModule:
-    """
-    Unit testing for the preprocessing module.
-    """
-
-
+    """Unit testing for the preprocessing module."""
 
     def test_preprocessing(self):
         """

@@ -8,8 +8,8 @@ import cv2
 from typing import Any
 import pickle
 import pydash
-from google.cloud import storage
-from firebase_admin import firestore
+import json
+from abc import abstractmethod
 
 class Module(Runnable):
     """
@@ -35,24 +35,14 @@ class Module(Runnable):
         self.next: Module | None = None
         self.type: Modules = module_type
 
-    def run(self, data: Data) -> Any:
+    @abstractmethod
+    def run(self, data: Data) -> None:
         """
         Processes the image.
 
         Args:
-            data: the job data
-            persist: whether to save the images to the field database
+            data: the pipeline data object
         """
-
-        # If there is a next module, then run it
-        if self.next is not None:
-            print(f"Preparing <{self.name}>")
-            data.current = self.next.type
-            self.next.prepare(data)
-            print(f"Running <{self.name}>")
-
-        # Otherwise, return the data
-        return data
 
     def display(self, img: Mat) -> None:
         """

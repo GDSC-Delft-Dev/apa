@@ -10,8 +10,8 @@ import numpy as np
 class Preprocess(Module):
     """Perform data preprocessing on raw images."""
 
-    def __init__(self, data: Data, input_data: Any):
-        super().__init__(data, name="Preprocesisng", module_type=Modules.PREPROCESS)
+    def __init__(self, data: Data, input_data: Any, name="Preprocess"):
+        super().__init__(data, name=name, module_type=Modules.PREPROCESS)
         self.masks: list[Mat] = input_data
         
     def run(self, data: Data):
@@ -32,8 +32,6 @@ class Preprocess(Module):
                                  for (x, mask) in zip(data.input, self.masks)] 
             data.modules[self.type.value]["masked"] = masked
 
-        return super().run(data)
-
 class AgricultureVisionPreprocess(Preprocess):
     """
     Perform data preprocessing on Agriculture-Vision: A Large Aerial Image Database for
@@ -44,7 +42,7 @@ class AgricultureVisionPreprocess(Preprocess):
     """
 
     def __init__(self, data: Data, input_data: Any):
-        super().__init__(data, input_data=input_data)
+        super().__init__(data, input_data=input_data, name="AgricultureVisionPreprocess")
    
     def run(self, data: Data):  
         """
@@ -74,4 +72,3 @@ class AgricultureVisionPreprocess(Preprocess):
         data.modules[self.type.value]["clipping"] =\
             [Mat(np.clip(x.get(), v_lower, v_upper).astype(np.uint8), data.input[0].channels) 
                 for (x, (v_lower, v_upper)) in zip(data.modules[Modules.MOSAIC.value]["patches"], bounds)]
-        return super().run(data)

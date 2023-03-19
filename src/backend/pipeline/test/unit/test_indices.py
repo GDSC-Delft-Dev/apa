@@ -17,9 +17,7 @@ import pytest
 import asyncio
 
 class TestNutrientRunnable:
-    """
-    Unit testing for the nutrient deficiency module.
-    """
+    """Unit testing for the nutrient deficiency module."""
 
     @pytest.mark.asyncio
     async def test_nutrient(self):
@@ -28,15 +26,16 @@ class TestNutrientRunnable:
         """  
         paths = {3:"../../ml/deepv3_seg_3/", 4:"../../ml/deepv3_seg_4/"}
         # initialize config for the pipeline with the necessary modules
-        cfg = Config(modules={Mosaicing: None, AgricultureVisionPreprocess: None,
-                          SemanticSegmentation: paths, Index: {"config": None, "runnables": [Nutrient]}}, 
+        cfg = Config(modules={Mosaicing: None, 
+                              AgricultureVisionPreprocess: None,
+                              SemanticSegmentation: paths,
+                              Index: {"config": None, "runnables": [Nutrient]}}, 
                      cloud=CloudConfig())
         pipeline = Pipeline(cfg)
         # get image paths
         imgs = [Mat.read(file) for file in sorted(glob.glob("../data/mosaicing/farm/D*.JPG"))]
         # run the pipeline
         result = await pipeline.run(imgs)
-        print(result.modules[Modules.INDEX.value])
         assert result.modules[Modules.INDEX.value]["runnables"][Indicies.NUTRIENT.value]["index"] is not None
         assert result.modules[Modules.INDEX.value]["runnables"][Indicies.NUTRIENT.value]["masks"] is not None
 
