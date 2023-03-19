@@ -32,9 +32,9 @@ class Nutrient(GenericIndex):
             patches = [x.get() for x in data.modules[Modules.MOSAIC.value]["patches"]]
             # reconstruct mosaic image
             img = self.merge_patches(patches, hdim)
-            img = Mat(img)
+            mat_img = Mat(img)
             # overlay masks over image
-            result = self.calculate(img)
+            result = self.calculate(mat_img)
             data.modules[Modules.INDEX.value]["runnables"][self.type.value]["index"] = result
             return True
         except Exception as exception:
