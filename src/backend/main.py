@@ -60,7 +60,7 @@ def main(args: Any):
     imgs = imgs[:3]
 
     # Run the pipeline
-    pipeline = default_pipeline(cloud=cloud_config)
+    pipeline = nutrient_pipeline()
     pipeline.show()
 
     # Authenticate to firebase

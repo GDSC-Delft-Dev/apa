@@ -47,5 +47,5 @@ def nutrient_pipeline() -> Pipeline:
                           AgricultureVisionPreprocess: None,
                           SemanticSegmentation: paths,
                           Index: {"config": None, "runnables": [Nutrient]}},
-                cloud=CloudConfig(True, "terrafarm-example"))
+                cloud=CloudConfig(False, "terrafarm-example"))
     return Pipeline(cfg)
