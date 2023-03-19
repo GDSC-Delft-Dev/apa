@@ -39,7 +39,7 @@ class _FieldInsightsState extends State<FieldInsights> {
               future: Future.wait([
                 Provider.of<InsightTypesProvider>(context, listen: false).fetchInsightTypes(),
                 Provider.of<FieldScanProvider>(context, listen: false)
-                    .fetchFieldScans(currField.runs),
+                    .fetchFieldScans(currField.scans),
               ]),
               builder: (context, snapshot) {
                 if(snapshot.connectionState != ConnectionState.done) {

@@ -14,10 +14,11 @@ class InsightItemModel {
   });
 
   factory InsightItemModel.fromDocumentSnapshot(DocumentSnapshot snapshot) {
+    var data = snapshot.data() as Map<String, dynamic>;
     return InsightItemModel(
       id: snapshot.id,
-      name: snapshot['name'],
-      description: snapshot['description'],
+      name: data['name'],
+      description: data['description'],
     );
   }
 
