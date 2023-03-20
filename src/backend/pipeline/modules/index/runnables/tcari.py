@@ -32,17 +32,14 @@ class TCARI(GenericIndex):
             The NDVI index.
         """
 
-        re = img[Channels.RE].get()
-        red = img[Channels.R].get()
-        green = img[Channels.G].get()
-
-        a = (re - red) - 0.2
-        b = (re - green)
-        c_numerator = np.asarray(re, dtype=np.float64)
-        c_denominator = np.asarray(red, dtype=np.float64)
-        c = np.divide(c_numerator, c_denominator,
-                      out=np.zeros_like(c_numerator),
-                      where=c_denominator!=0,
-                      casting="unsafe")
+        re = np.asarray(img[Channels.RE].get(), dtype=np.float64)
+        red = np.asarray(img[Channels.R].get(), dtype=np.float64)
+        green = np.asarray(img[Channels.G].get(), dtype=np.float64)
         
-        return 3 * a * b * c
+        return 3 *                   \
+                ((re - red) - 0.2) * \
+                (re - green) *       \
+                np.divide(re, red,
+                      out=np.zeros_like(re),
+                      where=red!=0,
+                      casting="unsafe")

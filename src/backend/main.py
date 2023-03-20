@@ -12,11 +12,11 @@ from pipeline.auth import init_firebase
 from tqdm import tqdm
 
 # output bucket for pipeline results
-output_bucket = "terrafarm-example"
+OUTPUT_BUCKET = "terrafarm-example"
 # local input bucket
-local_input_bucket = "terrafarm-inputs"
+LOCAL_INPUT_BUCKET = "terrafarm-inputs"
 # cloud input bucket
-cloud_input_bucket = "terrafarm-test"
+CLOUD_INPUT_BUCKET = "terrafarm-test"
 
 def main(args: Any):
     """Main entry point."""
@@ -25,22 +25,22 @@ def main(args: Any):
     if args.path is None or args.mode is None:
         imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG"))]
         path = "pipeline/test/data/mosaicing/farm/D*.JPG"
-        cloud_config = CloudConfig(bucket_name=output_bucket)
+        cloud_config = CloudConfig(bucket_name=OUTPUT_BUCKET)
     else:
         storage_client = storage.Client()
         cloud_config = CloudConfig(
             use_cloud=True,
             input_path=args.path,
             staged_input=(args.mode == "local"),
-            bucket_name=output_bucket
+            bucket_name=OUTPUT_BUCKET
         )
 
         if not os.path.exists("./pipeline/data"):
             os.mkdir("./pipeline/data/")
         if args.mode == "local":
-            bucket = storage_client.get_bucket(local_input_bucket)
+            bucket = storage_client.get_bucket(LOCAL_INPUT_BUCKET)
         else:
-            bucket = storage_client.get_bucket(cloud_input_bucket)
+            bucket = storage_client.get_bucket(CLOUD_INPUT_BUCKET)
 
         # get all the files from the specified bucket and prefix path
         blobs = bucket.list_blobs(prefix=args.path + "/D", delimiter="/")
