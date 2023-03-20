@@ -7,16 +7,14 @@ import cv2
 import uuid
 import numpy as np
 import os
-from google.cloud import storage
-from ...auth import get_credentials
+import pytest
 
 class TestPreprocessingModule:
     """
     Unit testing for the preprocessing module.
     """
 
-
-
+    @pytest.mark.asyncio
     def test_preprocessing(self):
         """
         Test the method run.   
@@ -30,11 +28,14 @@ class TestPreprocessingModule:
         module.run(data)
         assert data.modules[Modules.PREPROCESS.value]["masked"] is not None
         out = np.array([x.get() for x in data.modules[Modules.PREPROCESS.value]["masked"]])
+
+        # Download the expected output from Cloud Storage
         if not os.path.exists("expected_preprocess_masked.npy"):
-            # connect to Cloud Storage
-            storage_client = storage.Client(credentials=get_credentials())
-            bucket = storage_client.bucket("terrafarm-test")
-            blob = bucket.blob("expected_preprocess_masked.npy")
-            blob.download_to_filename("expected_preprocess_masked.npy")
+            pytest.storage_client                           \
+                .bucket("terrafarm-test")                   \
+                .blob("expected_preprocess_masked.npy")     \
+                .download_to_filename("expected_preprocess_masked.npy")
+            
+        # Load the expected output
         expected = np.load("expected_preprocess_masked.npy", allow_pickle=True) 
         assert np.array_equal(out, expected)

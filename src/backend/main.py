@@ -45,8 +45,6 @@ def main(args: Any):
         # get all the files from the specified bucket and prefix path
         blobs = bucket.list_blobs(prefix=args.path + "/D", delimiter="/")
         for blob in tqdm(blobs):
-            print(blob)
-            print(os.getcwd())
             # file path where the blob data from Google Storage is stored
             filename = f"./pipeline/data/{blob.name.split('/')[-1]}"
             # create an empty file on the specified path
@@ -60,7 +58,7 @@ def main(args: Any):
     imgs = imgs[:3]
 
     # Run the pipeline
-    pipeline = nutrient_pipeline()
+    pipeline = nutrient_pipeline(cloud=cloud_config)
     pipeline.show()
 
     # Authenticate to firebase

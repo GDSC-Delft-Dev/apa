@@ -4,10 +4,10 @@ from ....mat import Mat, Channels
 import numpy as np
 from .generic import GenericIndex
 
-class NDVI(GenericIndex):
+class TCARI(GenericIndex):
     """
-    The Normalized Differential Vegetation Index runnable.
-    https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index
+    The Transformed Chlorophyll Absorption Ratio Index (TCARI) runnable.
+    https://www.l3harrisgeospatial.com/docs/narrowbandgreenness.html
     """
 
     def __init__(self, data: Data):
@@ -17,9 +17,9 @@ class NDVI(GenericIndex):
         Args:
             data: the pipeline data object
         """
-        super().__init__(data, name="NDVI", color_map="RdYlGn",
+        super().__init__(data, name="TCARI", color_map="RdYlGn",
                          channels=[Channels.RE, Channels.G, Channels.R], 
-                         index_type=Indicies.GCI)
+                         index_type=Indicies.TCARI)
 
     def calculate(self, img: Mat) -> np.ndarray:
         """
