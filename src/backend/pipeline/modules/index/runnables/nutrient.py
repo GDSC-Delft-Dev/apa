@@ -1,6 +1,7 @@
 from ...runnable import Runnable
 from ...data import Data, Modules
 from ..indicies import Indicies
+import tensorflow as tf
 import traceback
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,8 +21,9 @@ class Nutrient(Runnable):
         try:
             # take the calculated masks from the segmentation module
             masks = data.modules[Modules.SEGMENTATION.value]["masks"]
+            arg_masks = [tf.one_hot(tf.math.argmax(mask, axis=3), depth=9) for mask in masks]
             # assume index 0 is for the nutrient deficiency mask
-            nutrient_masks = [mask[0][:, :, 0] for mask in masks]
+            nutrient_masks = [mask[0][:, :, 0] for mask in arg_masks]
             data.modules[Modules.INDEX.value]["runnables"][self.type.value]["masks"] = nutrient_masks
             masks = [np.where(mask == 1, 255, 0) for mask in nutrient_masks]
             patches = data.modules[Modules.MOSAIC.value]["patches"]

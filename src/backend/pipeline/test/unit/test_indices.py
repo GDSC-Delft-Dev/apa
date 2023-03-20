@@ -15,6 +15,7 @@ import glob
 import numpy as np
 import pytest
 import asyncio
+import tensorflow as tf
 
 class TestNutrientRunnable:
     """Unit testing for the nutrient deficiency module."""
@@ -48,7 +49,6 @@ class TestNutrientRunnable:
             blob.download_to_filename("nutrient_masks.npy")
 
         # load data and assert
-        expected = np.load("nutrient_masks.npy", allow_pickle=True) 
-        print(result.modules[Modules.INDEX.value]["runnables"])
-        out = result.modules[Modules.INDEX.value]["runnables"][Indicies.NUTRIENT.value]["masks"] 
+        expected = np.load("nutrient_masks.npy", allow_pickle=True)
+        out = result.modules[Modules.INDEX.value]["runnables"][Indicies.NUTRIENT.value]["masks"]
         assert np.array_equal(out, expected)
