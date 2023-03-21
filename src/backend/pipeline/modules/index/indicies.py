@@ -4,6 +4,8 @@ class Indicies(Enum):
     """Represents module types."""
     # Normalized Differential Vegetation Index. Suggests whether the area contains live vegetation
     NDVI = "NDVI"
+    # Transformed Chlorophyll Absorption Ratio Index. Estimates chlorophyll content in the area.
+    TCARI = "TCARI"
     # Nutrient Deficiency Index. Suggests whether the plants in the area exhibit some sort of deficiency.
     # with respect to nutrients
     NUTRIENT = "NUTRIENT"
