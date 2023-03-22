@@ -38,6 +38,6 @@ class InsightModel {
 
   @override
   String toString() {
-    return 'InsightModel{typeId: $typeId, center: $center, data: $data}';
+    return 'InsightModel{type_id: $typeId, center: $center, data: $data}';
   }
 }
