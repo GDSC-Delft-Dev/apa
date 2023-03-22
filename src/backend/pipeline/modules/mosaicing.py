@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 import asyncio
 from typing import Any
+from typing import Tuple
 
 class Mosaicing(Module):
     """
@@ -60,7 +61,8 @@ class Mosaicing(Module):
         mask, alpha_stitched = self.process(data.modules[self.type.value]["stitched"])
         data.modules[self.type.value]["mask"] = mask
         data.modules[self.type.value]["alpha_img"] = alpha_stitched
-        patches = self.create_patches(stitched, data.input[0].channels)
+        patches_dims = self.create_patches(stitched, data.input[0].channels)
+        data.modules[self.type.value]["patches_dims"] = (patches_dims[0], patches_dims[1])
         data.modules[self.type.value]["patches"] = patches
             
         # Run the next module
@@ -69,7 +71,7 @@ class Mosaicing(Module):
     def to_persist(self, data: Data):
         data.persistable[self.type.value] = frozenset([self.type.value + "." + "stitched"])
 
-    def create_patches(self, stitched: Mat, channels) -> list[Mat]:
+    def create_patches(self, stitched: Mat, channels) -> Tuple[int, int, list[Mat]]:
         """
         Divide the stitched image into equal patches.
 
@@ -92,7 +94,7 @@ class Mosaicing(Module):
                 patch = stitched.get()[i*height:(i+1)*height, j*width:(j+1)*width, :]
                 patches.append(Mat(patch, channels))
 
-        return patches
+        return num_patches_horizontal, num_patches_vertical, patches
             
     def process(self, img: Mat) -> tuple[np.ndarray, Mat]:
         """

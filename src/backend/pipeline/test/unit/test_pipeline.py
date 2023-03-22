@@ -18,7 +18,7 @@ class TestPipeline:
         
         with pytest.raises(AssertionError):
             config: Config = Config({})
-            pipeline = Pipeline(config)        
+            Pipeline(config)        
 
     def test_init_module(self):
         """Test the create method with a normal module."""

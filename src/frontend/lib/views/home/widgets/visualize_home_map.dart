@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/services/location_service.dart';
@@ -52,7 +51,6 @@ class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
     ));
   }
 
-
   /// Takes a list of field models and created polygons to draw on the map
   _convertFieldsToPolygons(List<FieldModel> fields) {
     // TODO: add custom marker (pin) that has field name as label
@@ -71,7 +69,6 @@ class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
