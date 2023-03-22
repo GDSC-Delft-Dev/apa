@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/models/insight_type_model.dart';
-import 'package:frontend/models/scan_model.dart';
 import 'package:frontend/providers/field_scan_provider.dart';
 import 'package:frontend/providers/insight_types_provider.dart';
 import 'package:frontend/utils/network_utils.dart';
@@ -18,8 +15,7 @@ import 'package:frontend/utils/network_utils.dart' as nutils;
 import '../../../models/insight_model.dart';
 import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
-import 'bottom_insights_sheet.dart';
-import 'hidden_drawer.dart';
+import 'color_legend.dart';
 import 'insights_selection.dart';
 import 'maps_dropdown.dart';
 
@@ -197,10 +193,14 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                           padding: const EdgeInsets.only(top: 20, right: 10, left: 170),
                           alignment: Alignment.topRight,
                           child: const MapsDropdown()),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 70, right: 10, left: 10),
+                        alignment: Alignment.bottomCenter,
+                        child: ColorLegend(mapType: Provider.of<InsightChoicesProvider>(context, listen: true).currInsightMapType)
+                      )
                     ],
                   ),
                 )
-                // TODO: Add color scale for insights
               ],
             );
           }),

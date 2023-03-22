@@ -20,6 +20,7 @@ class InsightDetailsSheet extends StatelessWidget {
     return FutureBuilder<InsightItemModel>(
         future: InsightItemStore().getInsightItemByTypeId(insight.data, insightType.id),
         builder: (context, snapshot) {
+          
           if (!snapshot.hasData) {
             return SizedBox.shrink();
           }
