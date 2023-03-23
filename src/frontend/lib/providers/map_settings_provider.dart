@@ -20,8 +20,8 @@ class MapSettingsProvider extends ChangeNotifier {
 
   /// The default position is set to 0,0 and zoom level 10.
   CameraPosition _cameraPosition = const CameraPosition(
-    target: LatLng(0, 0),
-    zoom: 0,
+    target: LatLng(51.984925, 4.322979),
+    zoom: 14,
   );
 
   CameraPosition get cameraPosition => _cameraPosition;
