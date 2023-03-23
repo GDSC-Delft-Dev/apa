@@ -29,6 +29,7 @@ class InsightDetailsSheet extends StatelessWidget {
     var currDescription = insightType.name == 'pest' ? pestDesciption : insightType.name == 'disease' ? diseaseDescription : deficiencyDescription;
     var currRecommendations = insightType.name == 'pest' ? pestRecommendations : insightType.name == 'disease' ? diseaseRecommendations : deficiencyRecommendations;
     var currImage = insightType.name == 'pest' ? 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fcaterpillars-pest.jpg?alt=media&token=3ec649ee-fde8-4a5b-8f2f-2339191e9605' : insightType.name == 'disease' ? 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fblack-spot-fungal-disease.jpg?alt=media&token=5056b4e8-82e1-4fe4-8c4e-d2b578a996a1' : 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fnitrogen-deficiency.jpg?alt=media&token=0c8cdaf0-957c-454b-89d5-340b8e2d1031';
+    var currInsightName = insightType.name == 'pest' ? 'Pest' : insightType.name == 'disease' ? 'Disease' : 'Nutrient Deficiency';
 
     return FutureBuilder<InsightItemModel>(
         future: InsightItemStore().getInsightItemByTypeId(insight.data, insightType.id),
@@ -39,6 +40,7 @@ class InsightDetailsSheet extends StatelessWidget {
           }
 
           var insightItem = snapshot.data!;
+
           return Container(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -48,7 +50,7 @@ class InsightDetailsSheet extends StatelessWidget {
                   const SizedBox(height: 20),
                   Center(
                       child: Text(
-                    '${capitalize (insightType.name)} detected!',
+                    '$currInsightName detected!',
                     style: TextStyle(fontSize: 20, color: Colors.red[900]),
                   )),
                   const SizedBox(height: 20),
