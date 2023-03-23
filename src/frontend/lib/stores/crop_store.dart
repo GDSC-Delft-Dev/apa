@@ -12,7 +12,7 @@ class CropStore {
       var data = doc.data() as Map<String, dynamic>;
       return CropModel(
         cropId: doc.id,
-        name: data.containsKey('name') ? data['name'] : '',
+        name: data.containsKey('name') ? data['name'] : 'corn',
         type: data.containsKey('type') ? data['type'] : '',
       );
     }).toList();
