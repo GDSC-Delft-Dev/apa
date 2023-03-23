@@ -64,6 +64,7 @@ dependencies:
 dev_dependencies:
   # A build system for Dart code generation and modular compilation.
   build_runner: ^2.1.5
+  flutter_launcher_icons: ^0.12.0
   # A code generator for envify.
   envify_generator: ^2.0.2
   flutter_test:
@@ -75,6 +76,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+flutter_icons:
+  android: "launcher_icon"
+  image_path: "assets/icons/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -98,6 +104,7 @@ flutter:
     - assets/images/black-spot-fungal-disease.jpg
     - assets/images/caterpillars-pest.jpg
     - assets/images/nitrogen-deficiency.jpg
+    - assets/icons/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
