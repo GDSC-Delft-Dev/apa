@@ -26,6 +26,10 @@ class InsightDetailsSheet extends StatelessWidget {
       
     var insightType = Provider.of<InsightTypesProvider>(context, listen: false)
         .getInsightTypeById(insight.typeId);
+    var currDescription = insightType.name == 'pest' ? pestDesciption : insightType.name == 'disease' ? diseaseDescription : deficiencyDescription;
+    var currRecommendations = insightType.name == 'pest' ? pestRecommendations : insightType.name == 'disease' ? diseaseRecommendations : deficiencyRecommendations;
+    var currImage = insightType.name == 'pest' ? 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fcaterpillars-pest.jpg?alt=media&token=3ec649ee-fde8-4a5b-8f2f-2339191e9605' : insightType.name == 'disease' ? 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fblack-spot-fungal-disease.jpg?alt=media&token=5056b4e8-82e1-4fe4-8c4e-d2b578a996a1' : 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fnitrogen-deficiency.jpg?alt=media&token=0c8cdaf0-957c-454b-89d5-340b8e2d1031';
+
     return FutureBuilder<InsightItemModel>(
         future: InsightItemStore().getInsightItemByTypeId(insight.data, insightType.id),
         builder: (context, snapshot) {
@@ -71,7 +75,7 @@ class InsightDetailsSheet extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Details', style: TextStyle(fontSize: 18)),
-                            Text(pestDesciption, style: TextStyle(fontSize: 14, color: Colors.grey[700])),
+                            Text(currDescription, style: TextStyle(fontSize: 14, color: Colors.grey[700])),  
                             // insight.data.containsKey('proper_name')
                             //     ? Text('Scientific name: ${insight.data['proper_name']}',
                             //         style: TextStyle(fontSize: 14, color: Colors.grey[700]))
@@ -82,16 +86,16 @@ class InsightDetailsSheet extends StatelessWidget {
                       SizedBox(width: 10),
                       CachedNetworkImage(
                         // imageUrl: insight.data['image'],
-                        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fcaterpillars-pest.jpg?alt=media&token=3ec649ee-fde8-4a5b-8f2f-2339191e9605',
-                        width: 120.0,
-                        height: 10.0,
+                        imageUrl: currImage,
+                        width: 140.0,
+                        height: 150.0,
                       )
                     ],
                   ),
                   Text('Recommendations', style: TextStyle(fontSize: 18)),
                       Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: pestRecommendations
+                      children: currRecommendations
                           .map((r) => Text('\u2022 $r',
                               style: TextStyle(fontSize: 14, color: Colors.grey[700])))
                           .toList()
