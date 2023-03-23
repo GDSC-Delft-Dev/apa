@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:f_logs/model/flog/flog.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/field_scan_provider.dart';
 import 'package:frontend/providers/insight_types_provider.dart';
@@ -97,7 +98,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     InsightMapType mapType =
         Provider.of<InsightChoicesProvider>(context, listen: true).currInsightMapType;
     _drawInsightMap(mapType);
-    print('updated map');
+    FLog.info(text: 'Updating map');
   }
 
   Future<void> updateMarkers() async {
@@ -112,6 +113,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
 
   void _removeGroundOverlay() {
     setState(() {
+      FLog.info(text: 'Removing ground overlay');
       _overlayImage = null;
     });
   }
@@ -120,17 +122,55 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   void initState() {
     super.initState();
     _addGroundOverlay();
+    Provider.of<InsightChoicesProvider>(context, listen: false).addListener(_addGroundOverlay);
+    Provider.of<FieldScanProvider>(context, listen: false).addListener(_addGroundOverlay);
+  }
+
+  @override
+  void dispose() {
+    Provider.of<InsightChoicesProvider>(context, listen: false).removeListener(_addGroundOverlay);
+    Provider.of<FieldScanProvider>(context, listen: false).removeListener(_addGroundOverlay);
+    super.dispose();
   }
 
   Future<void> _addGroundOverlay() async {
-    var bytes = await loadNetworkImage(
-        'https://fff2df98a796d7e3d5d805ed2415c1f937f282bb453e636936006b2-apidata.googleusercontent.com/download/storage/v1/b/terrafarm-scans/o/xHv2bv9rPdrYav79FfFK%2F03-2022%2Fc6bd6bf3-8ea9-40f3-ac73-cd46521a5270%2Fpipelines%2Fa0f2ce2e-46e1-4e2d-9436-ca63a7a3c4f5%2Findex%2Frgb%2Fdownscaled.png?jk=AahUMlsvriKtyWN9gP1FrG4dK6LvJ9pjzPwTc-dbmADSEzu-6dMq78qN3zLB98_EdGSoQp1LxTvUmwws088eV4JzbMQfsstB3WTloH8UAn7bOF-IjCSiwFigtcZqcWCylJhXzTcRGKeigFrqCKlLT_zj4WtdwVufo4e8cOlTiJSnj-BBmHAp3eRttfqqn2WGBx9mr4aV1_Y9luftiMmuMAdG5JPxHh4fBLvgYjfFr9ZqG6ymifw18_zkBckOt7QWS5m4oa-ntT2XR81jQWOQBY1cRNvIkhngHBgHW6d4GmF0B4auOYeRpYiYCPq5nK-u3aknpNM7sqPySiuddLzwA0TUVXSwVLAB_T5zO-VKodTpl0jLTwbZ7IqdnOetRlBe2WbLnCmnVo6YK27fuL62Y57iol0EvsCjU1S5amc58kw5KkxzxpybBlbteMiFrgw80pweFTmP4hZDVX2q9yICYvkFlUqHZSAgVHwtzaafcXIJb8zOYZfz0d_HUE3SbDqSsCmurx_xkbApDj4pKw9O3kYV5dz73HtBYlVO5bbW7bHVgiPlGhunZuem1-BY9cbr9q66einSPK0mt5O9Qxy6gDF2YfJocVIDbH0fJiGsmndQnz62alHjKIvpnlJBEoeQ2IwzxYjQOzMKN3stEKBO9bWv7tXHkynonKvo4lS1rQedQZLCwbbJzYdJ1aFwbyh8JrCK0hCOVe7yTB7d2LtyuBR49NAIufY0RA1G2qx_7PErnfFwD5AfFQ8VAuZ0ja4FDBlK2WhA7JP6GaXgXbtgB9MpKAe0Y9a0nUyWKYGe95BIfn0sl4UqiOT0RY9I2gLj_kMNnX7J1vqp3nEnZOk9YHnCKOZ6AHWq-F-aebt7NCwBDaJlXN-3ZLPvlQjOvVrnynU0rNTA4XWFe5hhYrw850XmJ7tD-eYf63bAxZkEFgVDINc8V3cSjjE_MWAe5GgjKf4yABGCPnsXBbXv3u72b0u15-vXYZXa-II_8VrVneB_itwVXWL70xMh6L89VloszVa9CgpggLxT9KjAUs2i2L8DYC15x4h2qipFjPBC3Jk9Vi6Ap3h7eL6eYo-QBLUzRrJQ2XYF0T391U_Y8jG-RaeZtJdURhzD7q8uPbs_haTFr-d36SuVVAqd_TTsx_iiDpJAmpFg-DTIHOA_Z5fbknBnErjPNVj6UWvCLWO2MwHOcTHxZYpUwlEO4oSGMAMVIBcbBYDmPQtNwsTkqpxYSIsv0SQb167gOWZMFh_5Vgk3i3Cx05hYmWwzK1CJo5-ZCQ6bEeMT5f8Scpv75n2czL-D5obb0lX31BYyKcYMH0lh0yRzpA6BLKo-bWYSbW44jei7p3LEgSwsQV7OjNGy0nQzPPD3G6w2Bzt42jSC8UwO2Wdi2ZnPfHqCaLnv8ULrhb-4oS8QFVBU0mSg-ZnAESWdcgd1-Yoe&isca=1');
-    var bitmap = BitmapDescriptor.fromBytes(
-      bytes!,
-    );
-    setState(() {
-      _overlayImage = bitmap;
-    });
+    var indexType = Provider.of<InsightChoicesProvider>(context, listen: false).currInsightMapType;
+    var scanData = Provider.of<FieldScanProvider>(context, listen: false).selectedFieldScan;
+
+    FLog.info(text: 'Adding ground overlay for ${indexType.name}');
+
+    if (scanData == null) {
+      FLog.warning(text: 'No scan data found');
+      _removeGroundOverlay();
+      return;
+    }
+
+    if (scanData.indices[indexType.name.toLowerCase()] == null) {
+      FLog.warning(text: 'No ${indexType.name} data found');
+      _removeGroundOverlay();
+      return;
+    }
+
+    try {
+      FLog.info(
+          text:
+              'Adding ground overlay for ${indexType.name} with url: ${scanData.indices[indexType.name.toLowerCase()]['url']}');
+      var bytes = await loadNetworkImage(scanData.indices[indexType.name.toLowerCase()]['url']);
+      FLog.info(text: 'Made bytes for ${indexType.name}');
+      var bitmap = BitmapDescriptor.fromBytes(
+        bytes!,
+      );
+      FLog.info(text: 'Made bitmap for ${indexType.name}');
+      setState(() {
+        FLog.info(text: 'Added ground overlay for ${indexType.name}');
+        _overlayImage = bitmap;
+      });
+    } catch (e) {
+      FLog.error(text: 'Error adding ground overlay for ${indexType.name} with error');
+      _removeGroundOverlay();
+    } finally {
+      FLog.info(text: 'Added ground overlay for ${indexType.name}');
+    }
   }
 
   @override
@@ -159,9 +199,11 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         groundOverlays: _overlayImage != null
                             ? {
                                 GroundOverlay(
-                                  groundOverlayId: GroundOverlayId('ground_overlay_1'),
+                                  groundOverlayId: GroundOverlayId(
+                                      Random().nextInt(100000).toString()), //random id
                                   image: _overlayImage!,
-                                  positionFromBounds: getLatLngBoundsForPolygon(widget.currField.boundaries),
+                                  positionFromBounds:
+                                      getLatLngBoundsForPolygon(widget.currField.boundaries),
                                   bearing: 0,
                                   transparency: 0,
                                   zIndex: 1,
@@ -194,10 +236,11 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                           alignment: Alignment.topRight,
                           child: const MapsDropdown()),
                       Container(
-                        padding: const EdgeInsets.only(bottom: 70, right: 10, left: 10),
-                        alignment: Alignment.bottomCenter,
-                        child: ColorLegend(mapType: Provider.of<InsightChoicesProvider>(context, listen: true).currInsightMapType)
-                      )
+                          padding: const EdgeInsets.only(bottom: 70, right: 10, left: 10),
+                          alignment: Alignment.bottomCenter,
+                          child: ColorLegend(
+                              mapType: Provider.of<InsightChoicesProvider>(context, listen: true)
+                                  .currInsightMapType))
                     ],
                   ),
                 )
