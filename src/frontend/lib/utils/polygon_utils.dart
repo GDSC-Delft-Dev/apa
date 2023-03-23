@@ -57,6 +57,34 @@ double getGeoArea(List<GeoPoint> geoPoints) {
   return double.parse(areaInHectares.toStringAsFixed(1));
 }
 
+// Get center of a polygon
+LatLng getCenterOfPolygon(List<LatLng> points) {
+  double x = 0;
+  double y = 0;
+  double z = 0;
+
+  for (var point in points) {
+    double latitude = point.latitude * pi / 180;
+    double longitude = point.longitude * pi / 180;
+
+    x += cos(latitude) * cos(longitude);
+    y += cos(latitude) * sin(longitude);
+    z += sin(latitude);
+  }
+
+  int total = points.length;
+
+  x = x / total;
+  y = y / total;
+  z = z / total;
+
+  double centralLongitude = atan2(y, x);
+  double centralSquareRoot = sqrt(x * x + y * y);
+  double centralLatitude = atan2(z, centralSquareRoot);
+  
+  return LatLng(centralLatitude * 180 / pi, centralLongitude * 180 / pi);
+}
+
   /// Returns a camera position that is good for the current polygon.
 CameraPosition getGoodCameraPositionForPolygon(List<GeoPoint> geoPoints) {
   if (geoPoints.isEmpty) {

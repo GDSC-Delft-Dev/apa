@@ -124,13 +124,13 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                   child: Stack(
                     children: <Widget>[
                       GoogleMap(
-                        mapToolbarEnabled: false,
-                        zoomControlsEnabled: false,
-                        zoomGesturesEnabled: true,
-                        scrollGesturesEnabled: true,
-                        rotateGesturesEnabled: true,
-                        tiltGesturesEnabled: true,
-                        myLocationEnabled: false,
+                            myLocationEnabled: true,
+                            myLocationButtonEnabled: false,
+                            rotateGesturesEnabled: true,
+                            scrollGesturesEnabled: true,
+                            mapToolbarEnabled: false,
+                            compassEnabled: false,
+                            zoomControlsEnabled: false,
                         initialCameraPosition:
                             utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                         mapType: MapType.satellite,
