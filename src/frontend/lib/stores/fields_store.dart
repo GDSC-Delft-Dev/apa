@@ -23,6 +23,7 @@ class FieldsStore {
       boundaries: List<GeoPoint>.from(
           snapshot['boundaries']?.map((loc) => GeoPoint(loc.latitude, loc.longitude)) ?? []),
       hasInsights: snapshot['has_insights'],
+      plantingDate: snapshot['planting_date'],
       scans: List<String>.from(snapshot['scans'] ?? []),
     );
   }
@@ -67,6 +68,7 @@ class FieldsStore {
           // Convert Firebase array of GeoPoints into List<GeoPoint>
           boundaries: boundaries,
           scans: List<String>.from(doc.get('scans') ?? []),
+          plantingDate: doc.get('planting_date') ?? Timestamp.now(),
           hasInsights: doc.get('has_insights') ?? false);
     }).toList();
   }
