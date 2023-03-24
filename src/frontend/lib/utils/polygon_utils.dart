@@ -114,3 +114,33 @@ CameraPosition getGoodCameraPositionForPolygon(List<GeoPoint> geoPoints) {
     zoom: zoom,
   );
 }
+
+// Returns an LatLngBounds object that encloses the polygon
+// This is used to set the image overlay boundaries.
+LatLngBounds getLatLngBoundsForPolygon(List<GeoPoint> geoPoints) {
+  if (geoPoints.isEmpty) {
+    return LatLngBounds(
+      southwest: const LatLng(0, 0),
+      northeast: const LatLng(0, 0),
+    );
+  }
+
+  // TODO: It should account for the case where the polygon crosses the 180th meridian
+  // and the longitude values are negative.
+  double minLat = geoPoints[0].latitude;
+  double maxLat = geoPoints[0].latitude;
+  double minLong = geoPoints[0].longitude;
+  double maxLong = geoPoints[0].longitude;
+
+  for (var geoPoint in geoPoints) {
+    minLat = min(minLat, geoPoint.latitude);
+    maxLat = max(maxLat, geoPoint.latitude);
+    minLong = min(minLong, geoPoint.longitude);
+    maxLong = max(maxLong, geoPoint.longitude);
+  }
+
+  return LatLngBounds(
+    southwest: LatLng(minLat, minLong),
+    northeast: LatLng(maxLat, maxLong),
+  );
+}

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:f_logs/model/flog/flog.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/field_scan_provider.dart';
 import 'package:frontend/providers/insight_types_provider.dart';
-import 'package:frontend/views/insights/widgets/color_legend.dart';
+import 'package:frontend/utils/network_utils.dart';
+import 'package:frontend/utils/polygon_utils.dart';
 import 'package:frontend/views/insights/widgets/insight_details_sheet.dart';
 import 'package:frontend/views/insights/widgets/menu_drawer_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -14,6 +16,7 @@ import 'package:frontend/utils/network_utils.dart' as nutils;
 import '../../../models/insight_model.dart';
 import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
+import 'color_legend.dart';
 import 'insights_selection.dart';
 import 'maps_dropdown.dart';
 
@@ -29,15 +32,17 @@ class VisualizeInsightsMap extends StatefulWidget {
 
 class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   final Completer<GoogleMapController> _controller = Completer();
-
-  // Workaround lagging screen due to Google Maps initialization
-  final Future _mapFuture = Future.delayed(const Duration(milliseconds: 250), () => true);
+  BitmapDescriptor? _overlayImage;
+  double _bearing = 0;
+  double _transparency = 0;
 
   // For keeping track of polygons to  draw
   Set<Polygon> _polygons = Set<Polygon>();
 
   // For keeping track of insights to show
   Set<Marker> _insightMarkers = Set<Marker>();
+
+  Set<GroundOverlay> _groundOverlays = Set<GroundOverlay>();
 
   /// Takes a list of field models and created polygons to draw on the map
   void _drawInsightMap(InsightMapType mapType) {
@@ -96,6 +101,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     InsightMapType mapType =
         Provider.of<InsightChoicesProvider>(context, listen: true).currInsightMapType;
     _drawInsightMap(mapType);
+    FLog.info(text: 'Updating map');
   }
 
   Future<void> updateMarkers() async {
@@ -108,9 +114,97 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     await _drawMarkersForInsights(insights, excluded);
   }
 
+  Future<void> _removeGroundOverlay() async {
+    var bytes = await loadNetworkImage(
+        'https://holistichormonalhealth.com/wp-content/uploads/2015/08/transparent1.png');
+
+    setState(() {
+      FLog.info(text: 'Removing ground overlay');
+      var bitmap = BitmapDescriptor.fromBytes(
+        bytes!,
+      );
+      _overlayImage = bitmap;
+      _groundOverlays = {};
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _addGroundOverlay();
+    Provider.of<InsightChoicesProvider>(context, listen: false).addListener(_addGroundOverlay);
+    Provider.of<FieldScanProvider>(context, listen: false).addListener(_addGroundOverlay);
+    updateMap();
+  }
+
+  @override
+  void dispose() {
+    Provider.of<InsightChoicesProvider>(context, listen: false).removeListener(_addGroundOverlay);
+    Provider.of<FieldScanProvider>(context, listen: false).removeListener(_addGroundOverlay);
+    super.dispose();
+  }
+
+  Future<void> _addGroundOverlay() async {
+    try {
+      var indexType =
+          Provider.of<InsightChoicesProvider>(context, listen: false).currInsightMapType;
+      var scanData = Provider.of<FieldScanProvider>(context, listen: false).selectedFieldScan;
+
+      FLog.info(text: 'Adding ground overlay for ${indexType.name}');
+
+      if (scanData == null) {
+        FLog.warning(text: 'No scan data found');
+        _removeGroundOverlay();
+        return;
+      }
+
+      if (scanData.indices[indexType.name.toLowerCase()] == null) {
+        FLog.warning(text: 'No ${indexType.name} data found');
+        _removeGroundOverlay();
+        return;
+      }
+
+      try {
+        FLog.info(
+            text:
+                'Adding ground overlay for ${indexType.name} with url: ${scanData.indices[indexType.name.toLowerCase()]['url']}');
+        var bytes = await loadNetworkImage(scanData.indices[indexType.name.toLowerCase()]['url']);
+        FLog.info(text: 'Made bytes for ${indexType.name}');
+        var bitmap = BitmapDescriptor.fromBytes(
+          bytes!,
+        );
+        FLog.info(text: 'Made bitmap for ${indexType.name}');
+        setState(() {
+          FLog.info(text: 'Added ground overlay for ${indexType.name}');
+          _overlayImage = bitmap;
+
+          _groundOverlays = <GroundOverlay>{
+            GroundOverlay(
+              groundOverlayId: GroundOverlayId(Random().nextInt(100000).toString()), //random id
+              image: _overlayImage!,
+              positionFromBounds: getLatLngBoundsForPolygon(widget.currField.boundaries),
+              bearing: 0,
+              transparency: 0,
+              zIndex: 1,
+            ),
+          };
+        });
+      } catch (e) {
+        FLog.error(text: 'Error adding ground overlay for ${indexType.name} with error');
+        _removeGroundOverlay();
+      } finally {
+        FLog.info(text: 'Added ground overlay for ${indexType.name}');
+      }
+    } catch (e) {
+      FLog.error(text: 'Error adding ground overlay with error $e');
+      _removeGroundOverlay();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     updateMap();
+
     return Scaffold(
       body: FutureBuilder(
           future: updateMarkers(),
@@ -124,18 +218,19 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                   child: Stack(
                     children: <Widget>[
                       GoogleMap(
-                            myLocationEnabled: true,
-                            myLocationButtonEnabled: false,
-                            rotateGesturesEnabled: true,
-                            scrollGesturesEnabled: true,
-                            mapToolbarEnabled: false,
-                            compassEnabled: false,
-                            zoomControlsEnabled: false,
+                        mapToolbarEnabled: false,
+                        zoomControlsEnabled: false,
+                        zoomGesturesEnabled: true,
+                        scrollGesturesEnabled: true,
+                        rotateGesturesEnabled: true,
+                        tiltGesturesEnabled: true,
+                        myLocationEnabled: false,
+                        groundOverlays: _groundOverlays,
                         initialCameraPosition:
                             utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                         mapType: MapType.satellite,
                         markers: _insightMarkers,
-                        polygons: _polygons,
+                        // polygons: _polygons,
                         onMapCreated: (GoogleMapController controller) {
                           _controller.complete(controller);
                         },
@@ -157,10 +252,11 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                           alignment: Alignment.topRight,
                           child: const MapsDropdown()),
                       Container(
-                        padding: const EdgeInsets.only(bottom: 70, right: 10, left: 10),
-                        alignment: Alignment.bottomCenter,
-                        child: ColorLegend(mapType: Provider.of<InsightChoicesProvider>(context, listen: true).currInsightMapType)
-                      )
+                          padding: const EdgeInsets.only(bottom: 70, right: 10, left: 10),
+                          alignment: Alignment.bottomCenter,
+                          child: ColorLegend(
+                              mapType: Provider.of<InsightChoicesProvider>(context, listen: true)
+                                  .currInsightMapType))
                     ],
                   ),
                 )
