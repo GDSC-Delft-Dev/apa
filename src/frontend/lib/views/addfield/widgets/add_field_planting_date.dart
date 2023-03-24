@@ -48,10 +48,10 @@ class _AddFieldPlantingDateState extends State<AddFieldPlantingDate> {
                     lastDate: DateTime.now(),
                   );
                   if (picked != null) {
-                    print('---------------------- picked: $picked');
                     setState(() {
                       plantingDate = Timestamp.fromDate(picked);
                     });
+                    print('---------------------- picked: ${plantingDate!.toDate().toString()}');
                     widget.onChange(plantingDate!.toDate().toString());
                   }
                 },

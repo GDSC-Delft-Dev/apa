@@ -89,7 +89,7 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                       text: "Planting Date *",
                       onChange: (date) {
                         setState(() {
-                          _plantingDate = Timestamp.now();
+                          _plantingDate = Timestamp.fromDate(DateTime.parse(date).toUtc());
                         });
                       },
                     ),
