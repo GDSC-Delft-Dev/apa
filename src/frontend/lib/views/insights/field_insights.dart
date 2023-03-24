@@ -48,7 +48,7 @@ class _FieldInsightsState extends State<FieldInsights> {
 
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text('Field insights: ${currField.fieldName}'),
+                    title: Text('${currField.fieldName}'),
                     centerTitle: true,
                     backgroundColor: Colors.white,
                     elevation: 0,
