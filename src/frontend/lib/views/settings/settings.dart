@@ -63,9 +63,9 @@ class _SettingsState extends State<Settings> {
                         horizontal: 60,
                       ),
                       child: Text(
-                        'This app was created by the team at the TU Delft for the 2022-2023 Google Solutions Challenge. It was created to help farmers get automated insights about their fields and crops.',
+                        'This app was created by the GDSC team at the TU Delft for the 2022-2023 Google Solutions Challenge. It was created to help farmers inspect actionable insights about their fields and crops.',
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                     );
@@ -89,7 +89,7 @@ class _SettingsState extends State<Settings> {
                       'About',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
                     ),
                   ],
@@ -118,7 +118,7 @@ class _SettingsState extends State<Settings> {
                       'Logout',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
                     ),
                   ],

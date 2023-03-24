@@ -53,7 +53,7 @@ class _AddFieldCropTypeState extends State<AddFieldCropType> {
                               }).toList()
                             : [],
                         value: cropId,
-                        hint: Text('Select a crop type'),
+                        hint: Text('Select a crop type', style: TextStyle(color: Colors.black45, fontSize: 16)),
                         icon: Expanded(
                           child: Container(
                             alignment: Alignment.centerRight,
