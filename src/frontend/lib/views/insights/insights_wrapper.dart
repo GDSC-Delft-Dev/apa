@@ -23,8 +23,8 @@ class _InsightsWrapperState extends State<InsightsWrapper> {
     disableDragGesture: true,
     mainScreenTapClose: true,
     angle: -10,
-    slideWidth: MediaQuery.of(context).size.width * 0.55,
-    menuBackgroundColor: Colors.green.shade100,
+    slideWidth: MediaQuery.of(context).size.width * 0.6,
+    menuBackgroundColor: Colors.green.shade200,
     mainScreen: Stack(
           children: [
             Positioned.fill(
