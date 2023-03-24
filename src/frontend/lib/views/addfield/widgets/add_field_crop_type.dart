@@ -22,7 +22,7 @@ class _AddFieldCropTypeState extends State<AddFieldCropType> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(10.0),
         child: Flex(
           direction: Axis.horizontal,
           children: [
