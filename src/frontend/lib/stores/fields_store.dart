@@ -39,7 +39,7 @@ class FieldsStore {
         {'field_name': name, 'area': area, 'has_insights': hasInsights, 'crop_id': crop.cropId});
   }
 
-  Future addNewField(String name, String cropId, double area, List<GeoPoint> boundaries) async {
+  Future addNewField(String name, String cropId, double area, List<GeoPoint> boundaries, Timestamp datePlanted) async {
     var addFieldData = <String, dynamic>{};
     addFieldData['field_name'] = name;
     addFieldData['area'] = area;
@@ -48,6 +48,7 @@ class FieldsStore {
     addFieldData['boundaries'] = boundaries;
     addFieldData['has_insights'] = false; // by default, a field has no insights yet
     addFieldData['scans'] = []; // by default, a field has no scans yet
+    addFieldData['planting_date'] = datePlanted;
     return fieldsCollection.doc().set(addFieldData);
   }
 
