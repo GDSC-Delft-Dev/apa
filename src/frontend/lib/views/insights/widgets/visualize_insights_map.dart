@@ -16,6 +16,7 @@ import 'package:frontend/utils/network_utils.dart' as nutils;
 import '../../../models/insight_model.dart';
 import '../../../providers/insight_choices_provider.dart';
 import '../../loading.dart';
+import 'chat_button.dart';
 import 'color_legend.dart';
 import 'insights_selection.dart';
 import 'maps_dropdown.dart';
@@ -99,7 +100,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   Future<void> updateMap() async {
     _polygons.clear();
     InsightMapType mapType =
-        Provider.of<InsightChoicesProvider>(context, listen: true).currInsightMapType;
+        Provider.of<InsightChoicesProvider>(context, listen: false).currInsightMapType;
     _drawInsightMap(mapType);
     FLog.info(text: 'Updating map');
   }
@@ -107,23 +108,17 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   Future<void> updateMarkers() async {
     _insightMarkers.clear();
     List<String> excluded =
-        Provider.of<InsightChoicesProvider>(context, listen: true).excludedInsightsTypes;
-    var scan = Provider.of<FieldScanProvider>(context, listen: true).selectedFieldScan;
+        Provider.of<InsightChoicesProvider>(context, listen: false).excludedInsightsTypes;
+    var scan = Provider.of<FieldScanProvider>(context, listen: false).selectedFieldScan;
     List<InsightModel> insights = scan == null ? <InsightModel>[] : scan.insights;
 
     await _drawMarkersForInsights(insights, excluded);
   }
 
   Future<void> _removeGroundOverlay() async {
-    var bytes = await loadNetworkImage(
-        'https://holistichormonalhealth.com/wp-content/uploads/2015/08/transparent1.png');
-
     setState(() {
       FLog.info(text: 'Removing ground overlay');
-      var bitmap = BitmapDescriptor.fromBytes(
-        bytes!,
-      );
-      _overlayImage = bitmap;
+
       _groundOverlays = {};
     });
   }
@@ -134,7 +129,6 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     _addGroundOverlay();
     Provider.of<InsightChoicesProvider>(context, listen: false).addListener(_addGroundOverlay);
     Provider.of<FieldScanProvider>(context, listen: false).addListener(_addGroundOverlay);
-    updateMap();
   }
 
   @override
@@ -145,6 +139,8 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   }
 
   Future<void> _addGroundOverlay() async {
+    await updateMap();
+    await updateMarkers();
     try {
       var indexType =
           Provider.of<InsightChoicesProvider>(context, listen: false).currInsightMapType;
@@ -203,66 +199,59 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
 
   @override
   Widget build(BuildContext context) {
-    updateMap();
-
     return Scaffold(
-      body: FutureBuilder(
-          future: updateMarkers(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return Loading();
-            }
-            return Column(
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: <Widget>[
-                      GoogleMap(
-                        mapToolbarEnabled: false,
-                        zoomControlsEnabled: false,
-                        zoomGesturesEnabled: true,
-                        scrollGesturesEnabled: true,
-                        rotateGesturesEnabled: true,
-                        tiltGesturesEnabled: true,
-                        myLocationEnabled: false,
-                        groundOverlays: _groundOverlays,
-                        initialCameraPosition:
-                            utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
-                        mapType: MapType.satellite,
-                        markers: _insightMarkers,
-                        // polygons: _polygons,
-                        onMapCreated: (GoogleMapController controller) {
-                          _controller.complete(controller);
-                        },
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(top: 20, left: 20),
-                        alignment: Alignment.topLeft,
-                        child: Column(
-                          children: const <Widget>[
-                            InsightsSelection(),
-                            SizedBox(height: 10),
-                            MenuDrawerButton(),
-                            // HiddenDrawer()
-                          ],
-                        ),
-                      ),
-                      Container(
-                          padding: const EdgeInsets.only(top: 20, right: 10, left: 170),
-                          alignment: Alignment.topRight,
-                          child: const MapsDropdown()),
-                      Container(
-                          padding: const EdgeInsets.only(bottom: 70, right: 10, left: 10),
-                          alignment: Alignment.bottomCenter,
-                          child: ColorLegend(
-                              mapType: Provider.of<InsightChoicesProvider>(context, listen: true)
-                                  .currInsightMapType))
+      body: Column(
+        children: [
+          Expanded(
+            child: Stack(
+              children: <Widget>[
+                GoogleMap(
+                  mapToolbarEnabled: false,
+                  zoomControlsEnabled: false,
+                  zoomGesturesEnabled: true,
+                  scrollGesturesEnabled: true,
+                  rotateGesturesEnabled: true,
+                  tiltGesturesEnabled: true,
+                  myLocationEnabled: false,
+                  groundOverlays: _groundOverlays,
+                  initialCameraPosition:
+                      utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
+                  mapType: MapType.satellite,
+                  markers: _insightMarkers,
+                  // polygons: _polygons,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 20, left: 20),
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    children: const <Widget>[
+                      InsightsSelection(),
+                      SizedBox(height: 10),
+                      MenuDrawerButton(),
+                      SizedBox(height: 10),
+                      ChatButton(),
+                      // HiddenDrawer()
                     ],
                   ),
-                )
+                ),
+                Container(
+                    padding: const EdgeInsets.only(top: 20, right: 10, left: 170),
+                    alignment: Alignment.topRight,
+                    child: const MapsDropdown()),
+                Container(
+                    padding: const EdgeInsets.only(bottom: 70, right: 10, left: 10),
+                    alignment: Alignment.bottomCenter,
+                    child: ColorLegend(
+                        mapType: Provider.of<InsightChoicesProvider>(context, listen: false)
+                            .currInsightMapType))
               ],
-            );
-          }),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
