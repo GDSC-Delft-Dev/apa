@@ -14,7 +14,7 @@ class AddFieldPlantingDate extends StatefulWidget {
 }
 
 class _AddFieldPlantingDateState extends State<AddFieldPlantingDate> {
-  Timestamp? plantingDate = Timestamp.now();
+  Timestamp? plantingDate = null;
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +40,27 @@ class _AddFieldPlantingDateState extends State<AddFieldPlantingDate> {
             ),
             Expanded(
               child: ElevatedButton (
-                child: plantingDate != null ? Text(plantingDate!.toDate().toString().substring(0, 11)) : Text('Select planting date'),
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
-                    initialDate: plantingDate!.toDate(),
+                    initialDate: DateTime.now(),
                     firstDate: DateTime(1900, 1),
                     lastDate: DateTime.now(),
                   );
-                  if (picked != null && picked != plantingDate!.toDate()) {
+                  if (picked != null) {
+                    print('---------------------- picked: $picked');
                     setState(() {
                       plantingDate = Timestamp.fromDate(picked);
                     });
                     widget.onChange(plantingDate!.toDate().toString());
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  primary: plantingDate != null ? Colors.green : Colors.transparent,
+                  onPrimary: Colors.white,
+                ),
+                child: plantingDate != null ? Text(plantingDate!.toDate().toString().substring(0, 11)) 
+                                            : Text('Select date'),
               )
             )
           ],
