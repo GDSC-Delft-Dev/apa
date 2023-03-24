@@ -51,7 +51,6 @@ class _AddFieldPlantingDateState extends State<AddFieldPlantingDate> {
                     setState(() {
                       plantingDate = Timestamp.fromDate(picked);
                     });
-                    print('---------------------- picked: ${plantingDate!.toDate().toString()}');
                     widget.onChange(plantingDate!.toDate().toString());
                   }
                 },
