@@ -98,7 +98,6 @@ class _VisualizeHomeMapState extends State<VisualizeHomeMap> {
 
   /// Takes a list of field models and created polygons to draw on the map
   _convertFieldsToPolygons(List<FieldModel> fields) async {
-    // TODO: add custom marker (pin) that has field name as label
     for (var field in fields) {
       // Convert from List<GeoPoint> to List<LatLng>
       List<LatLng> fieldBoundaries = field.boundaries.map((f) =>
