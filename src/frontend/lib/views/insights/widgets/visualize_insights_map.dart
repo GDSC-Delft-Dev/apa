@@ -42,6 +42,8 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   // For keeping track of insights to show
   Set<Marker> _insightMarkers = Set<Marker>();
 
+  Set<GroundOverlay> _groundOverlays = Set<GroundOverlay>();
+
   /// Takes a list of field models and created polygons to draw on the map
   void _drawInsightMap(InsightMapType mapType) {
     // Convert from List<GeoPoint> to List<LatLng>
@@ -112,10 +114,17 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     await _drawMarkersForInsights(insights, excluded);
   }
 
-  void _removeGroundOverlay() {
+  Future<void> _removeGroundOverlay() async {
+    var bytes = await loadNetworkImage(
+        'https://holistichormonalhealth.com/wp-content/uploads/2015/08/transparent1.png');
+
     setState(() {
       FLog.info(text: 'Removing ground overlay');
-      _overlayImage = null;
+      var bitmap = BitmapDescriptor.fromBytes(
+        bytes!,
+      );
+      _overlayImage = bitmap;
+      _groundOverlays = {};
     });
   }
 
@@ -125,6 +134,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     _addGroundOverlay();
     Provider.of<InsightChoicesProvider>(context, listen: false).addListener(_addGroundOverlay);
     Provider.of<FieldScanProvider>(context, listen: false).addListener(_addGroundOverlay);
+    updateMap();
   }
 
   @override
@@ -135,48 +145,66 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
   }
 
   Future<void> _addGroundOverlay() async {
-    var indexType = Provider.of<InsightChoicesProvider>(context, listen: false).currInsightMapType;
-    var scanData = Provider.of<FieldScanProvider>(context, listen: false).selectedFieldScan;
-
-    FLog.info(text: 'Adding ground overlay for ${indexType.name}');
-
-    if (scanData == null) {
-      FLog.warning(text: 'No scan data found');
-      _removeGroundOverlay();
-      return;
-    }
-
-    if (scanData.indices[indexType.name.toLowerCase()] == null) {
-      FLog.warning(text: 'No ${indexType.name} data found');
-      _removeGroundOverlay();
-      return;
-    }
-
     try {
-      FLog.info(
-          text:
-              'Adding ground overlay for ${indexType.name} with url: ${scanData.indices[indexType.name.toLowerCase()]['url']}');
-      var bytes = await loadNetworkImage(scanData.indices[indexType.name.toLowerCase()]['url']);
-      FLog.info(text: 'Made bytes for ${indexType.name}');
-      var bitmap = BitmapDescriptor.fromBytes(
-        bytes!,
-      );
-      FLog.info(text: 'Made bitmap for ${indexType.name}');
-      setState(() {
+      var indexType =
+          Provider.of<InsightChoicesProvider>(context, listen: false).currInsightMapType;
+      var scanData = Provider.of<FieldScanProvider>(context, listen: false).selectedFieldScan;
+
+      FLog.info(text: 'Adding ground overlay for ${indexType.name}');
+
+      if (scanData == null) {
+        FLog.warning(text: 'No scan data found');
+        _removeGroundOverlay();
+        return;
+      }
+
+      if (scanData.indices[indexType.name.toLowerCase()] == null) {
+        FLog.warning(text: 'No ${indexType.name} data found');
+        _removeGroundOverlay();
+        return;
+      }
+
+      try {
+        FLog.info(
+            text:
+                'Adding ground overlay for ${indexType.name} with url: ${scanData.indices[indexType.name.toLowerCase()]['url']}');
+        var bytes = await loadNetworkImage(scanData.indices[indexType.name.toLowerCase()]['url']);
+        FLog.info(text: 'Made bytes for ${indexType.name}');
+        var bitmap = BitmapDescriptor.fromBytes(
+          bytes!,
+        );
+        FLog.info(text: 'Made bitmap for ${indexType.name}');
+        setState(() {
+          FLog.info(text: 'Added ground overlay for ${indexType.name}');
+          _overlayImage = bitmap;
+
+          _groundOverlays = <GroundOverlay>{
+            GroundOverlay(
+              groundOverlayId: GroundOverlayId(Random().nextInt(100000).toString()), //random id
+              image: _overlayImage!,
+              positionFromBounds: getLatLngBoundsForPolygon(widget.currField.boundaries),
+              bearing: 0,
+              transparency: 0,
+              zIndex: 1,
+            ),
+          };
+        });
+      } catch (e) {
+        FLog.error(text: 'Error adding ground overlay for ${indexType.name} with error');
+        _removeGroundOverlay();
+      } finally {
         FLog.info(text: 'Added ground overlay for ${indexType.name}');
-        _overlayImage = bitmap;
-      });
+      }
     } catch (e) {
-      FLog.error(text: 'Error adding ground overlay for ${indexType.name} with error');
+      FLog.error(text: 'Error adding ground overlay with error $e');
       _removeGroundOverlay();
-    } finally {
-      FLog.info(text: 'Added ground overlay for ${indexType.name}');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     updateMap();
+
     return Scaffold(
       body: FutureBuilder(
           future: updateMarkers(),
@@ -197,25 +225,12 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                         rotateGesturesEnabled: true,
                         tiltGesturesEnabled: true,
                         myLocationEnabled: false,
-                        groundOverlays: _overlayImage != null
-                            ? {
-                                GroundOverlay(
-                                  groundOverlayId: GroundOverlayId(
-                                      Random().nextInt(100000).toString()), //random id
-                                  image: _overlayImage!,
-                                  positionFromBounds:
-                                      getLatLngBoundsForPolygon(widget.currField.boundaries),
-                                  bearing: 0,
-                                  transparency: 0,
-                                  zIndex: 1,
-                                ),
-                              }
-                            : Set(),
+                        groundOverlays: _groundOverlays,
                         initialCameraPosition:
                             utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                         mapType: MapType.satellite,
                         markers: _insightMarkers,
-                        polygons: _polygons,
+                        // polygons: _polygons,
                         onMapCreated: (GoogleMapController controller) {
                           _controller.complete(controller);
                         },
