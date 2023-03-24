@@ -121,12 +121,15 @@ password: bob12345
 ````
 For all invalid authentication attempts, an error message will be displayed.
 
-<!-- ### Adding Fields
+### Adding Fields
+By clicking on the floating action button ('+') in either the "Home" screen or "My Fields" screen, you will be prompted to select boundaries for your new field to be added. Moreover, you can enter field details such as a name, crop type or planting date.
 
-### Inspecting Field Insights -->
-
-
-
+### Inspecting Field Insights
+In order to inspect a specific field, you can navigate to the desired field via "My Fields" - or by simply clicking on the field in the "Home" screen map. 
+Here you will be able to select various insight maps such as "NDVI" or "Soil Moisture".
+Moreover, you can pick localized insights to be displayed - including "nutrient", "disease" and "pest".  
+Upon clicking on some localized insight, you will see details regarding the area affected, (reference) images and recommendations for the farmer to take. 
+There is also a possibility to go back in forth between different field scans, by simply pressing the bottom arrows accompanying the date displayed.
 
 ## Folder Structure
 
