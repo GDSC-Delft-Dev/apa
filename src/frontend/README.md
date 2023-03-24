@@ -116,8 +116,8 @@ npm install -g eslint
 ### Logging into the app
 You can use the following dummy credentials for logging into the application:
 ````
-e-mail: andyzaidman42@tudelft.net
-password: andy12345
+e-mail: farmerbob@gmail.com
+password: bob12345
 ````
 For all invalid authentication attempts, an error message will be displayed.
 
@@ -164,7 +164,6 @@ The following routes are defined in `main.dart`
         '/fields': (context) => const MyFields(),
         '/settings': (context) => const Settings(),
         '/login': (context) => Authenticate(),
-        '/crop_growth': (context) => const CropGrowth(),
         '/field_details': (context) => const FieldDetails(),
       }
 ````
@@ -174,10 +173,17 @@ The initial route that is entered is the `Wrapper()`, which listens for authenti
 ## Data Models
 ````
 lib/models/
-|- user_model.dart - represent users of the application
-|- field_model.dart - represent fields owned by users
-|- insight_model.dart - represent insights detected by the image processing pipeline, specific to soem geolocation within given field
-|- crop_model.dart - represent crops that are grown in fields (e.g. lettuce, aloe vera)
+|- user_model.dart - user of the application
+|- field_model.dart - field owned by users
+|- crop_model.dart - crop that is grown in some field (e.g. lettuce, aloe vera)
+|- scan_model.dart - drone scan for some field, which can consist of multiple image processing pipelines
+|- insight_model.dart - insight detected by the image processing pipeline, specific to soem geolocation within given field
+|- insight_type_model.dart - a mere type of insight (e.g. disease, deficiency)
+|- insight_item_model.dart - details about some insight of a given type
+  |- nutrient_deficiencies_model.dart 
+  |- perpetrator_model.dart
+    |- disease_model.dart
+    |- pest_model.dart
 ````
 
 
@@ -187,6 +193,8 @@ lib/providers/
 |- insight_choices_provider.dart - handles user preferences regarding visualization of field insights
 |- map_settings_provider.dart - handles user preferences regarding maps displayed (e.g. map type, zoom level)
 |- new_field_provider.dart - handles the process of adding new fields to the system
+|- insight_types_provider.dart - handles keeping track of various insight types
+|- field_scan_provider.dart - handles user switching between field scans
 ````
 
 
@@ -195,6 +203,7 @@ lib/providers/
 lib/services/
 |- auth_service.dart - communicates with Firebase Authentication API to handle user management
 |- location_service.dart - communinates with Google Maps API to handle searching for locations on the map
+|- cloud_functions_service.dart - invokes custom Cloud Functions
 ````
 
 
@@ -206,6 +215,8 @@ lib/stores/
 |- fields_store.dart - handles CRUD operations regarding the field model
 |- insights_store.dart - handles CRUD operations regarding the insights model
 |- crop_store.dart - handles CRUD operations regarding the crop model
+|- insight_type_store.dart - handles CRUD operations regarding the insight type model
+|- insight_item_store.dart - handles CRUD operations regarding the insight item model
 ````
 
 

@@ -10,11 +10,10 @@ from .modules.index.runnables.nutrient import Nutrient
 from .modules.index.runnables.ndvi import NDVI
 from .modules.index.index import Index
 
-def default_pipeline() -> Pipeline:
+def default_pipeline(cloud: CloudConfig = CloudConfig()) -> Pipeline:
     """Default pipeline."""
-    cfg = Config(modules={Mosaicing: None,
-                          Index: {"config": None, "runnables": [NDVI]}}, 
-                cloud=CloudConfig(True, "terrafarm-example"))
+    cfg = Config(modules={Mosaicing: None, Index: None},
+                cloud=cloud)
     return Pipeline(cfg)
 
 def full_pipeline() -> Pipeline:
@@ -34,19 +33,19 @@ def training_pipeline() -> Pipeline:
     """Model training pipeline."""
 
     # Get the masks
-    masks = [cv2.imread(file) for file in glob.glob("../test/data/mosaicing/farm/mask*.JPG")]
+    masks = [cv2.imread(file) for file in sorted(glob.glob("../test/data/mosaicing/farm/mask*.JPG"))]
     # Run the pipeline
     cfg = Config(modules={AgricultureVisionPreprocess: masks, 
                           Mosaicing: None}, 
                  cloud=CloudConfig(True, "terrafarm-example"))
     return Pipeline(cfg)
 
-def nutrient_pipeline() -> Pipeline:
+def nutrient_pipeline(cloud: CloudConfig = CloudConfig()) -> Pipeline:
     """Nutrient deficiency pipeline."""
     paths = {3:"./pipeline/ml/deepv3_seg_3/", 4:"./pipeline/ml/deepv3_seg_4/"}
     cfg = Config(modules={Mosaicing: None,
                           AgricultureVisionPreprocess: None,
                           SemanticSegmentation: paths,
                           Index: {"config": None, "runnables": [Nutrient]}},
-                cloud=CloudConfig(True, "terrafarm-example"))
+                cloud=cloud)
     return Pipeline(cfg)

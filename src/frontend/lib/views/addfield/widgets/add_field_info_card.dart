@@ -18,7 +18,7 @@ class AddFieldInfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(10.0),
         child: Flex(
           direction: Axis.horizontal,
           children: [
@@ -26,9 +26,9 @@ class AddFieldInfoCard extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.normal,
-                  color: Colors.grey.shade700,
+                  color: Colors.grey.shade800,
                   letterSpacing: 0.05,
                 ),
               ),
@@ -38,7 +38,7 @@ class AddFieldInfoCard extends StatelessWidget {
                 controller: textController,
                 onChanged: (value) => onChange(),
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.normal,
                   color: Colors.grey.shade700,
                   letterSpacing: 0.05,

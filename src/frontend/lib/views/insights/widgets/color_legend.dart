@@ -28,7 +28,7 @@ class ColorLegend extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 10.0, right: 250.0),
+            padding: EdgeInsets.only(left: 10.0, right: 220.0),
             child: Text('Min', style: TextStyle(fontSize: 15.0, color: Colors.black),),
           ),
           Padding(

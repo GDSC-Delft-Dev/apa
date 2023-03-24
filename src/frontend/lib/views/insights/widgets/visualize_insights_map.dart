@@ -67,6 +67,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     for (var insight in insights) {
       // Only show markers for insights that are selected by user
       if (!excluded.contains(insight.typeId)) {
+        print('---------- Adding marker for insight $insight}');
         var bitmapDescriptor = await fromUrlToBitmapDescriptor(
             Provider.of<InsightTypesProvider>(context, listen: false)
                 .getInsightTypeById(insight.typeId)

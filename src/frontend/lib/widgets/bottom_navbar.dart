@@ -11,24 +11,26 @@ class MyBottomNavigationBar extends StatelessWidget {
     return BottomNavigationBar(
           currentIndex: currentIndex,
           onTap: onItemSelected,
-          backgroundColor: Colors.blueAccent,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white70,
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Colors.grey,
+          iconSize: 28,
+          elevation: 24,
+          // make it have rounded corners
+          type: BottomNavigationBarType.shifting,
+
+
           items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
             label: 'Map',
-            backgroundColor: Colors.blueAccent,),
+            backgroundColor: Colors.white,),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_chart_rounded),
-            label: 'My fields',
-            backgroundColor: Colors.blueAccent,),
-          BottomNavigationBarItem(icon: Icon(Icons.airplanemode_active),
-              label: 'Fly drone',
-              backgroundColor: Colors.blueAccent),
+            label: 'Fields',
+            backgroundColor: Colors.white,),
           BottomNavigationBarItem(icon: Icon(Icons.settings),
               label: 'Settings',
-              backgroundColor: Colors.blueAccent),
+              backgroundColor: Colors.white),
         ]
     );
   }

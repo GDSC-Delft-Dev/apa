@@ -1,5 +1,5 @@
 ## Pipeline
-
+ 
 The image processing pipeline is the main construct of our project. When provided with images from a flyover, the pipeline computes indicies (i.e. vegetation index, mositure content) to estimate relevant information and provides insights (e.g. nutrient deficiencies, infestations) locally. This data is saved in the database, and can be visualized in the user interface, or used for further analysis (e.g. model training, statistical analysis).
 
 <p align="center">
@@ -19,6 +19,43 @@ To run the default pipeline you'll need Python 3.10. First, install the necessar
 You can then run the default pipeline with
 
 `py main.py`
+
+As there are multiple ways to run a pipeline, there is a list of arguments that can be used to specify options. The supported arguments are:
+- path - specify the path on Google Cloud Storage where the input images are located. If not path is specified, the input images will be from the local filesystem. 
+- mode - specify if the input images are already in the cloud or need to be uploaded first from the local filesystem.
+- name - specify a unique name for the created job
+
+#### Examples
+
+Run the pipeline with images already in the cloud:
+```py main.py --path path/to/images --mode cloud```
+
+Run the pipeline with images on your local filesystem:
+```py main.py --path path/to/images --mode local```
+
+Run the pipeline without Google Cloud:
+```py main.py```
+
+### Trigger an image processing job on Google Cloud Platform
+
+Manual triggers allow you to run the latest pipeline builds from the Artifact Registry with custom input data using Cloud Run.
+You can run a job with either input data from your local file system or input data that already resides in the cloud.
+
+Custom inputs to the pipeline are removed from Google Cloud only if the pipeline run is successful.
+
+#### Provide input data from a local filesystem
+
+```bash
+sudo chmod +x trigger.sh
+./trigger.sh -l /path/to/data/ -n name-of-the-job
+```
+
+#### Provide input data from Cloud Storage
+
+```bash
+sudo chmod +x trigger.sh
+./trigger.sh -c /path/to/data/ -n name-of-the-job
+```
 
 ### Testing
 To test the code, run `pytest` unit tests:

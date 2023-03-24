@@ -6,6 +6,7 @@ __pycache__
 .mypy_cache
 .pytest_cache
 expected_preprocess_masked.npy
+src/backend/pipeline/data
 .vscode
 *json
 nutrient_masks.npy

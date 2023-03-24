@@ -22,7 +22,7 @@ class InsightItemStore {
         className: "InsightItemStore",
         methodName: "getInsightItemByTypeId",
         text: "Got insight type with name: ${insightType.name}");
-    // Insight item will be a document reference
+    // Insight item will be a document reference: e.g. 'pest' or 'disease
     var insightItem = insightData[insightType.name.toLowerCase()];
     FLog.info(
         className: "InsightItemStore",
