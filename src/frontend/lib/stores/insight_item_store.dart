@@ -18,25 +18,23 @@ class InsightItemStore {
         text: "Getting insight item by type id");
 
     var insightType = await InsightsTypeStore().getInsightTypeById(insightTypeId);
-
-    // Insight item will be a document reference
+    FLog.info(
+        className: "InsightItemStore",
+        methodName: "getInsightItemByTypeId",
+        text: "Got insight type with name: ${insightType.name}");
+    // Insight item will be a document reference: e.g. 'pest' or 'disease
     var insightItem = insightData[insightType.name.toLowerCase()];
+    FLog.info(
+        className: "InsightItemStore",
+        methodName: "getInsightItemByTypeId",
+        text: "Insight item is ${insightItem.runtimeType}");
+    var doc = await insightItem.get();
 
-    if (insightItem is DocumentReference) {
-      var doc = await insightItem.get();
-      
-      FLog.info(
-          className: "InsightItemStore",
-          methodName: "getInsightItemByTypeId",
-          text: "Got insight item by type id ${doc.id}");
+    FLog.info(
+        className: "InsightItemStore",
+        methodName: "getInsightItemByTypeId",
+        text: "Got insight item by type id ${doc.id}");
 
-      return InsightItemModel.fromDocumentSnapshot(doc);
-    } else {
-      FLog.error(
-          className: "InsightItemStore",
-          methodName: "getInsightItemByTypeId",
-          text: "Insight item is not a document reference");
-      throw Exception("Insight item is not a document reference");
-    }
+    return InsightItemModel.fromDocumentSnapshot(doc);
   }
 }

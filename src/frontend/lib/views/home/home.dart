@@ -34,26 +34,28 @@ class _HomeState extends State<Home> {
     // Curent user that is logged in
     final user = Provider.of<UserModel>(context);
 
-    return StreamProvider<List<FieldModel>>.value(
-      value: FieldsStore(userId: user.uid).fields,
-      initialData: [],
-      child: Scaffold(
-        backgroundColor: Colors.grey[200],
-        body: const VisualizeHomeMap(),
-        floatingActionButton: FloatingActionButton(
-          heroTag: 'home_add',
-          onPressed: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AddFieldScreen(),
-              )
-            );
-          },
-          tooltip: 'Add field',
-          child: const Icon(Icons.add, size: 35, color: Colors.white,)
+    return SafeArea(
+      child: StreamProvider<List<FieldModel>>.value(
+        value: FieldsStore(userId: user.uid).fields,
+        initialData: [],
+        child: Scaffold(
+          backgroundColor: Colors.grey[200],
+          body: const VisualizeHomeMap(),
+          floatingActionButton: FloatingActionButton(
+            heroTag: 'home_add',
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddFieldScreen(),
+                )
+              );
+            },
+            tooltip: 'Add field',
+            child: const Icon(Icons.add, size: 35, color: Colors.white,)
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
       ),
     );
 

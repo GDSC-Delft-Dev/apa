@@ -30,9 +30,9 @@ class _AddFieldCropTypeState extends State<AddFieldCropType> {
               child: Text(
                 widget.text,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.normal,
-                  color: Colors.grey.shade700,
+                  color: Colors.grey.shade800,
                   letterSpacing: 0.05,
                 ),
               ),

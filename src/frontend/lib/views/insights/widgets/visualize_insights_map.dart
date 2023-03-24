@@ -64,6 +64,7 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
     for (var insight in insights) {
       // Only show markers for insights that are selected by user
       if (!excluded.contains(insight.typeId)) {
+        print('---------- Adding marker for insight $insight}');
         var bitmapDescriptor = await fromUrlToBitmapDescriptor(
             Provider.of<InsightTypesProvider>(context, listen: false)
                 .getInsightTypeById(insight.typeId)
@@ -123,13 +124,13 @@ class _VisualizeInsightsMapState extends State<VisualizeInsightsMap> {
                   child: Stack(
                     children: <Widget>[
                       GoogleMap(
-                        mapToolbarEnabled: false,
-                        zoomControlsEnabled: false,
-                        zoomGesturesEnabled: true,
-                        scrollGesturesEnabled: true,
-                        rotateGesturesEnabled: true,
-                        tiltGesturesEnabled: true,
-                        myLocationEnabled: false,
+                            myLocationEnabled: true,
+                            myLocationButtonEnabled: false,
+                            rotateGesturesEnabled: true,
+                            scrollGesturesEnabled: true,
+                            mapToolbarEnabled: false,
+                            compassEnabled: false,
+                            zoomControlsEnabled: false,
                         initialCameraPosition:
                             utils.getGoodCameraPositionForPolygon(widget.currField.boundaries),
                         mapType: MapType.satellite,

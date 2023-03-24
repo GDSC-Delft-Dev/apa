@@ -13,19 +13,34 @@ class InsightDetailsSheet extends StatelessWidget {
 
   const InsightDetailsSheet({Key? key, required this.insight}) : super(key: key);
 
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
   @override
   Widget build(BuildContext context) {
+    const String pestDesciption = "Long, tube-shaped body in small, rounded segments";
+    const String diseaseDescription = "Feathery edged, black spots on lower leaves";
+    const String deficiencyDescription = "Yellowing of leaves, especially on the lower edges";
+    const List<String> pestRecommendations = ["Spray crops with solution of soap and water", "Create a habitat friendly to birds"];
+    const List<String> diseaseRecommendations = ["Removal of fallen leaves and pruning infected canes", "Restrict irrigation during cloudy, humid weather", "Good air circulation"];
+    const List<String> deficiencyRecommendations = ["Treat plants with a food rich in nitrogen", "Use an organic fertilizer or nitrate of soda", "Increase pH for better root absorption of nitrogen"];
+      
     var insightType = Provider.of<InsightTypesProvider>(context, listen: false)
         .getInsightTypeById(insight.typeId);
+    var currDescription = insightType.name == 'pest' ? pestDesciption : insightType.name == 'disease' ? diseaseDescription : deficiencyDescription;
+    var currRecommendations = insightType.name == 'pest' ? pestRecommendations : insightType.name == 'disease' ? diseaseRecommendations : deficiencyRecommendations;
+    var currImage = insightType.name == 'pest' ? 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fcaterpillars-pest.jpg?alt=media&token=3ec649ee-fde8-4a5b-8f2f-2339191e9605' : insightType.name == 'disease' ? 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fblack-spot-fungal-disease.jpg?alt=media&token=5056b4e8-82e1-4fe4-8c4e-d2b578a996a1' : 'https://firebasestorage.googleapis.com/v0/b/terrafarm-378218.appspot.com/o/insights_images%2Fnitrogen-deficiency.jpg?alt=media&token=0c8cdaf0-957c-454b-89d5-340b8e2d1031';
+    var currInsightName = insightType.name == 'pest' ? 'Pest' : insightType.name == 'disease' ? 'Disease' : 'Nutrient Deficiency';
+
     return FutureBuilder<InsightItemModel>(
         future: InsightItemStore().getInsightItemByTypeId(insight.data, insightType.id),
         builder: (context, snapshot) {
+          
           if (!snapshot.hasData) {
             return SizedBox.shrink();
           }
 
           var insightItem = snapshot.data!;
-          print(insight.data);
+
           return Container(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -35,7 +50,7 @@ class InsightDetailsSheet extends StatelessWidget {
                   const SizedBox(height: 20),
                   Center(
                       child: Text(
-                    '${insightType.name} detected!',
+                    '$currInsightName detected!',
                     style: TextStyle(fontSize: 20, color: Colors.red[900]),
                   )),
                   const SizedBox(height: 20),
@@ -62,23 +77,31 @@ class InsightDetailsSheet extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Details', style: TextStyle(fontSize: 18)),
-                            // Text('${insight.data}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')),
-                            insight.data.containsKey('proper_name')
-                                ? Text('Scientific name: ${insight.data['proper_name']}',
-                                    style: TextStyle(fontSize: 14, color: Colors.grey[700]))
-                                : Container(),
+                            Text(currDescription, style: TextStyle(fontSize: 14, color: Colors.grey[700])),  
+                            // insight.data.containsKey('proper_name')
+                            //     ? Text('Scientific name: ${insight.data['proper_name']}',
+                            //         style: TextStyle(fontSize: 14, color: Colors.grey[700]))
+                            //     : Container(),
                           ],
                         ),
                       ),
                       SizedBox(width: 10),
                       CachedNetworkImage(
-                        imageUrl: insight.data['image'],
-                        width: 100.0,
-                        height: 100.0,
+                        // imageUrl: insight.data['image'],
+                        imageUrl: currImage,
+                        width: 140.0,
+                        height: 150.0,
                       )
                     ],
                   ),
                   Text('Recommendations', style: TextStyle(fontSize: 18)),
+                      Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: currRecommendations
+                          .map((r) => Text('\u2022 $r',
+                              style: TextStyle(fontSize: 14, color: Colors.grey[700])))
+                          .toList()
+                          .cast<Widget>()),
                   // Column(
                   //     crossAxisAlignment: CrossAxisAlignment.start,
                   //     children: insightItem['recommendations']
@@ -99,5 +122,7 @@ class InsightDetailsSheet extends StatelessWidget {
                 ],
               ));
         });
+
+
   }
 }
