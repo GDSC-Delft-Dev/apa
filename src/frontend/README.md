@@ -101,6 +101,14 @@ Note that `local.properties` and `Debug.xcconfig` are both under `.gitignore`.
 ````
 GOOGLE_MAPS_API_KEY={YOUR_PRIVATE_GOOGLE_MAPS_API_KEY}
 ````
+
+### Open AI API
+
+We use the ChatGPT API for our chat feature. In order to use it you need to add your private OpenAI key to the .env file previously created.
+````
+OPEN_AI_KEY={YOUR_PRIVATE_OPEN_AI_KEY}
+
+````
 ### Cloud Functions
 
 In order to be able to run Cloud Functions, you will need to install `TypeScript` and `ESLint`.
@@ -165,6 +173,7 @@ The following routes are defined in `main.dart`
         '/settings': (context) => const Settings(),
         '/login': (context) => Authenticate(),
         '/field_details': (context) => const FieldDetails(),
+        '/chat': (context) => const ChatScreen()
       }
 ````
 The initial route that is entered is the `Wrapper()`, which listens for authentication status changes - will return `MainPage()` if logged in or `Authenticate()` if not logged in (both under `views/`).
