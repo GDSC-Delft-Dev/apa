@@ -68,6 +68,7 @@ class MyApp extends StatelessWidget {
         theme:
             ThemeData(primarySwatch: Colors.lightGreen, textTheme: GoogleFonts.openSansTextTheme()),
         initialRoute: '/',
+        debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => Wrapper(),
           '/load': (context) => Loading(),

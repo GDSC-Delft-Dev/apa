@@ -64,7 +64,7 @@ class _SignInState extends State<SignIn> {
                         width: width,
                         child: const Center(
                           child: Text('Welcome back to Terrafarm', textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, color: Colors.white))
+                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white))
                         ),
                       ),
                       Positioned (
