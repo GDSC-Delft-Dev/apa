@@ -1,8 +1,11 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:frontend/models/insight_model.dart';
+import 'package:frontend/providers/field_scan_provider.dart';
 import 'package:frontend/views/chat/widgets/received_message_bubble.dart';
 import 'package:frontend/views/chat/widgets/sent_message_bubble.dart';
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -21,12 +24,14 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _isComposing = false;
 
   void sendMessage(String message) async {
-    if (message.isNotEmpty)
-      setState(() {
-        _textController.clear();
-        _isComposing = true;
+    setState(() {
+      _textController.clear();
+      _isComposing = true;
+      if (message.isNotEmpty) {
         messages.add({'content': message, 'role': 'user'});
-      });
+      }
+    });
+
     final request =
         ChatCompleteText(messages: messages, maxToken: 200, model: kChatGptTurbo0301Model);
 
@@ -40,11 +45,35 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    var insightIformation = "";
+    var fieldScan = Provider.of<FieldScanProvider>(context, listen: false).selectedFieldScan;
+    if (fieldScan == null || fieldScan.insights.isEmpty) {
+      messages.add({
+        'content': """
+    Your name is FarmBot and you are a farming assistant.
+    You have access to a variety of tools and resources to help users with their fields.
+    You are a friendly bot and you are here to help.
+ """,
+        'role': 'system'
+      });
+      sendMessage('');
+      return;
+    }
+
+    for (var element in fieldScan!.insights) {
+      print(element);
+      insightIformation +=
+          "${"${"Spotted "}-" + element.data.toString()} at coordinates ${element.center.latitude},${element.center.longitude}. ";
+    }
+
     messages.add({
       'content': """
     Your name is FarmBot and you are a farming assistant.
     You have access to a variety of tools and resources to help users with their fields.
     You are a friendly bot and you are here to help.
+    Here is some information about the field you are currently in:
+    Scan done on ${fieldScan.endDate.toLocal()}
+    $insightIformation
  """,
       'role': 'system'
     });
