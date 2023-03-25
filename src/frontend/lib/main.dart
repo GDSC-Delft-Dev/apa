@@ -5,6 +5,7 @@ import 'package:frontend/providers/insight_types_provider.dart';
 import 'package:frontend/providers/map_settings_provider.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/views/authenticate/authenticate.dart';
+import 'package:frontend/views/chat/chat_screen.dart';
 import 'package:frontend/views/home/home.dart';
 import 'package:frontend/views/addfield/add_field_screen.dart';
 import 'package:frontend/views/loading.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
           // TODO: add field details screen
           '/field_details': (context) => Loading(),
           '/settings': (context) => const Settings(),
+          '/chat':(context) => ChatScreen()
         },
       ),
     );
