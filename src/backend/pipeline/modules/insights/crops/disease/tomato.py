@@ -3,6 +3,7 @@ from ....data import Data
 from .....ml.utils import Args
 import tensorflow as tf
 
+# TODO: take this from somewhere else
 MODEL_PATH = ""
 
 class TomatoDiseaseInsight(Insight):

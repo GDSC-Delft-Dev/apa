@@ -27,3 +27,18 @@ The architecture itself employs an encoder-decoder structure.
 Usually the model is used in combination with a pretrained model (e.g. ResNet) that extracts low-level features from the raw images. However, due to the available channels in our data, there is a need to use a multitude of models that can accomodate different number of channels.
 
 The code that corresponds to the model implementation is in **deeplabv3.py** and makes use of Google's Tensorflow framework.
+
+
+## Disease detection
+
+For a number of supported crops, we can use computer vision to detect different types of diseases from an early stage and notify the user about the problem. 
+
+### List of supported crops
+- Tomato
+
+### Method
+
+In order to detect diseases, we employ both a fine-tuning and transfer learning strategy (depending on the scenario) using pre-trained model like Resnet. Moreover, the training is done 
+using publicly available data (e.g. Google Datasets, Kaggle etc.)
+
+Specific training code for a certain crop can be found in **disease/** folder.
