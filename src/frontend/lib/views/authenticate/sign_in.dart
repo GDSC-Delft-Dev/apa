@@ -42,29 +42,33 @@ class _SignInState extends State<SignIn> {
                   height: height,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/farm-background.jpg'),
+                      image: AssetImage('assets/images/farm-background-blur.jpg'),
                       fit: BoxFit.fill
                     )
                   ),
                   child: Stack(
                     children: <Widget>[
                       Positioned(
-                          width: width * 0.5,
-                          height: height * 0.2,
-                          child: Container(
+                          width: width * 0.45,
+                          left: width * 0.25,
+                          height: height * 0.3,
+                          child: Center (
+                            child: Container(
                             decoration: const BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage('assets/images/drone.png')
+                                image: AssetImage('assets/icons/logo.png'),
+                                alignment: Alignment.center,
                               )
                             ),
+                          ),
                           )
                       ),
                       Positioned(
-                        height: height * 0.5,
+                        height: height * 0.6,
                         width: width,
                         child: const Center(
                           child: Text('Welcome back to Terrafarm', textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white))
+                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold))
                         ),
                       ),
                       Positioned (
@@ -120,7 +124,7 @@ class _SignInState extends State<SignIn> {
                                 ElevatedButton(
                                   child: const Text(
                                     'Login',
-                                    style: TextStyle(color: Colors.white, fontSize: 17),
+                                    style: TextStyle(color: Colors.black, fontSize: 17),
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -128,7 +132,6 @@ class _SignInState extends State<SignIn> {
                                     ),
                                     minimumSize: Size(width * 0.7, height * 0.05),
                                     elevation: 20,
-                                    shadowColor: Colors.blue,
                                   ),
                                   onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
@@ -141,10 +144,11 @@ class _SignInState extends State<SignIn> {
                                     }
                                   },
                                 ),
+                                const SizedBox(height: 12.0),
                                 ElevatedButton(
                                   child: const Text(
                                     'Create an account',
-                                    style: TextStyle(color: Colors.white, fontSize: 17),
+                                    style: TextStyle(color: Colors.black, fontSize: 17),
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -153,7 +157,7 @@ class _SignInState extends State<SignIn> {
                                     primary: Colors.blue[200],
                                     minimumSize: Size(width * 0.7, height * 0.05),
                                     elevation: 20,
-                                    shadowColor: Colors.blue,
+                                    
                                   ),
                                   onPressed: () => widget.toggleView(),
                                 ),

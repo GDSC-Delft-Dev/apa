@@ -103,6 +103,7 @@ flutter:
   assets:
     - lib/.env # Path to .env
     - assets/images/farm-background.jpg
+    - assets/images/farm-background-blur.jpg
     - assets/images/drone.png
     - assets/images/disease_marker.png
     - assets/images/nutrient_marker.png
