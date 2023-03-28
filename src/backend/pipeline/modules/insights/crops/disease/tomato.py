@@ -18,10 +18,9 @@ class TomatoDiseaseInsight(Insight):
             data - data object from the pipeline
             name - name of the insight
         """
-
         super().__init__(data, name)
 
-    def run(self) -> list[str]:
+    def run(self) -> bool:
         """
         Insight inference.
         """
@@ -35,5 +34,6 @@ class TomatoDiseaseInsight(Insight):
         labels = tf.argmax(labels, axis=1)
 
         # TODO: should have a separate ENUM with a specific disease name
+        # TODO: save them
         mapping = [Args.classes[i] for i in labels]
-        return mapping
+        return True
