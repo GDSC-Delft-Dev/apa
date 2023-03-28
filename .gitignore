@@ -10,5 +10,6 @@ src/backend/pipeline/data
 .vscode
 *json
 nutrient_masks.npy
+PlantVillage
 .vscode
 .idea
