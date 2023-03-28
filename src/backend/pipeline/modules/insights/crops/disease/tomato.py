@@ -1,6 +1,9 @@
 from ...insight import Insight
 from ....data import Data
+from .....ml.utils import Args
 import tensorflow as tf
+
+MODEL_PATH = ""
 
 class TomatoDiseaseInsight(Insight):
     """Decide if the crop is healthy or not. If the crop is not healthy, 
@@ -17,8 +20,19 @@ class TomatoDiseaseInsight(Insight):
 
         super().__init__(data, name)
 
-    def run(self) -> bool:
+    def run(self) -> list[str]:
         """
         Insight inference.
         """
-        pass
+
+        assert self.data.modules["plant_preprocessing"]["images"] is not None 
+        # assume a module takes care of all preprocessing steps
+        imgs = self.data.modules["plant_preprocessing"]["images"]
+        model = tf.keras.models.load_model(MODEL_PATH)
+
+        labels = model.predict(imgs)
+        labels = tf.argmax(labels, axis=1)
+
+        # TODO: should have a separate ENUM with a specific disease name
+        mapping = [Args.classes[i] for i in labels]
+        return mapping
