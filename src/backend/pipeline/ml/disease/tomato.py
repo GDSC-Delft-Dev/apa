@@ -101,10 +101,11 @@ def train(model: tf.keras.Model, dataset: tuple[np.ndarray, np.ndarray],
     # pre-fetch data for performance
     AUTOTUNE = tf.data.AUTOTUNE
     train_dataset = train_dataset.prefetch(buffer_size=AUTOTUNE)
-    validation_dataset = validation_dataset.prefetch(buffer_size=AUTOTUNE)
+    validation_dataset = val_dataset.prefetch(buffer_size=AUTOTUNE)
 
     hist = model.fit(train_dataset, 
                      epochs=100,
                      validation_data=validation_dataset)
     
-
+    performance_visualization(hist)
+    return model

@@ -62,9 +62,13 @@ def create_dataset() -> tuple[np.ndarray, np.ndarray]:
     data, labels = [], []
     for idx, _class in enumerate(Args.classes):
         imgs = read_class(Args.base_path + Args.classes[idx])
+        # sample from this bc too much memory
+        imgs = imgs[np.random.choice(imgs.shape[0], 250, replace=False)]
+
         data.append(preprocessing(imgs))
         # one-hot of the index of the class
         labels.append(tf.one_hot(np.full(imgs.shape[0], idx), len(Args.classes)))
+        print(labels[-1].shape)
         print(f"Images with label {idx}: {imgs.shape[0]}")
     return np.concatenate(data), np.concatenate(labels)
         
