@@ -4,7 +4,8 @@ import '../models/insight_model.dart';
 
 enum InsightMapType { 
   ndvi, 
-  soil_moisture,
+  tcari,
+  soilMoisture,
   biomass,
   yield,
   nitrogen 

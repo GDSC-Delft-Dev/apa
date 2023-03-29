@@ -28,7 +28,8 @@ class _MapsDropdownState extends State<MapsDropdown> {
                 filled: true,
                 fillColor: Colors.white,
                 hintText: currMap == InsightMapType.ndvi ? 'NDVI' 
-                                        : currMap == InsightMapType.soil_moisture ? 'Soil Moisture'
+                                        : currMap == InsightMapType.tcari ? 'TCARI'
+                                        : currMap == InsightMapType.soilMoisture ? 'Soil Moisture'
                                         : currMap == InsightMapType.biomass ? 'Biomass'
                                         : currMap == InsightMapType.yield ? 'Yield'
                                         : 'Nitrogen',
@@ -39,7 +40,8 @@ class _MapsDropdownState extends State<MapsDropdown> {
                 return DropdownMenuItem<InsightMapType>(
                   value: type,
                   child: Text(type == InsightMapType.ndvi ? 'NDVI' 
-                                        : type == InsightMapType.soil_moisture ? 'Soil Moisture'
+                                        : type == InsightMapType.tcari ? 'TCARI'
+                                        : type == InsightMapType.soilMoisture ? 'Soil Moisture'
                                         : type == InsightMapType.biomass ? 'Biomass'
                                         : type == InsightMapType.yield ? 'Yield'
                                         : 'Nitrogen'),
