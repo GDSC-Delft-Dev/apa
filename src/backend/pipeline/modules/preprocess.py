@@ -33,6 +33,31 @@ class Preprocess(Module):
             data.modules[self.type.value]["masked"] = masked
 
         return super().run(data)
+    
+class StandardizePreprocess(Preprocess):
+    """
+    Perform data preprocessing on raw images by standardizing them.
+    """
+
+    def __init__(self, data: Data, input_data: Any):
+        super().__init__(data, input_data=input_data)
+
+    def run(self, data: Data):
+        """
+        Preprocesses the image(s) by standardizing them.
+
+        Args:
+            img: the images to preprocess
+
+        Returns:
+            The preprocessed image(s).
+        """ 
+        mean: list[float] = [0.485, 0.456, 0.406], 
+        stddev: list[float] = [0.229, 0.224, 0.225]
+        standardize: list[Mat] = [Mat(np.divide((x.get() - mean), stddev), data.input[0].channels)
+                                 for x in data.input]
+        data.modules[self.type.value]["standard"] = standardize
+        return super().run(data)
 
 class AgricultureVisionPreprocess(Preprocess):
     """

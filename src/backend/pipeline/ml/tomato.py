@@ -9,6 +9,7 @@ def main():
     optimizer = tf.keras.optimizers.Adam(learning_rate=LR)
     loss = tf.losses.CategoricalCrossentropy()
     model = train(model, dataset, optimizer, loss)
+    model.save("tomato_model/resnet_tomato")
     print(f"Finished")
 
 main() # run main
