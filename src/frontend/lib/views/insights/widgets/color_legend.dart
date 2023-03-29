@@ -11,8 +11,8 @@ class ColorLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    List<Color> ndviColors = [Colors.yellow, Colors.red];
-    List<Color> tcariColors = [Colors.blue, Colors.green];
+    List<Color> ndviColors = [Colors.red, Colors.green];
+    List<Color> tcariColors = [Colors.green, Colors.blue.shade900];
 
     return Container(
       height: 40.0,
