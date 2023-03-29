@@ -5,15 +5,21 @@ Through an intuitive dashboard, farmers are able to automatically track historic
 
 <p align="center">
     <p align="center">
-        <img src="https://user-images.githubusercontent.com/74115586/219355950-a4476798-28a1-4ca1-aa8b-85b7556fc3fe.png" width="450" />
+        <img src="assets/screenshots/login.png" width="160" />
         &nbsp &nbsp
-        <img src="https://user-images.githubusercontent.com/74115586/219356529-b53a18b4-6995-4cd0-9b3e-4c054c97cd46.png" width="300" />
+        <img src="assets/screenshots/home.png" width="152" />
          &nbsp &nbsp
-        <img src="https://user-images.githubusercontent.com/74115586/219357528-0ea762fe-0228-4e00-8d6e-9baad15b8fbc.png" width="470" />
+        <img src="assets/screenshots/my-fields.png" width="150" />
          &nbsp &nbsp
-        <img src="https://user-images.githubusercontent.com/74115586/219357760-b6b828e5-6330-4898-82cd-9eb31c03e607.png" width="300" />
-        <!-- &nbsp &nbsp
-        <img src="https://user-images.githubusercontent.com/74115586/219358000-6267bbd4-87cf-40ec-8459-26cc5ff6af04.png" width="400" /> -->
+        <img src="assets/screenshots/ndvi-map.png" width="153" />
+        &nbsp &nbsp
+        <img src="assets/screenshots/tcari-map.png" width="153" />
+        &nbsp &nbsp
+        <img src="assets/screenshots/disease-insight.png" width="145" />
+        &nbsp &nbsp
+        <img src="assets/screenshots/chatbot.png" width="135" />
+        &nbsp &nbsp
+        <img src="assets/screenshots/add-field.png" width="140">
     </p>
 </p>
 
