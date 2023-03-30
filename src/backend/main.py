@@ -23,7 +23,7 @@ def main(args: Any):
 
     # check if we use cloud data or local data
     if args.path is None or args.mode is None:
-        imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/test/data/disease/*.JPG"))]
+        imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG"))]
         path = "pipeline/test/data/mosaicing/farm/D*.JPG"
         cloud_config = CloudConfig(bucket_name=output_bucket)
     else:
