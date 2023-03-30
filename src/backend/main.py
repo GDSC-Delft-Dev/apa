@@ -4,7 +4,7 @@ import os
 import argparse
 from pipeline.mat import Mat
 from google.cloud import storage
-from pipeline.templates import full_pipeline, default_pipeline, training_pipeline, nutrient_pipeline
+from pipeline.templates import full_pipeline, default_pipeline, training_pipeline, nutrient_pipeline, disease_pipeline
 import asyncio
 from pipeline.config import CloudConfig
 from typing import Any
@@ -55,7 +55,7 @@ def main(args: Any):
         imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/data/D*.JPG"))]
 
     # Get test data
-    imgs = imgs[:3]
+    imgs = imgs[:min(len(imgs), 3)]
 
     # Run the pipeline
     pipeline = nutrient_pipeline(cloud=cloud_config)
