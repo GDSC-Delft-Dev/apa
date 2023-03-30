@@ -61,8 +61,8 @@ class Mosaicing(Module):
         mask, alpha_stitched = self.process(data.modules[self.type.value]["stitched"])
         data.modules[self.type.value]["mask"] = mask
         data.modules[self.type.value]["alpha_img"] = alpha_stitched
-        tuple = self.create_patches(stitched, data.input[0].channels)
-        data.modules[self.type.value]["patches_dims"] = (tuple[0], tuple[1])
+        patches_dims = self.create_patches(stitched, data.input[0].channels)
+        data.modules[self.type.value]["patches_dims"] = (patches_dims[0], patches_dims[1])
         data.modules[self.type.value]["patches"] = patches
             
         # Run the next module

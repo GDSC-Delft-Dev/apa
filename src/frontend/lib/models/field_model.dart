@@ -11,6 +11,7 @@ class FieldModel {
   final String cropId;
   final List<GeoPoint> boundaries;
   final List<String> scans;
+  final Timestamp plantingDate;
   bool hasInsights;
 
   FieldModel(
@@ -20,6 +21,7 @@ class FieldModel {
       required this.boundaries,
       required this.cropId,
       required this.scans,
+      required this.plantingDate,
       this.hasInsights = false});
 
   setHasInsights(bool hasInsights) {

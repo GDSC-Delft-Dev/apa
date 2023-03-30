@@ -49,12 +49,12 @@ def training_pipeline() -> Pipeline:
                  cloud=CloudConfig(True, "terrafarm-example"))
     return Pipeline(cfg)
 
-def nutrient_pipeline() -> Pipeline:
+def nutrient_pipeline(cloud: CloudConfig = CloudConfig()) -> Pipeline:
     """Nutrient deficiency pipeline."""
     paths = {3:"./pipeline/ml/deepv3_seg_3/", 4:"./pipeline/ml/deepv3_seg_4/"}
     cfg = Config(modules={Mosaicing: None,
                           AgricultureVisionPreprocess: None,
                           SemanticSegmentation: paths,
                           Index: {"config": None, "runnables": [Nutrient]}},
-                cloud=CloudConfig(False, "terrafarm-example"))
+                cloud=cloud)
     return Pipeline(cfg)

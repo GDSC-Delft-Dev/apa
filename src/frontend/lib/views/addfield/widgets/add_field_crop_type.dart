@@ -22,7 +22,7 @@ class _AddFieldCropTypeState extends State<AddFieldCropType> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(10.0),
         child: Flex(
           direction: Axis.horizontal,
           children: [
@@ -30,9 +30,9 @@ class _AddFieldCropTypeState extends State<AddFieldCropType> {
               child: Text(
                 widget.text,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.normal,
-                  color: Colors.grey.shade700,
+                  color: Colors.grey.shade800,
                   letterSpacing: 0.05,
                 ),
               ),
@@ -53,7 +53,7 @@ class _AddFieldCropTypeState extends State<AddFieldCropType> {
                               }).toList()
                             : [],
                         value: cropId,
-                        hint: Text('Select a crop type'),
+                        hint: Text('Select a crop type', style: TextStyle(color: Colors.black45, fontSize: 16)),
                         icon: Expanded(
                           child: Container(
                             alignment: Alignment.centerRight,

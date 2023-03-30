@@ -18,12 +18,10 @@ class ScanStore {
     for (var scanId in scanIds) {
       scans.add(await getScanDetails(scanId));
     }
-
     // We sort them based on start date. This is useful for the scan history feature.
     scans.sort(
       (a, b) => a.endDate.compareTo(b.endDate),
     );
-
     return scans;
   }
 
@@ -32,13 +30,15 @@ class ScanStore {
     if (snapshot.data() == null) {
       throw Exception('Scan not found');
     }
+    var data = snapshot.data() as Map<String, dynamic>;
 
     if (snapshot['result'] == null ||
-        Result.values.map((e) => e.name).contains(snapshot['result'].toString().toLowerCase()) ==
+        Result.values.map((e) => e.name).contains(data['result'].toString().toLowerCase()) ==
             false) {
       throw Exception('Scan result not found');
     }
-    
+
+
     List<InsightModel> insights = [];
     for (var insight in snapshot['insights']) {
       insights.add(InsightModel.fromMap(insight));
@@ -46,16 +46,16 @@ class ScanStore {
 
     return ScanModel(
       scanId: snapshot.id,
-      startDate: snapshot['start'].toDate(),
-      endDate: snapshot['end'].toDate(),
+      startDate: data['start'].toDate(),
+      endDate: data['end'].toDate(),
       result: Result.values
-          .firstWhere((element) => element.name == snapshot['result'].toString().toLowerCase()),
-      drone: snapshot['drone'] ?? "",
+          .firstWhere((element) => element.name == data['result'].toString().toLowerCase()),
+      drone: data['drone'] ?? "",
       insights: insights,
       // Pipelines are a reference to the pipeline document in Firestore
       // TODO: Add pipelines to scan model
       pipelines: <String>[],
-      indices: snapshot['indicies'] ?? [],
+      indices: data['indicies'] ?? [],
     );
   }
 }

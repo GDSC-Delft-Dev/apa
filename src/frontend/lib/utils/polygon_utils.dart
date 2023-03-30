@@ -57,6 +57,34 @@ double getGeoArea(List<GeoPoint> geoPoints) {
   return double.parse(areaInHectares.toStringAsFixed(1));
 }
 
+// Get center of a polygon
+LatLng getCenterOfPolygon(List<LatLng> points) {
+  double x = 0;
+  double y = 0;
+  double z = 0;
+
+  for (var point in points) {
+    double latitude = point.latitude * pi / 180;
+    double longitude = point.longitude * pi / 180;
+
+    x += cos(latitude) * cos(longitude);
+    y += cos(latitude) * sin(longitude);
+    z += sin(latitude);
+  }
+
+  int total = points.length;
+
+  x = x / total;
+  y = y / total;
+  z = z / total;
+
+  double centralLongitude = atan2(y, x);
+  double centralSquareRoot = sqrt(x * x + y * y);
+  double centralLatitude = atan2(z, centralSquareRoot);
+  
+  return LatLng(centralLatitude * 180 / pi, centralLongitude * 180 / pi);
+}
+
   /// Returns a camera position that is good for the current polygon.
 CameraPosition getGoodCameraPositionForPolygon(List<GeoPoint> geoPoints) {
   if (geoPoints.isEmpty) {
@@ -84,5 +112,35 @@ CameraPosition getGoodCameraPositionForPolygon(List<GeoPoint> geoPoints) {
   return CameraPosition(
     target: LatLng((minLat + maxLat) / 2, (minLong + maxLong) / 2),
     zoom: zoom,
+  );
+}
+
+// Returns an LatLngBounds object that encloses the polygon
+// This is used to set the image overlay boundaries.
+LatLngBounds getLatLngBoundsForPolygon(List<GeoPoint> geoPoints) {
+  if (geoPoints.isEmpty) {
+    return LatLngBounds(
+      southwest: const LatLng(0, 0),
+      northeast: const LatLng(0, 0),
+    );
+  }
+
+  // TODO: It should account for the case where the polygon crosses the 180th meridian
+  // and the longitude values are negative.
+  double minLat = geoPoints[0].latitude;
+  double maxLat = geoPoints[0].latitude;
+  double minLong = geoPoints[0].longitude;
+  double maxLong = geoPoints[0].longitude;
+
+  for (var geoPoint in geoPoints) {
+    minLat = min(minLat, geoPoint.latitude);
+    maxLat = max(maxLat, geoPoint.latitude);
+    minLong = min(minLong, geoPoint.longitude);
+    maxLong = max(maxLong, geoPoint.longitude);
+  }
+
+  return LatLngBounds(
+    southwest: LatLng(minLat, minLong),
+    northeast: LatLng(maxLat, maxLong),
   );
 }

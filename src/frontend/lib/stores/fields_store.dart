@@ -23,6 +23,7 @@ class FieldsStore {
       boundaries: List<GeoPoint>.from(
           snapshot['boundaries']?.map((loc) => GeoPoint(loc.latitude, loc.longitude)) ?? []),
       hasInsights: snapshot['has_insights'],
+      plantingDate: snapshot['planting_date'],
       scans: List<String>.from(snapshot['scans'] ?? []),
     );
   }
@@ -38,7 +39,7 @@ class FieldsStore {
         {'field_name': name, 'area': area, 'has_insights': hasInsights, 'crop_id': crop.cropId});
   }
 
-  Future addNewField(String name, String cropId, double area, List<GeoPoint> boundaries) async {
+  Future addNewField(String name, String cropId, double area, List<GeoPoint> boundaries, Timestamp datePlanted) async {
     var addFieldData = <String, dynamic>{};
     addFieldData['field_name'] = name;
     addFieldData['area'] = area;
@@ -47,6 +48,7 @@ class FieldsStore {
     addFieldData['boundaries'] = boundaries;
     addFieldData['has_insights'] = false; // by default, a field has no insights yet
     addFieldData['scans'] = []; // by default, a field has no scans yet
+    addFieldData['planting_date'] = datePlanted;
     return fieldsCollection.doc().set(addFieldData);
   }
 
@@ -67,6 +69,7 @@ class FieldsStore {
           // Convert Firebase array of GeoPoints into List<GeoPoint>
           boundaries: boundaries,
           scans: List<String>.from(doc.get('scans') ?? []),
+          plantingDate: doc.get('planting_date') ?? Timestamp.now(),
           hasInsights: doc.get('has_insights') ?? false);
     }).toList();
   }

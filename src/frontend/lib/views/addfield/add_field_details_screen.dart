@@ -7,6 +7,7 @@ import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/stores/fields_store.dart';
 import 'package:frontend/views/addfield/widgets/add_field_crop_type.dart';
 import 'package:frontend/views/addfield/widgets/add_field_info_card.dart';
+import 'package:frontend/views/addfield/widgets/add_field_planting_date.dart';
 import 'package:frontend/views/addfield/widgets/visualize_field_map.dart';
 import 'package:frontend/widgets/terrafarm_app_bar.dart';
 import 'package:frontend/widgets/terrafarm_rounded_button.dart';
@@ -25,6 +26,7 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
   // adding the text editing controller
   late TextEditingController _fieldNameController;
   String? _cropId = null;
+  Timestamp? _plantingDate = null;
 
   @override
   void initState() {
@@ -83,6 +85,14 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                         });
                       },
                     ),
+                    AddFieldPlantingDate(       // Optional: pick date of planting
+                      text: "Planting Date *",
+                      onChange: (date) {
+                        setState(() {
+                          _plantingDate = Timestamp.fromDate(DateTime.parse(date).toUtc());
+                        });
+                      },
+                    ),
                     SizedBox.fromSize(
                       size: const Size.fromHeight(20),
                     ),
@@ -130,7 +140,7 @@ class _AddFieldDetailsScreenState extends State<AddFieldDetailsScreen> {
                                           Provider.of<NewFieldProvider>(context, listen: false)
                                               .geoPoints),
                                       Provider.of<NewFieldProvider>(context, listen: false)
-                                          .geoPoints)
+                                          .geoPoints, _plantingDate!)
                                   .onError((error, stackTrace) {
                                 // Snackbars are used to display messages to the user.
                                 ScaffoldMessenger.of(context).showSnackBar(

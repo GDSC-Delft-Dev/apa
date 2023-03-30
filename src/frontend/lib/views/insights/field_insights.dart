@@ -42,12 +42,17 @@ class _FieldInsightsState extends State<FieldInsights> {
                     .fetchFieldScans(currField.scans),
               ]),
               builder: (context, snapshot) {
-                if(snapshot.connectionState != ConnectionState.done) {
+                if (snapshot.connectionState != ConnectionState.done) {
                   return Loading();
                 }
 
                 return Scaffold(
-                  appBar: AppBar(title: Text('Field insights: ${currField.fieldName}')),
+                  appBar: AppBar(
+                    title: Text('${currField.fieldName}'),
+                    centerTitle: true,
+                    backgroundColor: Colors.white,
+                    elevation: 0,
+                  ),
                   backgroundColor: Colors.grey[200],
                   body: Stack(
                     children: [

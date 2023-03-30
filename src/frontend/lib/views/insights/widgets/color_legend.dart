@@ -11,8 +11,8 @@ class ColorLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    List<Color> ndviColors = [Colors.yellow, Colors.red];
-    List<Color> soilMoistureColors = [Colors.blue, Colors.green];
+    List<Color> ndviColors = [Colors.red, Colors.green];
+    List<Color> tcariColors = [Colors.green, Colors.blue.shade900];
 
     return Container(
       height: 40.0,
@@ -21,14 +21,14 @@ class ColorLegend extends StatelessWidget {
         border: Border.all(color: Colors.black, width: 1.0),
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         gradient: LinearGradient(
-                    colors: mapType == InsightMapType.ndvi ? ndviColors : soilMoistureColors,
+                    colors: mapType == InsightMapType.ndvi ? ndviColors : tcariColors,
                     begin: Alignment.centerLeft, end: Alignment.centerRight, tileMode: TileMode.clamp)
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 10.0, right: 250.0),
+            padding: EdgeInsets.only(left: 10.0, right: 220.0),
             child: Text('Min', style: TextStyle(fontSize: 15.0, color: Colors.black),),
           ),
           Padding(
