@@ -4,7 +4,7 @@ import os
 import argparse
 from pipeline.mat import Mat
 from google.cloud import storage
-from pipeline.templates import full_pipeline, default_pipeline, training_pipeline, nutrient_pipeline
+from pipeline.templates import full_pipeline, default_pipeline, training_pipeline, nutrient_pipeline, disease_pipeline
 import asyncio
 from pipeline.config import CloudConfig
 from typing import Any
@@ -23,7 +23,7 @@ def main(args: Any):
 
     # check if we use cloud data or local data
     if args.path is None or args.mode is None:
-        imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/test/data/mosaicing/farm/D*.JPG"))]
+        imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/test/data/disease/*.JPG"))]
         path = "pipeline/test/data/mosaicing/farm/D*.JPG"
         cloud_config = CloudConfig(bucket_name=output_bucket)
     else:
@@ -57,10 +57,10 @@ def main(args: Any):
         imgs = [Mat.read(file) for file in sorted(glob.glob("pipeline/data/D*.JPG"))]
 
     # Get test data
-    imgs = imgs[:3]
+    imgs = imgs[:min(len(imgs), 3)]
 
     # Run the pipeline
-    pipeline = nutrient_pipeline()
+    pipeline = disease_pipeline()
     pipeline.show()
 
     # Authenticate to firebase

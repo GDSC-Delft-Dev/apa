@@ -1,12 +1,14 @@
 from ..insight import Insight
 from ...data import Data
+from ...modules import Modules
 from ...runnable import Runnable
 from ....ml.utils import Args
 from ....mat import Channels
+from ..insights import Insights, insights_mapping
 import tensorflow as tf
+import numpy as np
 
-# TODO: take this from somewhere else
-MODEL_PATH = ""
+MODEL_PATH = "pipeline/ml/tomato_model/resnet_tomato"
 
 class TomatoDiseaseInsight(Runnable):
     """Decide if the crop is healthy or not. If the crop is not healthy, 
@@ -30,18 +32,15 @@ class TomatoDiseaseInsight(Runnable):
         Args:
             data: the pipeline data object
         """
-
-        assert data.modules["plant_preprocessing"]["images"] is not None 
+        assert data.modules[Modules.PREPROCESS.value]["standard"] is not None 
         # assume a module takes care of all preprocessing steps
-        imgs = data.modules["plant_preprocessing"]["images"]
+        imgs = data.modules[Modules.PREPROCESS.value]["standard"]
         model = tf.keras.models.load_model(MODEL_PATH)
-
-        labels = model.predict(imgs)
+        labels = model.predict(np.array([x.get() for x in imgs]))
         labels = tf.argmax(labels, axis=1)
-
-        # TODO: should have a separate ENUM with a specific disease name
-        # TODO: save them
-        mapping = [Args.classes[i] for i in labels]
+        # Map index to disease
+        mapping = [insights_mapping[Insights.TOMATO](i).name for i in labels]
+        data.modules[Modules.INSIGHT.value]["runnables"][self.type.value] = mapping
 
     def prepare(self, data: Data):
         """
@@ -51,7 +50,8 @@ class TomatoDiseaseInsight(Runnable):
         Args:
             data: the pipeline data object
         """
-        pass 
+        data.modules[Modules.INSIGHT.value]["runnables"][self.type.value] = {}
+        self.to_persist(data)
 
     def upload(self, data: Data, collection, bucket, base_url: str):
         """
@@ -72,4 +72,7 @@ class TomatoDiseaseInsight(Runnable):
         Args:
             data: the pipeline data object
         """
-        pass
+        persist: str = Modules.INSIGHT.value + "." + "runnables" + "." + \
+                            self.type.value + "." + "index"
+        data.persistable[Modules.INSIGHT.value]["runnables"]\
+                        [self.type.value] = frozenset([persist])
