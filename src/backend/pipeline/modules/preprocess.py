@@ -52,7 +52,7 @@ class StandardizePreprocess(Preprocess):
         Returns:
             The preprocessed image(s).
         """ 
-        mean: list[float] = [0.485, 0.456, 0.406], 
+        mean: list[float] = [0.485, 0.456, 0.406] 
         stddev: list[float] = [0.229, 0.224, 0.225]
         standardize: list[Mat] = [Mat(np.divide((x.get() - mean), stddev), data.input[0].channels)
                                  for x in data.input]
