@@ -1,12 +1,12 @@
 import tensorflow as tf
-from utils import *
-from disease.tomato import *
+from .utils import create_dataset
+from .disease.tomato import ResNetTomato, train
 
 def main():
-    LR = 3e-4 # learning rate
+    LEARNING_RATE = 3e-4 # learning rate
     dataset = create_dataset()
     model = ResNetTomato()
-    optimizer = tf.keras.optimizers.Adam(learning_rate=LR)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE)
     loss = tf.losses.CategoricalCrossentropy()
     model = train(model, dataset, optimizer, loss)
     model.save("tomato_model/resnet_tomato")
