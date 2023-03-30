@@ -7,6 +7,7 @@ from ....mat import Channels
 from ..insights import Insights, insights_mapping
 import tensorflow as tf
 import numpy as np
+import os
 
 MODEL_PATH = "pipeline/ml/tomato_model/resnet_tomato"
 
@@ -32,7 +33,7 @@ class TomatoDiseaseInsight(Runnable):
         Args:
             data: the pipeline data object
         """
-        assert data.modules[Modules.PREPROCESS.value]["standard"] is not None 
+        assert data.modules[Modules.PREPROCESS.value]["standard"] is not None
         # assume a module takes care of all preprocessing steps
         imgs = data.modules[Modules.PREPROCESS.value]["standard"]
         model = tf.keras.models.load_model(MODEL_PATH)
