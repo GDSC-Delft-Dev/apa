@@ -1,11 +1,12 @@
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
+from ....utils import performance_visualization
 
 
-def ResNetPotato():
+def ResNetTomato():
     """
-    Create a ResNet50 model for the tomato disease potato task.
+    Create a ResNet50 model for the tomato disease classification task.
     """
     # create a ResNet50 model
     resnet = tf.keras.applications.ResNet50(
@@ -18,45 +19,9 @@ def ResNetPotato():
     resnet.trainable = False
     # add a dense layer with 10 output units, each correspoding to a class
     # in utils.py
-    output = tf.keras.layers.Dense(3, activation="softmax")(resnet.output)
+    output = tf.keras.layers.Dense(10, activation="softmax")(resnet.output)
     model = tf.keras.Model(inputs=resnet.input, outputs=output)
     return model
-
-def performance_visualization(history):
-    """
-    Visualize the performance of the model with respect to accuracy and loss
-    during training.
-
-    Args:
-        history - history of the model during training
-    """
-
-    acc = history.history['accuracy']
-    val_acc = history.history['val_accuracy']
-
-    loss = history.history['loss']
-    val_loss = history.history['val_loss']
-
-    plt.figure(figsize=(8, 8))
-    plt.subplot(2, 1, 1)
-    plt.plot(acc, label='Training Accuracy')
-    plt.plot(val_acc, label='Validation Accuracy')
-    plt.legend(loc='lower right')
-    plt.ylabel('Accuracy')
-    plt.ylim([min(plt.ylim()),1])
-    plt.title('Training and Validation Accuracy')
-
-    plt.subplot(2, 1, 2)
-    plt.plot(loss, label='Training Loss')
-    plt.plot(val_loss, label='Validation Loss')
-    plt.legend(loc='upper right')
-    plt.ylabel('Cross Entropy')
-    plt.ylim([0,1.0])
-    plt.title('Training and Validation Loss')
-    plt.xlabel('epoch')
-    plt.show()
-
-
 
 def train(model: tf.keras.Model, dataset: tuple[np.ndarray, np.ndarray], 
           optimizer: tf.keras.optimizers.Optimizer,
