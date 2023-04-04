@@ -9,6 +9,8 @@ Want to know more? Read our wiki [**here**](../../wiki).
 
 ## Getting Started
 
+Our code can be found in the `src` directory. Read below to learn how to explore, run, and modify the backend and frontend, or play with the notebooks in the `notebooks` directory.
+
 ### Backend
 
 The backend comprises of the image processing pipleline that processes mutlispectral images from farms. You can run it locally, or remotely on GCP (in a container). If you'd like to know more about the pipeline, read our wiki [**here**](../../wiki/Pipeline).
@@ -23,6 +25,8 @@ Run the image processing pipeline locally. Tested on linux (`Ubuntu 20`) and Mac
 ```
 git clone https://github.com/GDSC-Delft-Dev/apa.git
 ```
+
+Note that this might take a while.
 
 3. Setup the Python virtual environment 
 ```
@@ -66,6 +70,8 @@ To use infrastructure, please request the GCP service account key at `pawel.mist
 git clone https://github.com/GDSC-Delft-Dev/apa.git
 ```
 
+Note that this might take a while.
+
 2. Set the GCP service account environmental variable
 ```
 export GCP_FA_PRIVATE_KEY=<key> (linux, mac)
@@ -108,6 +114,8 @@ To executed the automated tests, run `pytest` unit tests:
 python -m pytest
 ```
 
+You can find our tests in `src\backend\pipeline\test\unit`.
+
 ### Static analysis
 Our project uses `mypy` and `pylint` to assert the quality of the code. You can run these with:
 
@@ -118,6 +126,8 @@ python -m pylint ./pipeline
 
 ### CI/CD
 The CI/CD pushes the build from the latest commit to the `pipelines-dev` repository in the Google Artifact Registry. Note that only the backend is covered.
+
+You can find the pipeline declaration in `.github\workflows\pipeline.yml`.
 
 ## Frontend setup
 Please refer to `apa/src/frontend/README.md`.
