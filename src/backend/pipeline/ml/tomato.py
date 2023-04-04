@@ -1,6 +1,6 @@
 import tensorflow as tf
 from .utils import create_dataset
-from .disease.tomato import ResNetTomato, train
+from .disease.tomato.tomato import ResNetTomato, train
 
 def main():
     LEARNING_RATE = 3e-4 # learning rate

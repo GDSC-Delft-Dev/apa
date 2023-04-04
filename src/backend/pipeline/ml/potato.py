@@ -1,6 +1,6 @@
 import tensorflow as tf
 from .utils import create_dataset
-from .disease.potato import ResNetPotato, train
+from .disease.potato.potato import ResNetPotato, train
 
 def main():
     LEARNING_RATE = 3e-4 # learning rate

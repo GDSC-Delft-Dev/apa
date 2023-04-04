@@ -1,7 +1,7 @@
 import argparse
 from .model import keras_estimator, input_fn, serving_input_fn
 from .mappings import mappings
-from utils import create_dataset
+from ..utils import create_dataset
 import numpy as np
 import tensorflow as tf
 import os
@@ -95,7 +95,7 @@ def train_and_evaluate(args: argparse.Namespace):
     Args:
         args: command line arguments
     """
-    train_dict = mappings[args.crop]
+    train_dict: dict = mappings[args.crop]
     # load data
     (train_data, train_labels), (test_data, test_labels) = load_data(train_dict["bucket"], 
                                                                      train_dict["labels"])
