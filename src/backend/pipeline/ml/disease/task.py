@@ -42,11 +42,11 @@ def load_data(bucket: str, labels: list[str], val_split: float = 0.2) -> tuple[t
     download_files_from_gcs(sources, destinations)
 
     # TODO: give the paths as parameters instead of hardcoding them in utils.py
-    data, labels = create_dataset()
+    data, dlabels = create_dataset()
 
     # shuffle data
     perm = np.random.permutation(data.shape[0])
-    dataset = (data[perm], labels[perm])
+    dataset = (data[perm], dlabels[perm])
 
     # split in train and validation data
     train_data = (dataset[0][:int((1-val_split) * dataset[0].shape[0])], dataset[1][:int((1-val_split) * dataset[0].shape[0])])
