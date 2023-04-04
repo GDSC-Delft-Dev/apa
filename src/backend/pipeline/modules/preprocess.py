@@ -54,7 +54,7 @@ class StandardizePreprocess(Preprocess):
         Returns:
             The preprocessed image(s).
         """ 
-        assert data.input[0].channels == 3, "Standardization only works for RGB images."
+        assert len(data.input[0].channels) == 3, "Standardization only works for RGB images."
         mean: list[float] = [0.485, 0.456, 0.406] 
         stddev: list[float] = [0.229, 0.224, 0.225]
         standardize: list[Mat] = [Mat(np.divide((x.get() - mean), stddev), data.input[0].channels)

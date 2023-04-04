@@ -7,15 +7,14 @@ from ....mat import Channels
 from ..insights import Insights, insights_mapping
 import tensorflow as tf
 import numpy as np
-import os
 
-MODEL_PATH = "pipeline/ml/tomato_model/resnet_tomato"
+MODEL_PATH = "pipeline/ml/potato_model/resnet_potato"
 
-class TomatoDiseaseInsight(Runnable):
+class PotatoDiseaseInsight(Runnable):
     """Decide if the crop is healthy or not. If the crop is not healthy, 
     determine the disease."""
 
-    def __init__(self, data: Data, name: str = "Tomato disease insight"):
+    def __init__(self, data: Data, name: str = "Potato disease insight"):
         """
         Initializes the insight.
 
@@ -33,7 +32,7 @@ class TomatoDiseaseInsight(Runnable):
         Args:
             data: the pipeline data object
         """
-        assert data.modules[Modules.PREPROCESS.value]["standard"] is not None
+        assert data.modules[Modules.PREPROCESS.value]["standard"] is not None 
         # assume a module takes care of all preprocessing steps
         imgs = data.modules[Modules.PREPROCESS.value]["standard"]
         model = tf.keras.models.load_model(MODEL_PATH)

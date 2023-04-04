@@ -4,6 +4,7 @@ class Insights(Enum):
     """Represents insight types."""
     # Disease
     TOMATO = "Tomato"
+    POTATO = "Potato"
 
 class Tomato(Enum):
     """Represents tomato disease types."""
@@ -29,9 +30,20 @@ class Tomato(Enum):
     # Healthy
     HEALTHY = 9
 
+class Potato(Enum):
+    """Represents potato disease types."""
+
+    # Early blight
+    EARLY_BLIGHT = 0
+    # Late blight
+    LATE_BLIGHT = 1
+    # Healthy
+    HEALTHY = 2
+
 # mapping from insight to specific enum
 insights_mapping = {
-    Insights.TOMATO: Tomato
+    Insights.TOMATO: Tomato,
+    Insights.POTATO: Potato
 }
 
 
