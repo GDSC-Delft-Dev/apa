@@ -35,7 +35,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  google_maps_flutter: ^2.2.3
+  google_maps_flutter:
+    git:
+      url: https://github.com/RD211/plugins.git
+      path: packages/google_maps_flutter/google_maps_flutter/
   http: ^0.13.5
   # A better way to handle environment variables using `.env` file.
   flutter_dotenv: ^5.0.2
@@ -56,6 +59,9 @@ dependencies:
   intl: ^0.17.0
   permission_handler: ^10.2.0
   f_logs: ^2.0.1
+  chat_gpt_sdk: ^2.0.6
+  flutter_chat_bubble: ^2.0.2
+
   # google_maps_flutter_platform_interface:
   #   git:
   #     url: https://github.com/bytestreme/plugins.git
@@ -64,6 +70,7 @@ dependencies:
 dev_dependencies:
   # A build system for Dart code generation and modular compilation.
   build_runner: ^2.1.5
+  flutter_launcher_icons: ^0.12.0
   # A code generator for envify.
   envify_generator: ^2.0.2
   flutter_test:
@@ -75,6 +82,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+flutter_icons:
+  android: "launcher_icon"
+  image_path: "assets/icons/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -91,6 +103,7 @@ flutter:
   assets:
     - lib/.env # Path to .env
     - assets/images/farm-background.jpg
+    - assets/images/farm-background-blur.jpg
     - assets/images/drone.png
     - assets/images/disease_marker.png
     - assets/images/nutrient_marker.png
@@ -98,6 +111,7 @@ flutter:
     - assets/images/black-spot-fungal-disease.jpg
     - assets/images/caterpillars-pest.jpg
     - assets/images/nitrogen-deficiency.jpg
+    - assets/icons/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

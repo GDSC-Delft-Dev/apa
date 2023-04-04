@@ -5,15 +5,21 @@ Through an intuitive dashboard, farmers are able to automatically track historic
 
 <p align="center">
     <p align="center">
-        <img src="https://user-images.githubusercontent.com/74115586/219355950-a4476798-28a1-4ca1-aa8b-85b7556fc3fe.png" width="450" />
+        <img src="assets/screenshots/login.png" width="160" />
         &nbsp &nbsp
-        <img src="https://user-images.githubusercontent.com/74115586/219356529-b53a18b4-6995-4cd0-9b3e-4c054c97cd46.png" width="300" />
+        <img src="assets/screenshots/home.png" width="152" />
          &nbsp &nbsp
-        <img src="https://user-images.githubusercontent.com/74115586/219357528-0ea762fe-0228-4e00-8d6e-9baad15b8fbc.png" width="470" />
+        <img src="assets/screenshots/my-fields.png" width="150" />
          &nbsp &nbsp
-        <img src="https://user-images.githubusercontent.com/74115586/219357760-b6b828e5-6330-4898-82cd-9eb31c03e607.png" width="300" />
-        <!-- &nbsp &nbsp
-        <img src="https://user-images.githubusercontent.com/74115586/219358000-6267bbd4-87cf-40ec-8459-26cc5ff6af04.png" width="400" /> -->
+        <img src="assets/screenshots/ndvi-map.png" width="153" />
+        &nbsp &nbsp
+        <img src="assets/screenshots/tcari-map.png" width="153" />
+        &nbsp &nbsp
+        <img src="assets/screenshots/disease-insight.png" width="145" />
+        &nbsp &nbsp
+        <img src="assets/screenshots/chatbot.png" width="135" />
+        &nbsp &nbsp
+        <img src="assets/screenshots/add-field.png" width="140">
     </p>
 </p>
 
@@ -101,6 +107,14 @@ Note that `local.properties` and `Debug.xcconfig` are both under `.gitignore`.
 ````
 GOOGLE_MAPS_API_KEY={YOUR_PRIVATE_GOOGLE_MAPS_API_KEY}
 ````
+
+### Open AI API
+
+We use the ChatGPT API for our chat feature. In order to use it you need to add your private OpenAI key to the .env file previously created.
+````
+OPEN_AI_KEY={YOUR_PRIVATE_OPEN_AI_KEY}
+
+````
 ### Cloud Functions
 
 In order to be able to run Cloud Functions, you will need to install `TypeScript` and `ESLint`.
@@ -116,17 +130,20 @@ npm install -g eslint
 ### Logging into the app
 You can use the following dummy credentials for logging into the application:
 ````
-e-mail: andyzaidman42@tudelft.net
-password: andy12345
+e-mail: farmerbob@gmail.com
+password: bob12345
 ````
 For all invalid authentication attempts, an error message will be displayed.
 
-<!-- ### Adding Fields
+### Adding Fields
+By clicking on the floating action button ('+') in either the "Home" screen or "My Fields" screen, you will be prompted to select boundaries for your new field to be added. Moreover, you can enter field details such as a name, crop type or planting date.
 
-### Inspecting Field Insights -->
-
-
-
+### Inspecting Field Insights
+In order to inspect a specific field, you can navigate to the desired field via "My Fields" - or by simply clicking on the field in the "Home" screen map. 
+Here you will be able to select various insight maps such as "NDVI" or "Soil Moisture".
+Moreover, you can pick localized insights to be displayed - including "nutrient", "disease" and "pest".  
+Upon clicking on some localized insight, you will see details regarding the area affected, (reference) images and recommendations for the farmer to take. 
+There is also a possibility to go back in forth between different field scans, by simply pressing the bottom arrows accompanying the date displayed.
 
 ## Folder Structure
 
@@ -164,8 +181,8 @@ The following routes are defined in `main.dart`
         '/fields': (context) => const MyFields(),
         '/settings': (context) => const Settings(),
         '/login': (context) => Authenticate(),
-        '/crop_growth': (context) => const CropGrowth(),
         '/field_details': (context) => const FieldDetails(),
+        '/chat': (context) => const ChatScreen()
       }
 ````
 The initial route that is entered is the `Wrapper()`, which listens for authentication status changes - will return `MainPage()` if logged in or `Authenticate()` if not logged in (both under `views/`).
@@ -174,10 +191,17 @@ The initial route that is entered is the `Wrapper()`, which listens for authenti
 ## Data Models
 ````
 lib/models/
-|- user_model.dart - represent users of the application
-|- field_model.dart - represent fields owned by users
-|- insight_model.dart - represent insights detected by the image processing pipeline, specific to soem geolocation within given field
-|- crop_model.dart - represent crops that are grown in fields (e.g. lettuce, aloe vera)
+|- user_model.dart - user of the application
+|- field_model.dart - field owned by users
+|- crop_model.dart - crop that is grown in some field (e.g. lettuce, aloe vera)
+|- scan_model.dart - drone scan for some field, which can consist of multiple image processing pipelines
+|- insight_model.dart - insight detected by the image processing pipeline, specific to soem geolocation within given field
+|- insight_type_model.dart - a mere type of insight (e.g. disease, deficiency)
+|- insight_item_model.dart - details about some insight of a given type
+  |- nutrient_deficiencies_model.dart 
+  |- perpetrator_model.dart
+    |- disease_model.dart
+    |- pest_model.dart
 ````
 
 
@@ -187,6 +211,8 @@ lib/providers/
 |- insight_choices_provider.dart - handles user preferences regarding visualization of field insights
 |- map_settings_provider.dart - handles user preferences regarding maps displayed (e.g. map type, zoom level)
 |- new_field_provider.dart - handles the process of adding new fields to the system
+|- insight_types_provider.dart - handles keeping track of various insight types
+|- field_scan_provider.dart - handles user switching between field scans
 ````
 
 
@@ -195,6 +221,7 @@ lib/providers/
 lib/services/
 |- auth_service.dart - communicates with Firebase Authentication API to handle user management
 |- location_service.dart - communinates with Google Maps API to handle searching for locations on the map
+|- cloud_functions_service.dart - invokes custom Cloud Functions
 ````
 
 
@@ -206,6 +233,8 @@ lib/stores/
 |- fields_store.dart - handles CRUD operations regarding the field model
 |- insights_store.dart - handles CRUD operations regarding the insights model
 |- crop_store.dart - handles CRUD operations regarding the crop model
+|- insight_type_store.dart - handles CRUD operations regarding the insight type model
+|- insight_item_store.dart - handles CRUD operations regarding the insight item model
 ````
 
 

@@ -21,7 +21,6 @@ class _MainPageState extends State<MainPage> {
   final screens = [
     Home(title: 'Terrafarm'),
     MyFields(),
-    FlyDrone(droneName: 'DJI Mavic 3'),
     Settings(),
   ];
 

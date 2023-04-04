@@ -4,11 +4,13 @@ import glob
 from .pipeline import Pipeline
 from .config import Config, CloudConfig
 from .modules.mosaicing import Mosaicing
-from .modules.preprocess import AgricultureVisionPreprocess
+from .modules.preprocess import AgricultureVisionPreprocess, StandardizePreprocess
 from .modules.segmentation import SemanticSegmentation
 from .modules.index.runnables.nutrient import Nutrient
 from .modules.index.runnables.ndvi import NDVI
+from .modules.insights.diseases.tomato import TomatoDiseaseInsight
 from .modules.index.index import Index
+from .modules.insights.insight import Insight
 
 def default_pipeline(cloud: CloudConfig = CloudConfig()) -> Pipeline:
     """Default pipeline."""
@@ -27,6 +29,13 @@ def full_pipeline() -> Pipeline:
                           AgricultureVisionPreprocess: None,
                           SemanticSegmentation: paths},
                 cloud=CloudConfig(True, "terrafarm-example"))
+    return Pipeline(cfg)
+
+def disease_pipeline() -> Pipeline:
+    """Disease detection pipeline."""
+    cfg = Config(modules={StandardizePreprocess: None,
+                          Insight: {"config": None, "runnables": [TomatoDiseaseInsight]}},
+                cloud=CloudConfig(False, "terrafarm-example"))
     return Pipeline(cfg)
 
 def training_pipeline() -> Pipeline:

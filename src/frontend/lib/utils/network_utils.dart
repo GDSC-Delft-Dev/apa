@@ -7,10 +7,13 @@ import 'package:flutter/material.dart';
 Future<Uint8List?> loadNetworkImage(String path) async {
   final completer = Completer<ImageInfo>();
   var img = NetworkImage(path);
-  img
-      .resolve(const ImageConfiguration())
-      .addListener(ImageStreamListener((info, _) => completer.complete(info)));
+  var resolved = img.resolve(const ImageConfiguration());
+  var listener = ImageStreamListener((info, _) => completer.complete(info));
+  resolved.addListener(listener);
+
   final imageInfo = await completer.future;
+  resolved.removeListener(listener);
   final byteData = await imageInfo.image.toByteData(format: ui.ImageByteFormat.png);
+
   return byteData?.buffer.asUint8List();
 }

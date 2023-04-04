@@ -15,17 +15,22 @@ class InsightDetailsSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     var insightType = Provider.of<InsightTypesProvider>(context, listen: false)
         .getInsightTypeById(insight.typeId);
+        
+    String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
     return FutureBuilder<InsightItemModel>(
         future: InsightItemStore().getInsightItemByTypeId(insight.data, insightType.id),
         builder: (context, snapshot) {
+          
           if (!snapshot.hasData) {
             return SizedBox.shrink();
           }
 
           var insightItem = snapshot.data!;
-          print(insight.data);
+
           return Container(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -35,7 +40,7 @@ class InsightDetailsSheet extends StatelessWidget {
                   const SizedBox(height: 20),
                   Center(
                       child: Text(
-                    '${insightType.name} detected!',
+                    '${capitalize(insightItem.name)} detected!',
                     style: TextStyle(fontSize: 20, color: Colors.red[900]),
                   )),
                   const SizedBox(height: 20),
@@ -61,36 +66,32 @@ class InsightDetailsSheet extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Details', style: TextStyle(fontSize: 18)),
-                            // Text('${insight.data}', style: TextStyle(fontSize: 14, color: Colors.grey[700], fontFamily: 'Lato')),
-                            insight.data.containsKey('proper_name')
-                                ? Text('Scientific name: ${insight.data['proper_name']}',
-                                    style: TextStyle(fontSize: 14, color: Colors.grey[700]))
-                                : Container(),
+                            const Text('Details', style: TextStyle(fontSize: 18)),
+                            Text(insightItem.description, style: TextStyle(fontSize: 14, color: Colors.grey[700])),  
                           ],
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       CachedNetworkImage(
                         imageUrl: insight.data['image'],
-                        width: 100.0,
-                        height: 100.0,
+                        width: 140.0,
+                        height: 150.0,
                       )
                     ],
                   ),
-                  Text('Recommendations', style: TextStyle(fontSize: 18)),
-                  // Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: insightItem['recommendations']
-                  //         .cast<String>()
-                  //         .map((String recommendation) => Text('\u2022 $recommendation',
-                  //             style: TextStyle(fontSize: 14, color: Colors.grey[700])))
-                  //         .toList()
-                  //         .cast<Widget>()),
-                  SizedBox(height: 20),
+                  const Text('Recommendations', style: TextStyle(fontSize: 18)),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: insight.data['recommendations']
+                          .cast<String>()
+                          .map((String recommendation) => Text('\u2022 $recommendation',
+                              style: TextStyle(fontSize: 14, color: Colors.grey[700])))
+                          .toList()
+                          .cast<Widget>()),
+                  const SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(
-                        child: Text(
+                        child: const Text(
                           "Close",
                           style: TextStyle(fontSize: 16),
                         ),
@@ -99,5 +100,7 @@ class InsightDetailsSheet extends StatelessWidget {
                 ],
               ));
         });
+
+
   }
 }

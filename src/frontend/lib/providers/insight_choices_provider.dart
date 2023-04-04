@@ -4,7 +4,11 @@ import '../models/insight_model.dart';
 
 enum InsightMapType { 
   ndvi, 
-  soil_moisture 
+  tcari,
+  soilMoisture,
+  biomass,
+  yield,
+  nitrogen 
 }
 
 /// A provider that stores the user's choices for insights
